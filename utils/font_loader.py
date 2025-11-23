@@ -3,35 +3,19 @@ import glob
 import dearpygui.dearpygui as dpg
 from pathlib import Path
 
-from utils.resource_path import get_resource_path, get_current_directory
 
-def load_font_dpg(font_path):
+def get_font(cwd_path: Path, font_name: str, italic: bool = False) -> Path:
+    return Path(cwd_path.parent) / 'res' / 'fonts' / (font_name + ('_italic' if italic else '') + '.ttf')
+
+def load_font_dpg(font_path: Path) -> None:
     dpg.create_context()
 
     big_let_start = 0x00C0  # Capital "A" in cyrillic alphabet
     big_let_end = 0x00DF  # Capital "Я" in cyrillic alphabet
-    small_let_end = 0x00FF  # small "я" in cyrillic alphabet
     remap_big_let = 0x0410  # Starting number for remapped cyrillic alphabet
     alph_len = big_let_end - big_let_start + 1  # adds the shift from big letters to small
-    alph_shift = remap_big_let - big_let_start  # adds the shift from remapped to non-remapped
 
-    # Попробуем найти Arial в системной папке шрифтов Windows, иначе первый ttf как fallback
-    fonts_dir = Path(__file__).parent.parent / 'res' / 'fonts'
-    preferred = os.path.join(fonts_dir, "Jost.ttf")
-    font_path = None
-    if os.path.exists(preferred):
-        font_path = preferred
-    else:
-        # попробуем найти что-то похожее (может быть arialbd.ttf и т.д.)
-        matches = glob.glob(os.path.join(fonts_dir, "Jost*.ttf"))
-        if matches:
-            font_path = matches[0]
-        else:
-            # крайний fallback: любой ttf в папке шрифтов
-            any_ttf = glob.glob(os.path.join(fonts_dir, "*.ttf"))
-            if any_ttf:
-                font_path = any_ttf[0]
-
+    # Попробуем найти Arial в системной папке шрифтов Windows, иначе первый ttf как fallbac
     default_font = None
     with dpg.font_registry():
         if font_path:
