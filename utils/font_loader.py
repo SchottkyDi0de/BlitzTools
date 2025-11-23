@@ -3,7 +3,8 @@ import glob
 import dearpygui.dearpygui as dpg
 from pathlib import Path
 
-from utils.resource_path import get_resource_path, get_current_directory
+def get_fonts(cwd_path: Path):
+    
 
 def load_font_dpg(font_path):
     dpg.create_context()
