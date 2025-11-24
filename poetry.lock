@@ -309,6 +309,18 @@ files = [
 typing-extensions = ">=4.14.1"
 
 [[package]]
+name = "pywinstyles"
+version = "1.8"
+description = "Customize window styles in windows 11"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "pywinstyles-1.8-py3-none-any.whl", hash = "sha256:17d89c6bc91569b676b71c00400ec958548302809858966c4cf447bb16a7e407"},
+    {file = "pywinstyles-1.8.tar.gz", hash = "sha256:7a087b1f45ef8d572b440712817dbbef8ae90793ab7fcc51b060851d2d6f301c"},
+]
+
+[[package]]
 name = "pyyaml"
 version = "6.0.3"
 description = "YAML parser and emitter for Python"
@@ -437,4 +449,4 @@ dev = ["black (>=19.3b0) ; python_version >= \"3.6\"", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<4.0"
-content-hash = "c08c5f6d7ef3ffa725da1f1660d8d89474fd98e33d63a4c79a8b42a6d9711c4d"
+content-hash = "3fdb8293956a4bc7c74807a6e88dde2c2a022e43c3b07d61ac788df2dd78a3e4"
