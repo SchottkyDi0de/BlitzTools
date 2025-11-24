@@ -1,0 +1,66 @@
+~ |INFO    | [2025-11-24 01:56:07,879] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:56
+>>> Logger initialized 
+~ |WARNING | [2025-11-24 02:14:25,558] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:56
+>>> Logger initialized 
+[92m~ |INFO    | [2025-11-24 02:22:22,269] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:59
+>>> Logger initialized [0m
+
+
+Logger initialized
+Logger initialized
+Logger initialized
+Привет, мир!
+Привет, мир!
+Привет, мир!
+~ |INFO    | [2025-11-24 02:51:16.277] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:75
+>>> Logger initialized
+~ |INFO    | [02:52:28.253] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:75
+>>> Logger initialized
+~ |INFO    | [2025-11-24 02:53:29.054] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:86
+>>> Logger initialized
+~ |INFO    | [2025-11-24 02:56:36.080] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:99
+>>> Logger initialized
+~ |INFO    | [2025-11-24 02:56:50.360] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:99
+>>> Logger initialized
+~ |INFO    | [2025-11-24 02:57:54.929] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:111
+>>> Logger initialized
+~ |INFO    | [2025-11-24 02:57:54.930] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:113
+>>> Info message
+~ |WARNING | [2025-11-24 02:57:54.930] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:114
+>>> Warning message
+~ |ERROR   | [2025-11-24 02:57:54.930] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:115
+>>> Error message
+~ |CRITICAL| [2025-11-24 02:57:54.930] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:116
+>>> Critical message
+~ |INFO    | [2025-11-24 03:03:43.043] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:0
+>>> Logger initialized
+~ |INFO    | [2025-11-24 03:05:02.295] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:109
+>>> Logger initialized
+~ |INFO    | [2025-11-24 03:05:02.296] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:111
+>>> Info message
+~ |WARNING | [2025-11-24 03:05:02.298] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:112
+>>> Warning message
+~ |ERROR   | [2025-11-24 03:05:02.299] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:113
+>>> Error message
+~ |CRITICAL| [2025-11-24 03:05:02.300] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:114
+>>> Critical message
+~ |INFO    | [2025-11-24 03:09:23.692] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:109
+>>> Logger initialized
+~ |INFO    | [2025-11-24 03:09:23.693] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:111
+>>> Info message
+~ |WARNING | [2025-11-24 03:09:23.694] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:112
+>>> Warning message
+~ |ERROR   | [2025-11-24 03:09:23.695] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:113
+>>> Error message
+~ |CRITICAL| [2025-11-24 03:09:23.695] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:114
+>>> Critical message
+~ |INFO    | [2025-11-24 03:10:35.729] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:109
+>>> Logger initialized
+~ |INFO    | [2025-11-24 03:10:35.731] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:111
+>>> Info message
+~ |WARNING | [2025-11-24 03:10:35.731] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:112
+>>> Warning message
+~ |ERROR   | [2025-11-24 03:10:35.732] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:113
+>>> Error message
+~ |CRITICAL| [2025-11-24 03:10:35.732] in c:\VSCodeProjects\Python\BlitzTools\utils\logger.py:114
+>>> Critical message

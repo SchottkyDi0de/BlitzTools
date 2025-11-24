@@ -1,5 +1,3 @@
-import os
-import glob
 import dearpygui.dearpygui as dpg
 from pathlib import Path
 
@@ -30,10 +28,10 @@ def load_font_dpg(font_path: Path) -> None:
                         dpg.add_char_remap(i1 + alph_len, biglet + alph_len)  # Remap the small cyrillic letter
                         biglet += 1  # choose next letter
             except Exception as e:
-                print("Не удалось загрузить шрифт:", font_path, " — ошибка:", e)
+                print(f'Font load error: {e}')
                 default_font = None
         else:
-            print("Шрифт не найден в папке шрифтов Windows. Продолжаем без кастомного шрифта.")
+            print("Fatal error")
 
     if default_font:
         dpg.bind_font(default_font)
