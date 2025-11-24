@@ -13,10 +13,10 @@ def level_filter(level_name):
 
 _formats = {
     "INFO":  "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue>  | <level>{level: <8}</level> | {message}",
-    "DEBUG": "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}<cyan>\n{message}</cyan>",
-    "WARNING":"<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}<yellow>\n{message}</yellow>",
-    "ERROR": "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}<magenta>\n{message}</magenta>",
-    "CRITICAL":"<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}<red><reverse>\n{message}</reverse></red>"
+    "DEBUG": "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>> <cyan>{message}</cyan>",
+    "WARNING":"<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>> <yellow>{message}</yellow>",
+    "ERROR": "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>>  <magenta>{message}</magenta>",
+    "CRITICAL":"<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>> <red><reverse>{message}</reverse></red>"
 }
 
 for lvl in _levels:
@@ -41,8 +41,6 @@ def get_logger(name: str) -> loguru.Logger:
         loguru.Logger: The bound logger.
     """
     return _logger.bind(name=name)
-
-get_logger("main").critical("Logger initialized") # DEBUG
 
 # TODO: Реализовать запись логов в файл через добавления Callable в sink logger.py:24
 # TODO: Реализовать атоочиску логов при достижении определенного размера

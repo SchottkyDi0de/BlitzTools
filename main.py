@@ -1,10 +1,15 @@
 # Импорты библиотек
+from pathlib import Path
+
 import dearpygui.dearpygui as dpg
 
 # Импорты из проекта
 from utils.resource_path import get_current_directory
 from utils.font_loader import get_font, load_font_dpg
+from utils.logger import get_logger
 from ui.titlebar import add_title_bar
+
+_log = get_logger(__file__)
 
 
 # Параметры окна
@@ -31,7 +36,8 @@ with dpg.window(tag="main_win", no_title_bar=True, no_resize=True,
     add_title_bar(parent_tag="main_win",
                   title="BlitzTools",
                   width=WIDTH,
-                  height=TITLE_H,
+                  bar_width=WIDTH,
+                  bar_height=TITLE_H,
                   minimize_callback=do_minimize,
                   close_callback=do_close,
                   tag_prefix="main_")
@@ -77,7 +83,7 @@ dpg.bind_theme(global_theme)
 dpg.setup_dearpygui()
 dpg.show_viewport()
 dpg.set_primary_window("main_win", True)
-
+_log.info("App started")
 # Главный цикл с анимацией закрытия
 while dpg.is_dearpygui_running():
     if app_state.get("closing"):
