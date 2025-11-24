@@ -39,3 +39,10 @@ def get_current_directory() -> Path:
         application_path = os.path.dirname(__file__)
 
     return Path(application_path)
+
+def get_files_path() -> Path:
+    path = Path().expanduser('~') / 'Documents' /'BlitzTools'
+    if not path.exists():
+        path.mkdir(parents=True)
+        
+    return path
