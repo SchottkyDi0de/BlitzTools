@@ -1,4 +1,6 @@
 # Импорты библиотек
+import pywinstyles
+from ctypes import windll
 from pathlib import Path
 
 import dearpygui.dearpygui as dpg
@@ -7,7 +9,6 @@ import dearpygui.dearpygui as dpg
 from utils.resource_path import get_current_directory
 from utils.font_loader import get_font, load_font_dpg
 from utils.logger import get_logger
-from ui.titlebar import add_title_bar
 
 _log = get_logger(__file__)
 
@@ -32,16 +33,6 @@ with dpg.window(tag="main_win", no_title_bar=True, no_resize=True,
                 no_move=True, width=WIDTH, height=HEIGHT, pos=(0, 0),
                 menubar=False, no_scrollbar=True):
 
-    # Titlebar
-    add_title_bar(parent_tag="main_win",
-                  title="BlitzTools",
-                  width=WIDTH,
-                  bar_width=WIDTH,
-                  bar_height=TITLE_H,
-                  minimize_callback=do_minimize,
-                  close_callback=do_close,
-                  tag_prefix="main_")
-
     # Контент (таблица)
     with dpg.group(tag="content"):
         with dpg.table(header_row=True, resizable=True, policy=dpg.mvTable_SizingStretchProp,
@@ -60,7 +51,7 @@ with dpg.window(tag="main_win", no_title_bar=True, no_resize=True,
 
 
 # Настройка viewport
-dpg.create_viewport(title='DearPyGui Demo', width=WIDTH, height=HEIGHT, decorated=False)
+dpg.create_viewport(title='DearPyGui Demo', width=WIDTH, height=HEIGHT)
 
 # Глобальная тема + её применение
 with dpg.theme() as global_theme:
@@ -83,6 +74,8 @@ dpg.bind_theme(global_theme)
 dpg.setup_dearpygui()
 dpg.show_viewport()
 dpg.set_primary_window("main_win", True)
+hwnd = windll.user32.GetActiveWindow()
+pywinstyles.apply_style(hwnd, "acrylic")
 _log.info("App started")
 # Главный цикл с анимацией закрытия
 while dpg.is_dearpygui_running():
