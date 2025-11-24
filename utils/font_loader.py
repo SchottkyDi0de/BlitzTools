@@ -1,9 +1,6 @@
 import dearpygui.dearpygui as dpg
 from pathlib import Path
 
-def get_fonts(cwd_path: Path):
-    
-
 def get_font(cwd_path: Path, font_name: str, italic: bool = False) -> Path:
     return Path(cwd_path.parent) / 'res' / 'fonts' / (font_name + ('_italic' if italic else '') + '.ttf')
 
