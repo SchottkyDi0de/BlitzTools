@@ -1,0 +1,18 @@
+global:
+  # Шрифт текста в интерфейсе
+  font:
+    name: "roboto" # "roboto", "robotomono", "jost"
+    italic: false
+
+  # Тема интерфейса
+  theme: "dark" # "dark", "light"
+
+  # Язык интерфейса
+  language: "ru"  # "en", "ru"
+
+sessions:
+
+olenemer:
+
+converter:
+

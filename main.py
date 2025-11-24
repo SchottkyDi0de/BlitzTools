@@ -9,9 +9,11 @@ import dearpygui.dearpygui as dpg
 from utils.resource_path import get_current_directory
 from utils.font_loader import get_font, load_font_dpg
 from utils.logger import get_logger
+from lib.db.database import Database
 
 _log = get_logger(__file__)
-
+_db = Database("database/database.sqlite")
+_db.migrate()
 
 # Параметры окна
 WIDTH = 800
@@ -80,6 +82,7 @@ _log.info("App started")
 # Главный цикл с анимацией закрытия
 while dpg.is_dearpygui_running():
     if app_state.get("closing"):
+        _db.close()
         h = dpg.get_viewport_height()
         if h > TITLE_H:
             dpg.set_viewport_height(max(h - 5, TITLE_H))
