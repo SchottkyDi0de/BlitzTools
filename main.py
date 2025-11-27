@@ -10,6 +10,12 @@ from utils.resource_path import get_current_directory
 from utils.font_loader import get_font, load_font_dpg
 from utils.logger import get_logger
 from lib.db.database import Database
+from utils.exc_wrapper import wrap_exceptions
+
+from ui.sidebar import add_sidebar
+
+
+dpg.create_context()
 
 _log = get_logger(__file__)
 _db = Database("database/database.sqlite")
@@ -21,39 +27,18 @@ HEIGHT = 500
 TITLE_H = 30
 app_state = {"closing": False}
 
-# Функции для кнопок titlebar
-def do_minimize(): dpg.minimize_viewport()
-def do_close(): app_state["closing"] = True
 
-# Создаём контекст и загружаем шрифт
-dpg.create_context()
+# загружаем шрифт
 font = get_font(get_current_directory(), 'roboto', italic=False)
 load_font_dpg(font)
 
 
-with dpg.window(tag="main_win", no_title_bar=True, no_resize=True,
-                no_move=True, width=WIDTH, height=HEIGHT, pos=(0, 0),
-                menubar=False, no_scrollbar=True):
-
-    # Контент (таблица)
-    with dpg.group(tag="content"):
-        with dpg.table(header_row=True, resizable=True, policy=dpg.mvTable_SizingStretchProp,
-                        borders_innerH=True, borders_outerH=True, borders_innerV=True,
-                        borders_outerV=True, row_background=True, no_host_extendX=True,
-                        hideable=True, reorderable=True, sortable=True):
-            dpg.add_table_column()
-            dpg.add_table_column()
-            dpg.add_table_column()
-
-            for i in range(5):
-                with dpg.table_row():
-                    dpg.add_text(f"Строка {i} Данные 1 !@##$$%%^")
-                    dpg.add_text(f"Строка {i} Данные 2")
-                    dpg.add_text(f"Строка {i} Данные 3")
-
-
 # Настройка viewport
-dpg.create_viewport(title='DearPyGui Demo', width=WIDTH, height=HEIGHT)
+dpg.create_viewport(title='Blitz Tools', width=WIDTH, height=HEIGHT)
+
+dpg.setup_dearpygui()
+dpg.show_viewport()
+# dpg.set_primary_window("main_win", True)
 
 # Глобальная тема + её применение
 with dpg.theme() as global_theme:
@@ -72,23 +57,29 @@ with dpg.theme() as global_theme:
 
 dpg.bind_theme(global_theme)
 
-# Показ viewport
-dpg.setup_dearpygui()
-dpg.show_viewport()
-dpg.set_primary_window("main_win", True)
+
 hwnd = windll.user32.GetActiveWindow()
 pywinstyles.apply_style(hwnd, "acrylic")
 _log.info("App started")
-# Главный цикл с анимацией закрытия
-while dpg.is_dearpygui_running():
-    if app_state.get("closing"):
-        _db.close()
-        h = dpg.get_viewport_height()
-        if h > TITLE_H:
-            dpg.set_viewport_height(max(h - 5, TITLE_H))
-        else:
-            break
-    dpg.render_dearpygui_frame()
 
-# Очистка контекста
-dpg.destroy_context()
+@wrap_exceptions(logger=_log, ignore_exceptions=(Exception,))
+def run_app():
+    with dpg.window(tag='main_window', width=WIDTH, height=HEIGHT):
+        dpg.set_primary_window('main_window', True)
+        
+        add_sidebar("main_window", 'bar')
+        while dpg.is_dearpygui_running():
+            if app_state.get("closing"):
+                _db.close()
+                h = dpg.get_viewport_height()
+                if h > TITLE_H:
+                    dpg.set_viewport_height(max(h - 5, TITLE_H))
+                else:
+                    break
+            dpg.render_dearpygui_frame()
+            
+        
+
+    dpg.destroy_context()
+    
+run_app()
