@@ -1,4 +1,9 @@
 global:
+  window:
+    width: 800
+    height: 500
+    pos: [100, 100]
+
   # Шрифт текста в интерфейсе
   font:
     name: "roboto" # "roboto", "robotomono", "jost"
@@ -13,6 +18,21 @@ global:
 sessions:
 
 olenemer:
+  # Прозрачность окон оленемера
+  window_transparency: 0.7
+
+  # Позиция окон
+  window_pos_left: [0, 0]
+  window_pos_right: [800, 0]
+
+  # Автоматическое открытие окон после нахождения реплея
+  auto_open: true
+
+  # Видимость столбцов
+  column_status:
+    nickname: true
+    tank: true
+    rating: true
 
 converter:
 

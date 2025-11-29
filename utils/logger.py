@@ -12,11 +12,11 @@ def level_filter(level_name):
     return lambda record: record["level"].name == level_name
 
 _formats = {
-    "INFO":  "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue>  | <level>{level: <8}</level> | {message}",
-    "DEBUG": "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>> <cyan>{message}</cyan>",
-    "WARNING":"<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>> <yellow>{message}</yellow>",
-    "ERROR": "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>>  <magenta>{message}</magenta>",
-    "CRITICAL":"<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>> <red><reverse>{message}</reverse></red>"
+    "INFO":     "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | {message}",
+    "DEBUG":    "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>> <cyan>{message}</cyan>",
+    "WARNING":  "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>> <yellow>{message}</yellow>",
+    "ERROR":    "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>>  <magenta>{message}</magenta>",
+    "CRITICAL": "<blue>{time:YYYY-MM-DD HH:mm:ss}</blue> | <level>{level: <8}</level> | <underline>{file}:{line}</underline> in {function}\n>>> <red><reverse>{message}</reverse></red>"
 }
 
 for lvl in _levels:
