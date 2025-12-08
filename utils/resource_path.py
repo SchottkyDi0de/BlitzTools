@@ -34,11 +34,11 @@ def get_current_directory() -> Path:
         Path: The absolute path to the current directory.
     """
     if getattr(sys, 'frozen', False):
-        application_path = os.path.dirname(sys.executable)
+        application_path = Path(os.path.dirname(sys.executable))
     elif __file__:
-        application_path = os.path.dirname(__file__)
+        application_path = Path(os.path.dirname(__file__)).parent
 
-    return Path(application_path)
+    return application_path
 
 def get_files_path() -> Path:
     path = Path().expanduser('~') / 'Documents' /'BlitzTools'

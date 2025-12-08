@@ -1,0 +1,49 @@
+<MainLayout>: # MDBoxLayout
+    orientation: "horizontal"
+    MDNavigationRail:
+        type: "selected"
+
+        MDNavigationRailFabButton:
+            icon: "home"
+
+    MDScreen:
+        name: "settings"
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: 20
+
+            MDLabel:
+                markup: True
+                text: app.locales.data['ru'].main.intro.title
+                adaptive_height: True
+                padding_y: 20
+            
+            MDLabel:
+                markup: True
+                text: app.locales.data['ru'].main.intro.subtitle
+                adaptive_height: True
+                padding_y: 20
+
+            MDLabel:
+                markup: True
+                text: app.locales.data['ru'].main.intro.description
+                adaptive_height: True
+                padding_y: 10
+            
+            MDLabel:
+                markup: True
+                text: app.locales.data['ru'].main.intro.files
+                adaptive_height: True
+                padding_y: 5
+            
+            MDLabel:
+                markup: True
+                text: app.locales.data['ru'].main.intro.net
+                adaptive_height: True
+                padding_y: 5
+
+            MDLabel:
+                markup: True
+                text: app.locales.data['ru'].main.intro.overlay
+                adaptive_height: True
+                padding_y: 5
