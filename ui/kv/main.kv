@@ -8,6 +8,7 @@
 
     MDScreen:
         name: "settings"
+
         MDBoxLayout:
             orientation: "vertical"
             padding: 20
@@ -17,33 +18,94 @@
                 text: app.locales.data['ru'].main.intro.title
                 adaptive_height: True
                 padding_y: 20
+                theme_font_name: "Custom"
+                font_name: app.get_font(app.config.app_global.font.name)
             
             MDLabel:
                 markup: True
                 text: app.locales.data['ru'].main.intro.subtitle
                 adaptive_height: True
                 padding_y: 20
+                theme_font_name: "Custom"
+                font_name: app.get_font(app.config.app_global.font.name)
 
             MDLabel:
                 markup: True
                 text: app.locales.data['ru'].main.intro.description
                 adaptive_height: True
                 padding_y: 10
+                theme_font_name: "Custom"
+                font_name: app.get_font(app.config.app_global.font.name)
             
-            MDLabel:
-                markup: True
-                text: app.locales.data['ru'].main.intro.files
-                adaptive_height: True
-                padding_y: 5
-            
-            MDLabel:
-                markup: True
-                text: app.locales.data['ru'].main.intro.net
-                adaptive_height: True
-                padding_y: 5
+            MDBoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: self.minimum_height + 10
+                spacing: 10
 
-            MDLabel:
-                markup: True
-                text: app.locales.data['ru'].main.intro.overlay
-                adaptive_height: True
-                padding_y: 5
+                AnchorLayout:
+                    size_hint_x: None
+                    width: dp(32)
+                    anchor_x: 'left'
+                    anchor_y: 'top'
+
+                    MDIcon:
+                        icon: "archive-arrow-up-outline"
+                        size_hint: None, None
+                        size: dp(24), dp(24)
+                        padding_y: 5
+
+                MDLabel:
+                    markup: True
+                    text: app.locales.data['ru'].main.intro.files
+                    adaptive_height: True
+                    theme_font_name: "Custom"
+                    font_name: app.get_font(app.config.app_global.font.name)
+            
+            MDBoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+
+                AnchorLayout:
+                    size_hint_x: None
+                    width: dp(32)
+                    anchor_x: 'left'
+                    anchor_y: 'top'
+
+                    MDIcon:
+                        icon: "network-strength-3-alert"
+                        size_hint: None, None
+                        size: dp(24), dp(24)
+
+                MDLabel:
+                    markup: True
+                    text: app.locales.data['ru'].main.intro.net
+                    adaptive_height: True
+                    theme_font_name: "Custom"
+                    font_name: app.get_font(app.config.app_global.font.name)
+
+            MDBoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 10
+
+                AnchorLayout:
+                    size_hint_x: None
+                    width: dp(32)
+                    anchor_x: 'left'
+                    anchor_y: 'top'
+
+                    MDIcon:
+                        icon: "monitor-screenshot"
+                        size_hint: None, None
+                        size: dp(24), dp(24)
+
+                MDLabel:
+                    markup: True
+                    text: app.locales.data['ru'].main.intro.overlay
+                    adaptive_height: True
+                    theme_font_name: "Custom"
+                    font_name: app.get_font(app.config.app_global.font.name)

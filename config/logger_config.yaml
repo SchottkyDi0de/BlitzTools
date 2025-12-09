@@ -1,6 +1,0 @@
-log_levels:
-  file: 'INFO'
-  console: 'DEBUG'
-
-rotation:
-  size: '10 MB'

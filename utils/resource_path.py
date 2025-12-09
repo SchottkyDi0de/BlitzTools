@@ -41,7 +41,15 @@ def get_current_directory() -> Path:
     return application_path
 
 def get_files_path() -> Path:
-    path = Path().expanduser('~') / 'Documents' /'BlitzTools'
+    """
+    Gets the absolute path to the BlitzTools folder in the user's Documents directory.
+
+    If the folder does not exist, it is created with the necessary parent directories.
+
+    Returns:
+        Path: The absolute path to the BlitzTools folder.
+    """
+    path = Path('~').expanduser() / 'Documents' /'BlitzTools'
     if not path.exists():
         path.mkdir(parents=True)
         

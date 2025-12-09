@@ -1,8 +1,11 @@
-global:
+---
+app_global:
   window:
     width: 800
     height: 500
     pos: [100, 100]
+
+  apperance:
 
   # Шрифт текста в интерфейсе
   font:
@@ -35,4 +38,4 @@ olenemer:
     rating: true
 
 converter:
-
+...
