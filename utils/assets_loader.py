@@ -37,6 +37,18 @@ def get_font(font_name: str) -> str:
         font_name (str): The name of the font without the extension.
 
     Returns:
-        Path: The full path to the font file.
+        str: The full path to the font file.
     """
     return resource_find(f'fonts/{font_name}.ttf')
+
+def get_asset(asset_name: str) -> str:
+    """
+    Returns the full path to the asset with the given name.
+
+    Args:
+        asset_name (str): The name of the asset.
+
+    Returns:
+        Path: The full path to the asset.
+    """
+    return resource_find(asset_name)

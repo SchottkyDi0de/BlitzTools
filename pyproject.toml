@@ -16,6 +16,7 @@ dependencies = [
     "kivymd @ https://github.com/kivymd/KivyMD/archive/master.zip",
     "hpyt (>=1.4.0,<2.0.0)",
     "winaccent (>=2.1.0,<3.0.0)",
+    "dynamic-yaml (>=2.0.0,<3.0.0)",
 ]
 
 

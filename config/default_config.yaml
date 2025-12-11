@@ -1,20 +1,22 @@
 ---
 app_global:
   window:
-    width: 800
-    height: 500
-    pos: [100, 100]
+    width: 800 # Minimal window width
+    height: 500 # Minimal window height
+    allow_resize: false # Allow window resize
 
-  apperance:
-
+  theming:
+    # Только для win10 и выше. Автоматически опеределяет тему системы и акцентный цвет.
+    # Установите False если хотите применить свои цвета
+    auto_config: true 
+    global_theme: "Dark" # "Dark", "Light"
+    accent_color: '#89bf2d'
+ 
   # Шрифт текста в интерфейсе
   font:
-    name: "roboto" # "roboto", "robotomono", "jost"
-    italic: false
-
-  # Тема интерфейса
-  theme: "dark" # "dark", "light"
-
+    # "roboto", "robotomono", "jost"
+    #  и italic вариации - "roboto_italic", "robotomono_italic", "jost_italic"
+    name: "roboto" 
   # Язык интерфейса
   language: "ru"  # "en", "ru"
 

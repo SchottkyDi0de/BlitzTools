@@ -187,6 +187,21 @@ files = [
 ]
 
 [[package]]
+name = "dynamic-yaml"
+version = "2.0.0"
+description = "Enables self referential yaml entries"
+optional = false
+python-versions = ">=3.0"
+groups = ["main"]
+files = [
+    {file = "dynamic-yaml-2.0.0.tar.gz", hash = "sha256:7dd6cf3ed4dbeb5e068bf156eeb0808ac5cb92df397a436346b4b849f303b60b"},
+    {file = "dynamic_yaml-2.0.0-py3-none-any.whl", hash = "sha256:1df58ccb4e43a25e2dbbc795d830a5bc548a2de58a14f8b902e7a20545574d0d"},
+]
+
+[package.dependencies]
+pyyaml = ">=5.4"
+
+[[package]]
 name = "filetype"
 version = "1.2.0"
 description = "Infer file type and MIME type of any file/buffer. No external dependencies."
@@ -964,4 +979,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "3.13"
-content-hash = "b82840589b53b7aa4669e7ab2cfebea79ad9fd59e014f4f96fc6a0e8fd5911f5"
+content-hash = "20fa9e7c9fb8abf432a42b4736e61214bb73b3251cf08c0e8fc93a982068f964"

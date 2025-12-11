@@ -1,14 +1,13 @@
+
 import traceback
+import logging
 from typing import Callable, Tuple, Any
 
-class Logger:
-    def warning(self, msg: str) -> None:
-        pass
-
-    def error(self, msg: str) -> None:
-        pass
-
-def wrap_exceptions(logger: Logger, ignore_exceptions: Tuple[type, ...]) -> Callable[..., Callable[..., Any]]:
+def wrap_exceptions(
+        logger: logging.Logger, 
+        ignore_exceptions: Tuple[type, ...],
+        short_name: str = "Error Handler"
+    ) -> Callable[..., Callable[..., Any]]:
     """
     A decorator that wraps a function to catch and handle exceptions.
 
@@ -26,9 +25,11 @@ def wrap_exceptions(logger: Logger, ignore_exceptions: Tuple[type, ...]) -> Call
                 func(*args, **kwargs)
             except Exception as e:
                 if e in ignore_exceptions:
+                    logger.warning(f"{short_name}: {e.__class__.__name__} {e} in {func.__name__}()")
                     logger.warning(traceback.format_exc())
                     return
                 
+                logger.error(f"{short_name}: {e.__class__.__name__} {e} in {func.__name__}()")
                 logger.error(traceback.format_exc())
                 raise e
 
