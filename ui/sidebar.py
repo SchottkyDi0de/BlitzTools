@@ -68,13 +68,15 @@ class Sidebar:
             self.groups.append(group)
 
             # Кнопка с иконкой
-            btn = dpg.add_button(width=SIDEBAR_WIDTH_COLLAPSED,
+            btn = dpg.add_image_button(self.textures[i], label=titles[i], 
+                                 width=SIDEBAR_WIDTH_COLLAPSED,
                                  height=BUTTON_HEIGHT,
                                  parent=group,
                                  callback=self._make_onclick(i))
 
     def _make_onclick(self, index):
         def onclick(sender, app_data, user_data):
+            print(f"{sender=}, {app_data=}, {user_data=}")
             if self.active_index == index:
                 self.close_tab(index)
                 self.active_index = None

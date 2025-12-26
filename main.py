@@ -59,6 +59,7 @@ with dpg.theme() as global_theme:
         dpg.add_theme_color(dpg.mvThemeCol_HeaderHovered, (90, 90, 90))
         dpg.add_theme_color(dpg.mvThemeCol_HeaderActive, (110, 110, 110))
         dpg.add_theme_color(dpg.mvThemeCol_TableRowBgAlt, (40, 40, 40))
+        dpg.add_theme_style(dpg.mvStyleVar_ButtonTextAlign, 0.0, 0.5)
 dpg.bind_theme(global_theme)
 
 
@@ -75,9 +76,9 @@ def run_app():
 
             icons_dir = get_current_directory().parent / "res" / "images"
             icon_files = [
-                str(icons_dir / "settings.png"),
-                str(icons_dir / "settings.png"),
-                str(icons_dir / "settings.png"),
+                str(icons_dir / "sessions.png"),
+                str(icons_dir / "deer.png"),
+                str(icons_dir / "converter.png"),
                 str(icons_dir / "settings.png"),
             ]
             titles = ["Сессии", "Оленемер", "DPVL/DVPD", "Настройки"]
