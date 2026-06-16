@@ -133,6 +133,66 @@ class Dvp(BaseModel):
     results: DvpResults
 
 
+class ReplayActions(BaseModel):
+    pick_replay: str
+    pick_replay_dialog: str
+
+
+class ReplayStatus(BaseModel):
+    idle: str
+    loading: str
+    ready: str
+    error: str
+
+
+class ReplayTeams(BaseModel):
+    team1: str
+    team2: str
+    winner: str
+    defeat: str
+
+
+class ReplayAuthor(BaseModel):
+    title: str
+
+
+class ReplaySummary(BaseModel):
+    winner_team1: str
+    winner_team2: str
+    draw: str
+    battle_author: str
+    author_id: str
+    author_tank: str
+    author_damage: str
+    earnings_header: str
+    earnings_silver: str
+    earnings_xp: str
+    earnings_free_xp: str
+    meta_date: str
+    meta_duration: str
+    meta_mode: str
+    meta_map_id: str
+
+
+class ReplayColumns(BaseModel):
+    player: str
+    tank: str
+    damage: str
+    kills: str
+    xp: str
+    credits: str
+
+
+class Replay(BaseModel):
+    title: str
+    actions: ReplayActions
+    status: ReplayStatus
+    teams: ReplayTeams
+    author: ReplayAuthor
+    summary: ReplaySummary
+    columns: ReplayColumns
+
+
 class Main(BaseModel):
     titlebar: Titlebar
     intro: Intro
@@ -142,6 +202,7 @@ class Main(BaseModel):
     modules: Modules
     settings: Settings
     dvp: Dvp
+    replay: Replay
 
 
 class LocaleStruct(BaseModel):

@@ -94,4 +94,44 @@ main:
       unpacked: "Распакован: {name} → {out}"
       skipped: "Пропущен: {name} ({out} уже существует)"
       failed: "Ошибка ({name}): {error}"
+  replay:
+    title: "РЕПЛЕИ"
+    actions:
+      pick_replay: "Выбрать реплей"
+      pick_replay_dialog: "Выберите файл реплея (.wotbreplay / .tbreplay)"
+    status:
+      idle: "Выберите файл реплея для разбора."
+      loading: "Загрузка: {name}…"
+      ready: "Реплей: {name}"
+      error: "Ошибка: {error}"
+    teams:
+      team1: "КОМАНДА 1"
+      team2: "КОМАНДА 2"
+      winner: "ПОБЕДА"
+      defeat: "ПОРАЖЕНИЕ"
+    author:
+      title: "// АВТОР ЗАПИСИ"
+    summary:
+      winner_team1: "Победа: команда 1"
+      winner_team2: "Победа: команда 2"
+      draw: "Ничья или результат не определён"
+      battle_author: "Автор боя: {name}"
+      author_id: "Айди автора: {id}"
+      author_tank: "Играл на танке:"
+      author_damage: "Нанесено урона: {value}"
+      earnings_header: "Заработано:"
+      earnings_silver: "    Серебра: {value}"
+      earnings_xp: "    Опыт (боевой): {value}"
+      earnings_free_xp: "    Опыт (свободный): {value}"
+      meta_date: "Дата проведения боя: {date}"
+      meta_duration: "Длительность: {duration}"
+      meta_mode: "Режим игры: {mode}"
+      meta_map_id: "ID карты: {id}"
+    columns:
+      player: "Игрок"
+      tank: "Танк"
+      damage: "Урон"
+      kills: "Фраги"
+      xp: "XP"
+      credits: "Серебро"
 ...

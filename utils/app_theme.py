@@ -22,6 +22,7 @@ DARK_PALETTE = {
     "text": (0.78, 0.86, 0.92, 1),
     "muted": (0.42, 0.5, 0.58, 1),
     "success": (0.2, 0.95, 0.55, 1),
+    "danger": (0.95, 0.32, 0.36, 1),
 }
 
 LIGHT_PALETTE = {
@@ -34,6 +35,7 @@ LIGHT_PALETTE = {
     "text": (0.12, 0.16, 0.22, 1),
     "muted": (0.38, 0.44, 0.52, 1),
     "success": (0.1, 0.65, 0.35, 1),
+    "danger": (0.82, 0.18, 0.22, 1),
 }
 
 _ALL_PALETTES = (DARK_PALETTE, LIGHT_PALETTE)

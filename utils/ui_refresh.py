@@ -113,6 +113,11 @@ def _refresh_dvp(screen) -> None:
         screen.refresh_locale()
 
 
+def _refresh_replay(screen) -> None:
+    if hasattr(screen, "refresh_locale"):
+        screen.refresh_locale()
+
+
 def _refresh_admin_notice(root, loc) -> None:
     from ui.widgets import AdminNoticeBar
 
@@ -145,6 +150,8 @@ def refresh_ui(app: MDApp | None = None, *, apply_theme: bool = False) -> None:
             _refresh_settings(screen, app, loc)
         elif screen.name == "dvp":
             _refresh_dvp(screen)
+        elif screen.name == "replay":
+            _refresh_replay(screen)
 
     _refresh_placeholders(root, loc)
     _refresh_admin_notice(root, loc)

@@ -94,4 +94,44 @@ main:
       unpacked: "Unpacked: {name} → {out}"
       skipped: "Skipped: {name} ({out} already exists)"
       failed: "Error ({name}): {error}"
+  replay:
+    title: "REPLAYS"
+    actions:
+      pick_replay: "Pick replay"
+      pick_replay_dialog: "Select a replay file (.wotbreplay / .tbreplay)"
+    status:
+      idle: "Select a replay file to parse."
+      loading: "Loading: {name}…"
+      ready: "Replay: {name}"
+      error: "Error: {error}"
+    teams:
+      team1: "TEAM 1"
+      team2: "TEAM 2"
+      winner: "WIN"
+      defeat: "DEFEAT"
+    author:
+      title: "// RECORDER"
+    summary:
+      winner_team1: "Winner: team 1"
+      winner_team2: "Winner: team 2"
+      draw: "Draw or unknown result"
+      battle_author: "Battle author: {name}"
+      author_id: "Author ID: {id}"
+      author_tank: "Played in tank:"
+      author_damage: "Damage dealt: {value}"
+      earnings_header: "Earned:"
+      earnings_silver: "    Credits: {value}"
+      earnings_xp: "    XP (battle): {value}"
+      earnings_free_xp: "    XP (free): {value}"
+      meta_date: "Battle date: {date}"
+      meta_duration: "Duration: {duration}"
+      meta_mode: "Game mode: {mode}"
+      meta_map_id: "Map ID: {id}"
+    columns:
+      player: "Player"
+      tank: "Tank"
+      damage: "DMG"
+      kills: "Kills"
+      xp: "XP"
+      credits: "Credits"
 ...

@@ -2,7 +2,7 @@ import pickle
 from dataclasses import dataclass
 from typing import BinaryIO
 
-from ..marks import extract_marks
+from ..marks import extract_marks, player_info_marks
 from ..models.region import Region
 from ..types import BattleResults
 
@@ -36,4 +36,4 @@ def _enrich_player_info(battle_results: BattleResults, region: Region) -> None:
             continue
 
         player.info.tank_id = result_info.tank_id
-        player.info.marks = extract_marks(region, result_info)
+        player.info.marks = max(extract_marks(region, result_info), player_info_marks(player.info))

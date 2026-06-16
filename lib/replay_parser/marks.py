@@ -42,26 +42,44 @@ def _decode_varint(data: bytes, pos: int) -> tuple[int, int]:
     raise ValueError("truncated varint")
 
 
-def extract_marks_from_fields(region: Region, fields: dict[int, int]) -> int:
-    if region == Region.RU:
-        return _direct_marks(fields.get(110))
-
-    if region == Region.EU:
-        if (marks := _direct_marks(fields.get(110))) > 0:
-            return marks
-        encoded = fields.get(124)
-        if encoded is not None:
-            return min(encoded // 250, 3)
+def decode_marks_value(value: int | None) -> int:
+    if value is None or value < 0:
         return 0
-
+    if 1 <= value <= 3:
+        return value
+    if value >= 250:
+        return min(value // 250, 3)
     return 0
 
 
+def extract_marks_from_fields(region: Region, fields: dict[int, int]) -> int:
+    values = [decode_marks_value(fields.get(110)), decode_marks_value(fields.get(124))]
+    return max(values) if values else 0
+
+
 def extract_marks(region: Region, result_info: PlayerResultsInfo) -> int:
-    return extract_marks_from_fields(region, _parse_scalar_fields(result_info.SerializeToString()))
+    fields = _parse_scalar_fields(result_info.SerializeToString())
+    values = [
+        decode_marks_value(result_info.tank_marks) if _has_field(result_info, "tank_marks") else 0,
+        decode_marks_value(fields.get(110)),
+        decode_marks_value(result_info.marks_encoded) if _has_field(result_info, "marks_encoded") else 0,
+        decode_marks_value(fields.get(124)),
+    ]
+    return max(values)
+
+
+def player_info_marks(info) -> int:
+    if _has_field(info, "marks"):
+        return decode_marks_value(info.marks)
+    return decode_marks_value(getattr(info, "marks", None))
+
+
+def _has_field(message, name: str) -> bool:
+    try:
+        return message.HasField(name)
+    except (AttributeError, ValueError):
+        return False
 
 
 def _direct_marks(value: int | None) -> int:
-    if value is None or value < 0 or value > 3:
-        return 0
-    return value
+    return decode_marks_value(value)
