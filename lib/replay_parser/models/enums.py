@@ -1,0 +1,51 @@
+from enum import IntEnum
+
+
+class TeamNumber(IntEnum):
+    ONE = 1
+    TWO = 2
+
+
+class RoomType(IntEnum):
+    ANY = 0
+    REGULAR = 1
+    TRAINING_ROOM = 2
+    TOURNAMENT = 4
+    QUICK_TOURNAMENT = 5
+    RATING = 7
+    MAD_GAMES = 8
+    REALISTIC_BATTLES = 22
+    UPRISING = 23
+    GRAVITY_MODE = 24
+    SKIRMISH = 25
+    BURNING_GAMES = 26
+
+
+class MapId(IntEnum):
+    UNDEFINED = 0
+    DESERT_SANDS = 2
+    MIDDLEBURG = 3
+    COPPERFIELD = 4
+    ALPENSTADT = 5
+    MINES = 6
+    DEAD_RAIL = 7
+    FORT_DESPAIR = 8
+    HIMMELSDORF = 9
+    BLACK_GOLDVILLE = 10
+    OASIS_PALMS = 11
+    GHOST_FACTORY = 12
+    MOLENDIJK = 14
+    PORT_BAY = 15
+    WINTER_MALINOVKA = 19
+    CASTILLA = 20
+    CANAL = 21
+    VINEYARDS = 23
+    YAMATO_HARBOR = 25
+    CANYON = 27
+    MAYAN_RUINS = 30
+    DYNASTY_PEARL = 31
+    NAVAL_FRONTIER = 35
+    FALLS_CREEK = 38
+    NEW_BAY = 40
+    NORMANDY = 42
+    WASTELAND = 71

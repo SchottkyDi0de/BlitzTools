@@ -126,25 +126,10 @@ class HoverHighlightMixin:
         super().__init__(**kwargs)
 
     def on_hovered(self, *_args):
-        self._set_highlight_target(1.0 if self.hovered else 0.0)
-
-    def _set_highlight_target(self, target: float) -> None:
+        self._stop_highlight_tick()
+        target = 1.0 if self.hovered else 0.0
         self._highlight_target = target
-        if self._highlight_tick_ev is None:
-            self._highlight_tick_ev = Clock.schedule_interval(self._tick_highlight, 0)
-
-    def _tick_highlight(self, dt: float) -> None:
-        target = self._highlight_target
-        diff = target - self.highlight
-        if abs(diff) < 0.001:
-            if self.highlight != target:
-                self.highlight = target
-                self.sync_appearance()
-            self._stop_highlight_tick()
-            return
-
-        alpha = 1.0 - pow(0.001, dt / max(HOVER_ANIM_DURATION, 0.001))
-        self.highlight += diff * alpha
+        self.highlight = target
         self.sync_appearance()
 
     def _stop_highlight_tick(self) -> None:
@@ -157,41 +142,75 @@ class HoverHighlightMixin:
         self.hovered = False
         self.highlight = 0.0
         self._highlight_target = 0.0
+        if hasattr(self, "sync_appearance"):
+            self.sync_appearance()
 
 
-_hover_listener_count = 0
+_hover_listener_active = False
 _hover_clock_event = None
 _last_mouse_pos = [0.0, 0.0]
 
-_SCROLL_TYPES = frozenset({"ScrollView", "MDScrollView"})
+
+def _current_screen():
+    app = MDApp.get_running_app()
+    if not app or not app.root:
+        return None
+    manager = app.root.ids.get("screen_manager")
+    if not manager:
+        return None
+    return manager.current_screen
 
 
-def _pointer_over_widget(widget, pos) -> bool:
+def _collides_pointer(widget, pos) -> bool:
     if widget.opacity <= 0 or widget.width <= 0 or widget.height <= 0:
         return False
-    if not widget.get_root_window():
+    if getattr(widget, "disabled", False):
+        return False
+
+    parent = widget.parent
+    if parent is None:
         return False
 
     wx, wy = pos
     try:
-        lx, ly = widget.to_widget(wx, wy)
+        px, py = parent.to_widget(wx, wy)
     except Exception:
         return False
-    if not widget.collide_point(lx, ly):
-        return False
+    return widget.collide_point(px, py)
 
+
+def _draw_order(widget) -> int:
     parent = widget.parent
-    seen: set[int] = set()
-    depth = 0
-    while parent is not None and id(parent) not in seen and depth < 64:
-        seen.add(id(parent))
-        if type(parent).__name__ in _SCROLL_TYPES:
-            sx, sy = parent.to_widget(wx, wy)
-            if not parent.collide_point(sx, sy):
-                return False
-        parent = parent.parent
-        depth += 1
-    return True
+    if parent is not None and widget in parent.children:
+        return parent.children.index(widget)
+    return 0
+
+
+def _pick_hover_target(widgets, pos):
+    hits = [widget for widget in widgets if _collides_pointer(widget, pos)]
+    if not hits:
+        return None
+    if len(hits) == 1:
+        return hits[0]
+
+    def _metric(widget):
+        try:
+            cx, cy = widget.to_window(widget.center_x, widget.center_y)
+            dx = pos[0] - cx
+            dy = pos[1] - cy
+            dist = dx * dx + dy * dy
+        except Exception:
+            dist = float("inf")
+        return (dist, widget.width * widget.height, _draw_order(widget))
+
+    return min(hits, key=_metric)
+
+
+def _set_group_hover(widgets, active) -> None:
+    for widget in widgets:
+        desired = widget is active
+        if desired != widget.hovered:
+            widget.hovered = desired
 
 
 def _home_screen_active(app) -> bool:
@@ -211,6 +230,15 @@ def clear_feature_card_hover(root) -> None:
             widget.sync_appearance()
 
 
+def clear_option_button_hover(root) -> None:
+    for widget in root.walk():
+        if not isinstance(widget, (SettingsOptionButton, DvpActionButton)):
+            continue
+        if widget.hovered or widget.highlight > 0.001:
+            widget._detach_hover()
+            widget.sync_appearance()
+
+
 def _update_hover_targets(pos) -> None:
     app = MDApp.get_running_app()
     if not app or not app.root:
@@ -219,25 +247,40 @@ def _update_hover_targets(pos) -> None:
     _last_mouse_pos[0] = pos[0]
     _last_mouse_pos[1] = pos[1]
 
+    root = app.root
     home_active = _home_screen_active(app)
+    screen = _current_screen()
 
-    for widget in app.root.walk():
-        if isinstance(widget, FuturaFeatureCard):
-            if not home_active:
-                if widget.hovered or widget.highlight > 0.001:
-                    widget._detach_hover()
-                    widget.sync_appearance()
-                continue
-            inside = _pointer_over_widget(widget, pos)
-            if inside != widget.hovered:
-                widget.hovered = inside
-            continue
+    cards = []
+    option_buttons = []
+    if screen is not None:
+        for widget in screen.walk():
+            if isinstance(widget, FuturaFeatureCard):
+                cards.append(widget)
+            elif isinstance(widget, (SettingsOptionButton, DvpActionButton)):
+                option_buttons.append(widget)
 
-        if not isinstance(widget, (FuturaNavButton, SettingsOptionButton)):
-            continue
-        inside = _pointer_over_widget(widget, pos)
-        if inside != widget.hovered:
-            widget.hovered = inside
+    hit_cards = [card for card in cards if _collides_pointer(card, pos)]
+    active_card = _pick_hover_target(hit_cards, pos) if home_active else None
+
+    hit_options = [btn for btn in option_buttons if _collides_pointer(btn, pos)]
+    active_option = _pick_hover_target(hit_options, pos)
+
+    for card in cards:
+        desired = card is active_card
+        if desired != card.hovered:
+            card.hovered = desired
+
+    nav_panel = root.ids.get("nav_panel")
+    nav_buttons = []
+    if nav_panel is not None:
+        nav_buttons = [
+            child for child in nav_panel.children if isinstance(child, FuturaNavButton)
+        ]
+    active_nav = _pick_hover_target(nav_buttons, pos)
+    _set_group_hover(nav_buttons, active_nav)
+
+    _set_group_hover(option_buttons, active_option)
 
 
 def _on_global_mouse_pos(_window, pos):
@@ -248,24 +291,22 @@ def _on_hover_tick(_dt):
     _update_hover_targets(tuple(_last_mouse_pos))
 
 
+def ensure_hover_listener() -> None:
+    global _hover_listener_active, _hover_clock_event
+    if _hover_listener_active:
+        return
+    _hover_listener_active = True
+    _last_mouse_pos[0], _last_mouse_pos[1] = Window.mouse_pos
+    Window.bind(mouse_pos=_on_global_mouse_pos)
+    _hover_clock_event = Clock.schedule_interval(_on_hover_tick, 0)
+
+
 def _hover_widget_attached() -> None:
-    global _hover_listener_count, _hover_clock_event
-    _hover_listener_count += 1
-    if _hover_listener_count == 1:
-        _last_mouse_pos[0], _last_mouse_pos[1] = Window.mouse_pos
-        Window.bind(mouse_pos=_on_global_mouse_pos)
-        _hover_clock_event = Clock.schedule_interval(_on_hover_tick, 0)
+    ensure_hover_listener()
 
 
 def _hover_widget_detached() -> None:
-    global _hover_listener_count, _hover_clock_event
-    _hover_listener_count -= 1
-    if _hover_listener_count <= 0:
-        _hover_listener_count = 0
-        Window.unbind(mouse_pos=_on_global_mouse_pos)
-        if _hover_clock_event is not None:
-            _hover_clock_event.cancel()
-            _hover_clock_event = None
+    return
 
 
 class StatusDot(Widget):
@@ -364,6 +405,28 @@ class ThemeToggleButton(ButtonBehavior, MDBoxLayout):
         self.theme_icon = "weather-sunny" if is_dark else "weather-night"
 
 
+class PassThroughLabel(MDLabel):
+    """Label that never intercepts touch/hover hit-testing on parent buttons."""
+
+    def on_touch_down(self, touch):
+        return False
+
+    def on_touch_move(self, touch):
+        return False
+
+    def on_touch_up(self, touch):
+        return False
+
+
+class PassThroughHint(PassThroughLabel):
+    """Multiline hint text that never blocks pointer interaction."""
+
+    def on_size(self, *_args):
+        if self.width > 0:
+            self.text_size = (self.width, None)
+            self.texture_update()
+
+
 class SettingsOptionButton(ButtonBehavior, HoverHighlightMixin, MDBoxLayout):
     option_value = StringProperty("")
     option_label = StringProperty("")
@@ -383,6 +446,21 @@ class SettingsOptionButton(ButtonBehavior, HoverHighlightMixin, MDBoxLayout):
             _hover_widget_detached()
             self._detach_hover()
 
+    def on_touch_down(self, touch):
+        if self.disabled or not self.collide_point(*touch.pos):
+            return False
+        return ButtonBehavior.on_touch_down(self, touch)
+
+    def on_touch_move(self, touch):
+        if touch.grab_current is self:
+            return ButtonBehavior.on_touch_move(self, touch)
+        return False
+
+    def on_touch_up(self, touch):
+        if touch.grab_current is self:
+            return ButtonBehavior.on_touch_up(self, touch)
+        return False
+
     def sync_appearance(self):
         app = MDApp.get_running_app()
         palette = getattr(app, "palette", None) if app else None
@@ -395,8 +473,11 @@ class SettingsOptionButton(ButtonBehavior, HoverHighlightMixin, MDBoxLayout):
         accent_dim = palette["accent_dim"]
 
         if self.active:
-            self.md_bg_color = glow
-            self.line_color = accent
+            mix = self.highlight
+            if self.state == "down":
+                mix = min(1.0, mix + 0.55)
+            self.md_bg_color = lerp_color(glow, accent, mix * 0.35)
+            self.line_color = lerp_color(accent, (1, 1, 1, 1), mix * 0.25)
         else:
             mix = self.highlight
             if self.state == "down":
@@ -405,6 +486,7 @@ class SettingsOptionButton(ButtonBehavior, HoverHighlightMixin, MDBoxLayout):
             self.line_color = lerp_color(accent_dim, accent, mix)
 
         self._sync_option_label_color()
+        self.canvas.ask_update()
 
     def _sync_option_label_color(self):
         app = MDApp.get_running_app()
@@ -413,7 +495,72 @@ class SettingsOptionButton(ButtonBehavior, HoverHighlightMixin, MDBoxLayout):
         palette = app.palette
         for child in self.children:
             if isinstance(child, MDLabel):
-                child.text_color = palette["accent"] if self.active else palette["muted"]
+                if self.active:
+                    child.text_color = palette["accent"]
+                else:
+                    child.text_color = lerp_color(
+                        palette["muted"], palette["accent"], self.highlight
+                    )
+
+
+class DvpActionButton(ButtonBehavior, HoverHighlightMixin, MDBoxLayout):
+    action_label = StringProperty("")
+
+    def on_touch_down(self, touch):
+        if self.disabled or not self.collide_point(*touch.pos):
+            return False
+        return ButtonBehavior.on_touch_down(self, touch)
+
+    def on_touch_move(self, touch):
+        if touch.grab_current is self:
+            return ButtonBehavior.on_touch_move(self, touch)
+        return False
+
+    def on_touch_up(self, touch):
+        if touch.grab_current is self:
+            return ButtonBehavior.on_touch_up(self, touch)
+        return False
+
+    def on_parent(self, _widget, parent):
+        if parent is not None:
+            _hover_widget_attached()
+            Clock.schedule_once(lambda _dt: self.sync_appearance(), 0)
+        else:
+            _hover_widget_detached()
+            self._detach_hover()
+
+    def on_state(self, *_args):
+        self.sync_appearance()
+
+    def on_disabled(self, *_args):
+        self.sync_appearance()
+
+    def sync_appearance(self):
+        app = MDApp.get_running_app()
+        palette = getattr(app, "palette", None) if app else None
+        if not palette:
+            return
+
+        surface = palette["surface"]
+        glow = palette["accent_glow"]
+        accent = palette["accent"]
+        accent_dim = palette["accent_dim"]
+
+        if self.disabled:
+            self.md_bg_color = surface
+            self.line_color = accent_dim
+            label_color = palette["muted"]
+        else:
+            mix = self.highlight
+            if self.state == "down":
+                mix = min(1.0, mix + 0.55)
+            self.md_bg_color = lerp_color(surface, glow, mix * 0.55)
+            self.line_color = lerp_color(accent_dim, accent, mix)
+            label_color = lerp_color(palette["muted"], palette["accent"], mix)
+
+        for child in self.children:
+            if isinstance(child, MDLabel):
+                child.text_color = label_color
 
 
 class CustomTitleBar(MDBoxLayout):
@@ -462,15 +609,17 @@ class FuturaNavButton(ButtonBehavior, HoverHighlightMixin, MDBoxLayout):
             return
 
         glow = palette["accent_glow"]
-        if self.active:
-            self.md_bg_color = glow
-            return
-
+        accent = palette["accent"]
         mix = self.highlight
         if self.state == "down":
             mix = min(1.0, mix + 0.55)
 
-        self.md_bg_color = lerp_color((0, 0, 0, 0), glow, mix)
+        if self.active:
+            self.md_bg_color = lerp_color(glow, accent, mix * 0.35)
+        else:
+            self.md_bg_color = lerp_color((0, 0, 0, 0), glow, mix)
+
+        self.canvas.ask_update()
 
     def on_release(self):
         navigate_to(self.screen_name)
@@ -484,6 +633,27 @@ class FuturaFeatureCard(HoverHighlightMixin, MDCard, IconTitleLayoutMixin):
     pressed = BooleanProperty(False)
     title_horizontal_inset = NumericProperty(dp(46))
     title_block_height = NumericProperty(CARD_TITLE_BLOCK_HEIGHT)
+
+    def on_enter(self, *_args):
+        self.state_layer_color = [0, 0, 0, 0]
+
+    def on_leave(self, *_args):
+        self._state = 0.0
+        self.state_layer_color = [0, 0, 0, 0]
+        self.sync_appearance()
+
+    def set_properties_widget(self):
+        self.state_layer_color = [0, 0, 0, 0]
+
+    def _apply_card_colors(self, bg, border) -> None:
+        Animation.cancel_all(self, "_md_bg_color")
+        self._bg_color = bg
+        self.md_bg_color = bg
+        self._md_bg_color = bg
+        self.line_color = border
+        for instr in self.canvas.get_group("backgroundcolor-behavior-bg-color"):
+            instr.rgba = bg
+        self.canvas.ask_update()
 
     def on_card_title(self, *_args):
         self._title_layout_width = None
@@ -521,9 +691,9 @@ class FuturaFeatureCard(HoverHighlightMixin, MDCard, IconTitleLayoutMixin):
         if self.pressed:
             mix = min(1.0, mix + 0.45)
 
-        self.md_bg_color = lerp_color(base, hover_bg, mix)
-        self.line_color = lerp_color(accent_dim, accent, mix)
-        self.canvas.ask_update()
+        bg = lerp_color(base, hover_bg, mix)
+        border = lerp_color(accent_dim, accent, mix)
+        self._apply_card_colors(bg, border)
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):

@@ -48,4 +48,50 @@ main:
     languages:
       ru: "RU"
       en: "EN"
+  dvp:
+    title: "DVP CONVERTER"
+    description: "Pack and unpack DVPL files. Support for DVPM and DVLD files is coming soon."
+    sections:
+      compression: "// COMPRESSION"
+      options: "// OPTIONS"
+      log: "// LOG"
+    compression:
+      none: "None"
+      none_hint: "Packs fastest but produces the largest files. Use when size is not critical or you need maximum packing speed."
+      lz4: "LZ4"
+      lz4_hint: "Fast algorithm with moderate compression. A good balance of speed and size for most files."
+      lz4_hc: "LZ4 HC"
+      lz4_hc_hint: "Stronger compression at the cost of slower packing. Best when minimum DVPL file size on disk matters."
+    options:
+      keep_original: "Keep original files"
+      keep_original_hint: "When packing or unpacking, keeps the source file on disk. If off, the original is deleted after a successful conversion."
+      fast_mode: "Fast mode"
+      fast_mode_hint: "Speeds up batch processing: the log shows only errors and the final summary, not one line per file."
+      skip_if_exist: "Skip if exist"
+      skip_if_exist_hint: "Skips a file when the output already exists next to the source, without overwriting or converting again."
+      output_dir_hint: "If no folder is selected, results are saved next to the source files."
+      output_dir_active: "Output folder: {path}"
+    actions:
+      pack: "Pack files"
+      unpack: "Unpack files"
+      pack_folder: "Pack folder"
+      unpack_folder: "Unpack folder"
+      clear_log: "Clear log"
+      pick_output_dir: "Choose output folder"
+      reset_output_dir: "Reset output folder"
+      pick_files_pack: "Select files to pack"
+      pick_files_unpack: "Select DVPL files"
+      pick_folder_pack: "Select folder to pack"
+      pick_folder_unpack: "Select folder with DVPL files"
+      pick_output_dir_dialog: "Select folder for converted files"
+    log:
+      idle: "Select files or a folder to convert."
+      working: "Processing…"
+      progress: "{current} / {total} — {name}"
+      summary: "Summary: {ok} succeeded, {skipped} skipped, {failed} failed."
+    results:
+      packed: "Packed: {name} → {out}"
+      unpacked: "Unpacked: {name} → {out}"
+      skipped: "Skipped: {name} ({out} already exists)"
+      failed: "Error ({name}): {error}"
 ...

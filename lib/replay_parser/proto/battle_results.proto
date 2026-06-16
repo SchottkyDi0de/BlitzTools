@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package wotbreplay;
+
+enum TeamNumber {
+  TEAM_NUMBER_UNSPECIFIED = 0;
+  ONE = 1;
+  TWO = 2;
+}
+
+enum RoomType {
+  ANY = 0;
+  REGULAR = 1;
+  TRAINING_ROOM = 2;
+  TOURNAMENT = 4;
+  QUICK_TOURNAMENT = 5;
+  RATING = 7;
+  MAD_GAMES = 8;
+  REALISTIC_BATTLES = 22;
+  UPRISING = 23;
+  GRAVITY_MODE = 24;
+  SKIRMISH = 25;
+  BURNING_GAMES = 26;
+}
+
+message AvatarInfo {
+  string gfx_url = 2;
+  string gfx2_url = 3;
+  string kind = 4;
+}
+
+message Avatar {
+  AvatarInfo info = 2;
+}
+
+message PlayerInfo {
+  string nickname = 1;
+  optional uint32 platoon_id = 2;
+  TeamNumber team = 3;
+  optional string clan_tag = 5;
+  Avatar avatar = 7;
+  optional uint32 rank = 9;
+  optional uint32 marks = 10;
+  optional uint32 tank_id = 11;
+}
+
+message Player {
+  uint32 account_id = 1;
+  PlayerInfo info = 2;
+}
+
+message PlayerResultsInfo {
+  uint32 credits_earned = 2;
+  uint32 base_xp = 3;
+  uint32 n_shots = 4;
+  uint32 n_hits_dealt = 5;
+  uint32 n_penetrations_dealt = 7;
+  uint32 damage_dealt = 8;
+  uint32 damage_assisted_1 = 9;
+  uint32 damage_assisted_2 = 10;
+  uint32 n_hits_received = 12;
+  uint32 n_non_penetrating_hits_received = 13;
+  uint32 n_penetrations_received = 15;
+  uint32 n_enemies_damaged = 17;
+  uint32 n_enemies_destroyed = 18;
+  uint32 victory_points_earned = 32;
+  uint32 victory_points_seized = 33;
+  uint32 account_id = 101;
+  uint32 tank_id = 103;
+  optional float mm_rating = 107;
+  uint32 damage_blocked = 117;
+  optional uint32 tank_marks = 110;
+  optional uint32 marks_encoded = 124;
+}
+
+message PlayerResults {
+  uint32 result_id = 1;
+  PlayerResultsInfo info = 2;
+}
+
+message Author {
+  int32 hitpoints_left = 1;
+  uint32 total_credits = 2;
+  uint32 total_xp = 3;
+  uint32 n_shots = 4;
+  uint32 n_hits = 5;
+  uint32 n_splashes = 6;
+  uint32 n_penetrations = 7;
+  uint32 damage_dealt = 8;
+  uint32 account_id = 101;
+  TeamNumber team_number = 102;
+}
+
+message BattleResults {
+  uint32 mode_map_id = 1;
+  int64 timestamp_secs = 2;
+  optional TeamNumber winner_team_number = 3;
+  Author author = 8;
+  RoomType room_type = 9;
+  uint32 free_xp = 137;
+  repeated Player players = 201;
+  repeated PlayerResults player_results = 301;
+}

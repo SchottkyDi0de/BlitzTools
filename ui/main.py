@@ -3,13 +3,17 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.screenmanager import MDScreenManager
 
+from ui.dvp_screen import DvpScreen  # noqa: F401
 from ui.settings_screen import SettingsScreen  # noqa: F401
 from ui.widgets import (  # noqa: F401
     AdminNoticeBar,
     AdminNoticeDismissButton,
     CustomTitleBar,
+    DvpActionButton,
     FuturaFeatureCard,
     FuturaNavButton,
+    PassThroughLabel,
+    PassThroughHint,
     PlaceholderPane,
     SettingsOptionButton,
     StatusDot,
@@ -19,6 +23,7 @@ from ui.widgets import (  # noqa: F401
 
 Builder.load_file("ui/kv/titlebar.kv")
 Builder.load_file("ui/kv/screens/settings.kv")
+Builder.load_file("ui/kv/screens/dvp.kv")
 Builder.load_file("ui/kv/main.kv")
 
 class MainLayout(MDBoxLayout):

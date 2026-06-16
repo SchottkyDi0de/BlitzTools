@@ -6,6 +6,9 @@
     icon: "circle"
     active: False
     screen_name: "home"
+    orientation: "vertical"
+    theme_bg_color: "Custom"
+    md_bg_color: 0, 0, 0, 0
     size_hint_x: 1
     size_hint_y: None
     height: dp(48)
@@ -29,25 +32,23 @@
     style: "outlined"
     theme_bg_color: "Custom"
     theme_line_color: "Custom"
+    focus_behavior: False
     orientation: "vertical"
     padding: dp(10), dp(8)
     spacing: 0
-    size_hint_y: 1
+    size_hint: 1, None
+    height: dp(118)
     radius: dp(8)
     line_width: dp(1)
     ripple_behavior: False
     screen_name: ""
 
-    Widget:
-        size_hint_y: 1
-        size_hint_min_y: 0
-
     MDBoxLayout:
         id: card_content
         orientation: "vertical"
-        size_hint_y: None
-        height: dp(30) + dp(6) + dp(40)
+        size_hint: 1, 1
         spacing: dp(6)
+        padding: 0
         md_bg_color: 0, 0, 0, 0
 
         AnchorLayout:
@@ -120,10 +121,6 @@
             text_size: self.width, self.height
             size_hint_y: None
             height: dp(40)
-
-    Widget:
-        size_hint_y: 1
-        size_hint_min_y: 0
 
 <PlaceholderPane>:
     module_icon: "hammer-wrench"
@@ -351,6 +348,8 @@
                 screen_name: "ui_manager"
 
             Widget:
+                size_hint_y: 1
+                height: 1
 
             FuturaNavButton:
                 icon: "cog-outline"
@@ -481,12 +480,8 @@
                     AnchorLayout:
                         PlaceholderPane:
                             module_icon: "filmstrip-box"
-    
-                MDScreen:
-                    name: "dvp"
-                    AnchorLayout:
-                        PlaceholderPane:
-                            module_icon: "file-swap-outline"
+
+                DvpScreen:
     
                 MDScreen:
                     name: "ui_manager"

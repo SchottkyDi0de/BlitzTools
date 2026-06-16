@@ -67,6 +67,72 @@ class Settings(BaseModel):
     languages: SettingsLanguages
 
 
+class DvpSections(BaseModel):
+    compression: str
+    options: str
+    log: str
+
+
+class DvpCompression(BaseModel):
+    none: str
+    none_hint: str
+    lz4: str
+    lz4_hint: str
+    lz4_hc: str
+    lz4_hc_hint: str
+
+
+class DvpOptions(BaseModel):
+    keep_original: str
+    keep_original_hint: str
+    fast_mode: str
+    fast_mode_hint: str
+    skip_if_exist: str
+    skip_if_exist_hint: str
+    output_dir_hint: str
+    output_dir_active: str
+
+
+class DvpActions(BaseModel):
+    pack: str
+    unpack: str
+    pack_folder: str
+    unpack_folder: str
+    clear_log: str
+    pick_output_dir: str
+    reset_output_dir: str
+    pick_files_pack: str
+    pick_files_unpack: str
+    pick_folder_pack: str
+    pick_folder_unpack: str
+    pick_output_dir_dialog: str
+
+
+class DvpLog(BaseModel):
+    idle: str
+    working: str
+    progress: str
+    summary: str
+
+
+class DvpResults(BaseModel):
+    packed: str
+    unpacked: str
+    skipped: str
+    failed: str
+
+
+class Dvp(BaseModel):
+    title: str
+    description: str
+    sections: DvpSections
+    compression: DvpCompression
+    options: DvpOptions
+    actions: DvpActions
+    log: DvpLog
+    results: DvpResults
+
+
 class Main(BaseModel):
     titlebar: Titlebar
     intro: Intro
@@ -75,6 +141,7 @@ class Main(BaseModel):
     admin_notice: AdminNotice
     modules: Modules
     settings: Settings
+    dvp: Dvp
 
 
 class LocaleStruct(BaseModel):

@@ -37,4 +37,6 @@ olenemer:
     rating: true
 
 converter:
+  # Пустая строка — сохранять рядом с исходными файлами
+  output_dir: ""
 ...

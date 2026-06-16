@@ -63,6 +63,11 @@ def navigate_to(screen_name: str) -> None:
 
         clear_feature_card_hover(root)
 
+    if screen_name not in ("settings", "dvp"):
+        from ui.widgets import clear_option_button_hover
+
+        clear_option_button_hover(root)
+
     for child in root.ids.nav_panel.walk():
         if isinstance(child, FuturaNavButton):
             child.active = child.screen_name == screen_name

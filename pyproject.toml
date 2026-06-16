@@ -16,6 +16,8 @@ dependencies = [
     "kivymd @ https://github.com/kivymd/KivyMD/archive/master.zip",
     "hpyt (>=1.4.0,<2.0.0)",
     "winaccent (>=2.1.0,<3.0.0)",
+    "lz4 (>=4.4.4,<5.0.0)",
+    "pywin32 (>=308,<400)",
 ]
 
 

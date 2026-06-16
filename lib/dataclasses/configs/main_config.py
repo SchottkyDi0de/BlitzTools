@@ -41,8 +41,12 @@ class Olenemer(BaseModel):
     column_status: ColumnStatus
 
 
+class Converter(BaseModel):
+    output_dir: str = ""
+
+
 class ConfigStruct(BaseModel):
     app_global: AppGlobal
     sessions: None
     olenemer: Olenemer
-    converter: None
+    converter: Converter = Converter()

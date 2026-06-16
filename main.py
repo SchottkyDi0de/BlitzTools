@@ -23,6 +23,7 @@ from utils.admin import needs_admin_notice
 from utils.app_theme import apply_theme_from_config, get_palette, sync_feature_cards
 from utils.config_persist import bind_window_geometry_persist, sync_window_geometry
 from utils.screen_layout import prepare_screens, prepare_screens_delayed
+from ui.widgets import ensure_hover_listener
 from utils.ui_refresh import refresh_ui
 from utils.ui_scale import apply_ui_scale
 from utils.win_chrome import apply_window_settings, reset_chrome_state, restore_window_appearance
@@ -82,6 +83,7 @@ class MainApp(MDApp):
         if not getattr(self, "_layout_bound", False):
             self._layout_bound = True
             Window.bind(on_resize=self._on_window_resize)
+        ensure_hover_listener()
         manager = self.root.ids.screen_manager
         if not getattr(self, "_screen_bound", False):
             self._screen_bound = True

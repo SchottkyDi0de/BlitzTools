@@ -17,6 +17,7 @@
     option_value: ""
     option_label: ""
     active: False
+    size_hint_x: 1
     size_hint_y: None
     height: dp(38)
     padding: dp(10), dp(6)
@@ -27,8 +28,10 @@
     line_color: app.palette['accent_dim']
     line_width: dp(1)
 
-    MDLabel:
+    PassThroughLabel:
         text: root.option_label
+        size_hint: 1, 1
+        text_size: self.size
         font_size: sp(10)
         theme_font_size: "Custom"
         bold: root.active
