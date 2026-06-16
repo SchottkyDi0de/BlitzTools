@@ -18,15 +18,16 @@ class Font(BaseModel):
     italic: bool
 
 
+
 class AppGlobal(BaseModel):
     window: Window
-    apperance: None
     font: Font
     theme: str
     language: str
 
 
 class ColumnStatus(BaseModel):
+    avatar: bool
     nickname: bool
     tank: bool
     rating: bool

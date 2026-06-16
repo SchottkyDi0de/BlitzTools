@@ -1,10 +1,49 @@
 ---
 main:
+  titlebar:
+    status: "WORKING"
   intro:
-    title: "[b][size=30]Добро пожаловать в BlitzTools![/size][/b]"
-    subtitle: "[b][size=20]BlitzTools это набор инструментов для работы с играми Tanks Blitz и World of Tanks.[/size][/b]"
-    description: "[u][size=16]Программа на данный момент имеет следующий функционал:[/u][/size]"
-    files: "[b]Файлы:[/b] работа с DVPL, управление модами, конвертация текстур PVR"
-    net: "[b]Сеть:[/b] Измерение пинга, тестирование API и принудительное подключение к выбранным кластерам"
-    overlay: "[b]Оверлеи:[/b] Наэкранная сессионая статистика и оленеметр в реальном времени и без внешнего API"
+    title: "Добро пожаловать в BlitzTools"
+    subtitle: "Инструменты для Tanks Blitz и WoT Blitz"
+    description: "// МОДУЛИ"
+  home:
+    title: "// МОДУЛИ"
+    hint: "Основной функционал приложения. Откройте модуль по карточке или выберите раздел в панели навигации слева."
+  placeholder:
+    title: "В разработке"
+    subtitle: "Этот раздел скоро будет доступен"
+  modules:
+    sessions:
+      title: "СЕССИИ"
+      body: "Наэкранная сессионная статистика в реальном времени"
+    olenemer:
+      title: "ОЛЕНЕМЕР"
+      body: "Переработанные списки игроков с дополнительной статистикой"
+    cluster:
+      title: "КЛАСТЕРЫ"
+      body: "Блокировка определённых кластеров"
+    replay:
+      title: "РЕПЛЕИ"
+      body: "Парсинг и разбор файлов реплеев"
+    dvp:
+      title: "DVP КОНВЕРТЕР"
+      body: "Конвертер DVPL, DVPM, DVLD файлов"
+    ui_manager:
+      title: "МЕНЕДЖЕР ИНТЕРФЕЙСА"
+      body: "Шрифты · редактор текста · разметка и элементы UI"
+    settings:
+      title: "НАСТРОЙКИ ПРИЛОЖЕНИЯ"
+      body: "Конфигурация приложения и модулей"
+  settings:
+    title: "НАСТРОЙКИ"
+    sections:
+      font: "// ШРИФТ"
+      language: "// ЯЗЫК"
+    fonts:
+      roboto: "Roboto"
+      robotomono: "Roboto Mono"
+      jost: "Jost"
+    languages:
+      ru: "RU"
+      en: "EN"
 ...

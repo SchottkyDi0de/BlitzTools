@@ -1,0 +1,49 @@
+---
+main:
+  titlebar:
+    status: "WORKING"
+  intro:
+    title: "Welcome to BlitzTools"
+    subtitle: "Tools for Tanks Blitz and WoT Blitz"
+    description: "// MODULES"
+  home:
+    title: "// MODULES"
+    hint: "Core app features. Open a module from a card below or pick a section in the navigation panel on the left."
+  placeholder:
+    title: "In development"
+    subtitle: "This section will be available soon"
+  modules:
+    sessions:
+      title: "SESSIONS"
+      body: "On-screen session statistics in real time"
+    olenemer:
+      title: "OLENEMER"
+      body: "Redesigned player lists with extra statistics"
+    cluster:
+      title: "CLUSTERS"
+      body: "Block specific server clusters"
+    replay:
+      title: "REPLAYS"
+      body: "Parse and analyze replay files"
+    dvp:
+      title: "DVP CONVERTER"
+      body: "Converter for DVPL, DVPM, DVLD files"
+    ui_manager:
+      title: "UI MANAGER"
+      body: "Fonts · text editor · layout and UI elements"
+    settings:
+      title: "APP SETTINGS"
+      body: "Application and module configuration"
+  settings:
+    title: "SETTINGS"
+    sections:
+      font: "// FONT"
+      language: "// LANGUAGE"
+    fonts:
+      roboto: "Roboto"
+      robotomono: "Roboto Mono"
+      jost: "Jost"
+    languages:
+      ru: "RU"
+      en: "EN"
+...

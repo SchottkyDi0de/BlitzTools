@@ -5,17 +5,71 @@
 from pydantic import BaseModel
 
 
+class Titlebar(BaseModel):
+    status: str
+
+
 class Intro(BaseModel):
     title: str
     subtitle: str
     description: str
-    files: str
-    net: str
-    overlay: str
+
+
+class Home(BaseModel):
+    title: str
+    hint: str
+
+
+class Placeholder(BaseModel):
+    title: str
+    subtitle: str
+
+
+class ModuleInfo(BaseModel):
+    title: str
+    body: str
+
+
+class Modules(BaseModel):
+    sessions: ModuleInfo
+    olenemer: ModuleInfo
+    cluster: ModuleInfo
+    replay: ModuleInfo
+    dvp: ModuleInfo
+    ui_manager: ModuleInfo
+    settings: ModuleInfo
+
+
+class SettingsSections(BaseModel):
+    font: str
+    language: str
+
+
+class SettingsFonts(BaseModel):
+    roboto: str
+    robotomono: str
+    jost: str
+
+
+class SettingsLanguages(BaseModel):
+    ru: str
+    en: str
+
+
+class Settings(BaseModel):
+    title: str
+    sections: SettingsSections
+    fonts: SettingsFonts
+    languages: SettingsLanguages
 
 
 class Main(BaseModel):
+    titlebar: Titlebar
     intro: Intro
+    home: Home
+    placeholder: Placeholder
+    modules: Modules
+    settings: Settings
 
 
 class LocaleStruct(BaseModel):

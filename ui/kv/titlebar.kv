@@ -1,0 +1,136 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+
+<TitleBarButton>:
+    icon: "minus"
+    action: ""
+    size_hint_x: None
+    width: dp(36)
+    size_hint_y: 1
+    padding: 0
+    radius: 0
+    md_bg_color: 0, 0, 0, 0
+
+    AnchorLayout:
+        anchor_x: "center"
+        anchor_y: "center"
+
+        MDIcon:
+            icon: root.icon
+            theme_icon_color: "Custom"
+            icon_color: app.palette['accent']
+            font_size: sp(14)
+            size_hint: None, None
+            size: dp(16), dp(16)
+
+<ThemeToggleButton>:
+    theme_icon: "weather-sunny"
+    size_hint_x: None
+    width: dp(28)
+    padding: 0
+    radius: [dp(4)] * 4
+    md_bg_color: (0, 0, 0, 0)
+
+    AnchorLayout:
+        anchor_x: "center"
+        anchor_y: "center"
+
+        MDIcon:
+            icon: root.theme_icon
+            theme_icon_color: "Custom"
+            icon_color: app.palette['accent']
+            font_size: sp(14)
+            size_hint: None, None
+            size: dp(16), dp(16)
+
+<CustomTitleBar>:
+    orientation: "horizontal"
+    size_hint_y: None
+    height: dp(36)
+    padding: dp(10), 0, 0, 0
+    spacing: dp(8)
+    md_bg_color: app.palette['bg_panel']
+
+    canvas.after:
+        Color:
+            rgba: app.palette['accent_dim']
+        Line:
+            points: [self.x, self.y, self.right, self.y]
+            width: dp(1)
+
+    AnchorLayout:
+        size_hint_x: None
+        width: dp(18)
+        anchor_y: "center"
+
+        MDIcon:
+            icon: "flash-outline"
+            theme_icon_color: "Custom"
+            icon_color: app.palette['accent']
+            font_size: sp(15)
+            size_hint: None, None
+            size: dp(16), dp(16)
+
+    MDLabel:
+        text: "BLITZ//TOOLS"
+        font_size: sp(10)
+        bold: True
+        theme_font_name: "Custom"
+        font_name: app.get_font("robotomono")
+        theme_text_color: "Custom"
+        text_color: app.palette['accent']
+        md_bg_color: 0, 0, 0, 0
+        size_hint_x: 1
+        size_hint_y: 1
+        valign: "middle"
+
+    MDBoxLayout:
+        id: status_row
+        orientation: "horizontal"
+        size_hint_x: None
+        size_hint_y: 1
+        spacing: dp(5)
+        md_bg_color: 0, 0, 0, 0
+        width: dp(28) + dp(12) + (status_label.texture_size[0] if status_label.texture_size[0] else dp(72))
+
+        ThemeToggleButton:
+            pos_hint: {"center_y": 0.5}
+
+        AnchorLayout:
+            size_hint_x: None
+            width: dp(10)
+            anchor_y: "center"
+
+            StatusDot:
+                size_hint: None, None
+                size: dp(7), dp(7)
+
+        AnchorLayout:
+            size_hint_x: None
+            width: status_label.texture_size[0] if status_label.texture_size[0] else dp(60)
+            anchor_y: "center"
+
+            MDLabel:
+                id: status_label
+                text: app.locales.data['ru'].main.titlebar.status
+                font_size: sp(9)
+                theme_font_name: "Custom"
+                font_name: app.get_font("robotomono")
+                theme_text_color: "Custom"
+                text_color: app.palette['muted']
+                md_bg_color: 0, 0, 0, 0
+                size_hint: None, None
+                text_size: None, None
+                adaptive_size: True
+                shorten: False
+                max_lines: 1
+                halign: "left"
+                valign: "middle"
+
+    TitleBarButton:
+        icon: "minus"
+        action: "minimize"
+
+    TitleBarButton:
+        icon: "close"
+        action: "close"

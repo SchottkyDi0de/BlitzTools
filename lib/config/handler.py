@@ -6,6 +6,7 @@ from pydantic_core import ValidationError
 from lib.dataclasses.configs.main_config import ConfigStruct
 from utils.resource_path import get_current_directory, get_files_path
 from utils.singleton_factory import singleton
+from utils.window_geometry import sanitize_window_config
 
 _log = Logger
 
@@ -31,6 +32,12 @@ class ConfigHandler:
                 with open(self.config_path, 'r', encoding='utf-8') as config_file:
                     try:
                         self.config: ConfigStruct = ConfigStruct.model_validate(yaml.safe_load(config_file.read()))
+                        if sanitize_window_config(
+                            self.config.app_global.window,
+                            self.default_config.app_global.window,
+                        ):
+                            _log.warning('Config: invalid window geometry, restored defaults')
+                            self.write_config()
                     except (ValidationError, FileNotFoundError, yaml.YAMLError):
                         _log.warning('Config: Error while loading config, loading default config...')
                         self.config = self.default_config
@@ -40,7 +47,7 @@ class ConfigHandler:
                         
     def _load_config(self) -> None:
         with open(self.config_path, 'r', encoding='utf-8') as config_file:
-            self.config = ConfigStruct.model_validate(safe_load(config_file.read()))
+            self.config = ConfigStruct.model_validate(yaml.safe_load(config_file.read()))
                         
     def get_config(self) -> ConfigStruct:
         """
@@ -59,4 +66,4 @@ class ConfigHandler:
             config (ConfigStruct): The configuration to write.
         """
         with open(get_files_path().joinpath('config/config.yaml'), 'w', encoding='utf-8') as f:
-            f.write(dump(self.config.model_dump(), sort_keys=False, indent=2))
+            f.write(yaml.dump(self.config.model_dump(), sort_keys=False, indent=2))

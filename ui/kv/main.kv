@@ -1,111 +1,324 @@
-<MainLayout>: # MDBoxLayout
-    orientation: "horizontal"
-    MDNavigationRail:
-        type: "selected"
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+#:import MDSlideTransition kivymd.uix.transition.transition.MDSlideTransition
 
-        MDNavigationRailFabButton:
-            icon: "home"
+<FuturaNavButton>:
+    icon: "circle"
+    active: False
+    screen_name: "home"
+    size_hint_x: 1
+    size_hint_y: None
+    height: dp(44)
+    padding: 0
+    radius: dp(6)
 
-    MDScreen:
-        name: "settings"
+    AnchorLayout:
+        anchor_x: "center"
+        anchor_y: "center"
+
+        MDIcon:
+            icon: root.icon
+            theme_icon_color: "Custom"
+            icon_color: app.palette['accent']
+            font_size: sp(20)
+            size_hint: None, None
+            size: dp(22), dp(22)
+            pos_hint: {}
+
+<FuturaFeatureCard>:
+    style: "outlined"
+    theme_bg_color: "Custom"
+    theme_line_color: "Custom"
+    orientation: "vertical"
+    padding: dp(10), dp(8)
+    spacing: dp(6)
+    size_hint_y: 1
+    radius: dp(8)
+    line_width: dp(1)
+    ripple_behavior: False
+    screen_name: ""
+
+    MDBoxLayout:
+        size_hint_y: None
+        height: dp(32)
+        spacing: dp(6)
+        md_bg_color: 0, 0, 0, 0
+
+        MDIcon:
+            icon: root.card_icon
+            theme_icon_color: "Custom"
+            icon_color: app.palette['accent']
+            font_size: sp(14)
+            size_hint_x: None
+            width: dp(18)
+            pos_hint: {"center_y": 0.5}
+
+        MDLabel:
+            markup: True
+            text: root.card_title
+            font_size: sp(10)
+            bold: True
+            theme_font_name: "Custom"
+            font_name: app.get_font("robotomono")
+            theme_text_color: "Custom"
+            text_color: app.palette['accent']
+            md_bg_color: 0, 0, 0, 0
+            valign: "middle"
+            text_size: self.width, None
+            size_hint_x: 1
+
+    MDLabel:
+        markup: True
+        text: root.card_body
+        font_size: sp(10)
+        line_height: 1.25
+        theme_font_name: "Custom"
+        font_name: app.get_font(app.config.app_global.font.name)
+        theme_text_color: "Custom"
+        text_color: app.palette['muted']
+        md_bg_color: 0, 0, 0, 0
+        valign: "top"
+        text_size: self.width, None
+        size_hint_y: 1
+
+<PlaceholderPane@MDBoxLayout>:
+    module_icon: "hammer-wrench"
+    orientation: "vertical"
+    size_hint: None, None
+    width: dp(340)
+    height: self.minimum_height
+    padding: dp(24), dp(16)
+    spacing: dp(8)
+
+    MDIcon:
+        icon: root.module_icon
+        theme_icon_color: "Custom"
+        icon_color: app.palette['accent']
+        font_size: sp(36)
+        size_hint_y: None
+        height: dp(40)
+        halign: "center"
+
+    MDLabel:
+        text: app.locales.data['ru'].main.placeholder.title
+        font_size: sp(14)
+        bold: True
+        halign: "center"
+        theme_font_name: "Custom"
+        font_name: app.get_font("robotomono")
+        theme_text_color: "Custom"
+        text_color: app.palette['accent']
+        md_bg_color: 0, 0, 0, 0
+        text_size: root.width, None
+        size_hint_y: None
+        height: self.texture_size[1]
+
+    MDLabel:
+        text: app.locales.data['ru'].main.placeholder.subtitle
+        font_size: sp(11)
+        halign: "center"
+        theme_font_name: "Custom"
+        font_name: app.get_font(app.config.app_global.font.name)
+        theme_text_color: "Custom"
+        text_color: app.palette['muted']
+        md_bg_color: 0, 0, 0, 0
+        text_size: root.width, None
+        size_hint_y: None
+        height: self.texture_size[1]
+
+<MainLayout>:
+    md_bg_color: app.palette['bg']
+    orientation: "vertical"
+    spacing: 0
+
+    CustomTitleBar:
+        id: titlebar
+
+    MDBoxLayout:
+        id: content_row
+        orientation: "horizontal"
+        spacing: 0
+        md_bg_color: app.palette['bg']
 
         MDBoxLayout:
+            id: nav_panel
             orientation: "vertical"
-            padding: 20
+            size_hint_x: None
+            width: dp(56)
+            padding: dp(8), dp(10)
+            spacing: dp(4)
+            md_bg_color: app.palette['bg_panel']
 
-            MDLabel:
-                markup: True
-                text: app.locales.data['ru'].main.intro.title
-                adaptive_height: True
-                padding_y: 20
-                theme_font_name: "Custom"
-                font_name: app.get_font(app.config.app_global.font.name)
-            
-            MDLabel:
-                markup: True
-                text: app.locales.data['ru'].main.intro.subtitle
-                adaptive_height: True
-                padding_y: 20
-                theme_font_name: "Custom"
-                font_name: app.get_font(app.config.app_global.font.name)
+            canvas.after:
+                Color:
+                    rgba: app.palette['accent_dim']
+                Line:
+                    points: [self.right, self.y, self.right, self.top]
+                    width: dp(1)
 
-            MDLabel:
-                markup: True
-                text: app.locales.data['ru'].main.intro.description
-                adaptive_height: True
-                padding_y: 10
-                theme_font_name: "Custom"
-                font_name: app.get_font(app.config.app_global.font.name)
-            
-            MDBoxLayout:
-                orientation: "horizontal"
-                size_hint_y: None
-                height: self.minimum_height + 10
-                spacing: 10
+            FuturaNavButton:
+                icon: "home"
+                screen_name: "home"
+                active: True
 
+            FuturaNavButton:
+                icon: "chart-timeline-variant"
+                screen_name: "sessions"
+
+            FuturaNavButton:
+                icon: "target"
+                screen_name: "olenemer"
+
+            FuturaNavButton:
+                icon: "shield-lock-outline"
+                screen_name: "cluster"
+
+            FuturaNavButton:
+                icon: "filmstrip-box"
+                screen_name: "replay"
+
+            FuturaNavButton:
+                icon: "file-swap-outline"
+                screen_name: "dvp"
+
+            FuturaNavButton:
+                icon: "palette-outline"
+                screen_name: "ui_manager"
+
+            Widget:
+
+            FuturaNavButton:
+                icon: "cog-outline"
+                screen_name: "settings"
+
+        MDScreenManager:
+            id: screen_manager
+            transition: MDSlideTransition(duration=0.22, direction="left")
+            md_bg_color: app.palette['bg']
+
+            MDScreen:
+                name: "home"
+                md_bg_color: app.palette['bg']
+
+                ScrollView:
+                    do_scroll_x: False
+                    bar_width: dp(4)
+
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        padding: dp(14), dp(12)
+                        spacing: dp(10)
+                        adaptive_height: True
+                        size_hint_y: None
+                        height: self.minimum_height
+
+                        MDLabel:
+                            id: home_title
+                            text: app.locales.data['ru'].main.home.title
+                            font_size: sp(9)
+                            bold: True
+                            adaptive_height: True
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            theme_font_name: "Custom"
+                            font_name: app.get_font("robotomono")
+                            theme_text_color: "Custom"
+                            text_color: app.palette['accent']
+                            md_bg_color: 0, 0, 0, 0
+                            padding: 0, 0, 0, dp(2)
+
+                        MDLabel:
+                            id: home_hint
+                            text: app.locales.data['ru'].main.home.hint
+                            font_size: sp(10)
+                            adaptive_height: True
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            theme_font_name: "Custom"
+                            font_name: app.get_font(app.config.app_global.font.name)
+                            theme_text_color: "Custom"
+                            text_color: app.palette['muted']
+                            md_bg_color: 0, 0, 0, 0
+                            padding: 0, 0, 0, dp(8)
+
+                        MDGridLayout:
+                            cols: 3
+                            spacing: dp(8)
+                            size_hint_y: None
+                            row_force_default: True
+                            row_default_height: dp(108)
+                            height: dp(108) * 2 + dp(8)
+
+                            FuturaFeatureCard:
+                                screen_name: "sessions"
+                                card_icon: "chart-timeline-variant"
+                                card_title: app.locales.data['ru'].main.modules.sessions.title
+                                card_body: app.locales.data['ru'].main.modules.sessions.body
+
+                            FuturaFeatureCard:
+                                screen_name: "olenemer"
+                                card_icon: "target"
+                                card_title: app.locales.data['ru'].main.modules.olenemer.title
+                                card_body: app.locales.data['ru'].main.modules.olenemer.body
+
+                            FuturaFeatureCard:
+                                screen_name: "cluster"
+                                card_icon: "shield-lock-outline"
+                                card_title: app.locales.data['ru'].main.modules.cluster.title
+                                card_body: app.locales.data['ru'].main.modules.cluster.body
+
+                            FuturaFeatureCard:
+                                screen_name: "replay"
+                                card_icon: "filmstrip-box"
+                                card_title: app.locales.data['ru'].main.modules.replay.title
+                                card_body: app.locales.data['ru'].main.modules.replay.body
+
+                            FuturaFeatureCard:
+                                screen_name: "dvp"
+                                card_icon: "file-swap-outline"
+                                card_title: app.locales.data['ru'].main.modules.dvp.title
+                                card_body: app.locales.data['ru'].main.modules.dvp.body
+
+                            FuturaFeatureCard:
+                                screen_name: "ui_manager"
+                                card_icon: "palette-outline"
+                                card_title: app.locales.data['ru'].main.modules.ui_manager.title
+                                card_body: app.locales.data['ru'].main.modules.ui_manager.body
+
+            MDScreen:
+                name: "sessions"
                 AnchorLayout:
-                    size_hint_x: None
-                    width: dp(32)
-                    anchor_x: 'left'
-                    anchor_y: 'top'
+                    PlaceholderPane:
+                        module_icon: "chart-timeline-variant"
 
-                    MDIcon:
-                        icon: "archive-arrow-up-outline"
-                        size_hint: None, None
-                        size: dp(24), dp(24)
-                        padding_y: 5
-
-                MDLabel:
-                    markup: True
-                    text: app.locales.data['ru'].main.intro.files
-                    adaptive_height: True
-                    theme_font_name: "Custom"
-                    font_name: app.get_font(app.config.app_global.font.name)
-            
-            MDBoxLayout:
-                orientation: "horizontal"
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: 10
-
+            MDScreen:
+                name: "olenemer"
                 AnchorLayout:
-                    size_hint_x: None
-                    width: dp(32)
-                    anchor_x: 'left'
-                    anchor_y: 'top'
+                    PlaceholderPane:
+                        module_icon: "target"
 
-                    MDIcon:
-                        icon: "network-strength-3-alert"
-                        size_hint: None, None
-                        size: dp(24), dp(24)
-
-                MDLabel:
-                    markup: True
-                    text: app.locales.data['ru'].main.intro.net
-                    adaptive_height: True
-                    theme_font_name: "Custom"
-                    font_name: app.get_font(app.config.app_global.font.name)
-
-            MDBoxLayout:
-                orientation: "horizontal"
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: 10
-
+            MDScreen:
+                name: "cluster"
                 AnchorLayout:
-                    size_hint_x: None
-                    width: dp(32)
-                    anchor_x: 'left'
-                    anchor_y: 'top'
+                    PlaceholderPane:
+                        module_icon: "shield-lock-outline"
 
-                    MDIcon:
-                        icon: "monitor-screenshot"
-                        size_hint: None, None
-                        size: dp(24), dp(24)
+            MDScreen:
+                name: "replay"
+                AnchorLayout:
+                    PlaceholderPane:
+                        module_icon: "filmstrip-box"
 
-                MDLabel:
-                    markup: True
-                    text: app.locales.data['ru'].main.intro.overlay
-                    adaptive_height: True
-                    theme_font_name: "Custom"
-                    font_name: app.get_font(app.config.app_global.font.name)
+            MDScreen:
+                name: "dvp"
+                AnchorLayout:
+                    PlaceholderPane:
+                        module_icon: "file-swap-outline"
+
+            MDScreen:
+                name: "ui_manager"
+                AnchorLayout:
+                    PlaceholderPane:
+                        module_icon: "palette-outline"
+
+            SettingsScreen:

@@ -5,8 +5,6 @@ app_global:
     height: 500
     pos: [100, 100]
 
-  apperance:
-
   # Шрифт текста в интерфейсе
   font:
     name: "roboto" # "roboto", "robotomono", "jost"
@@ -33,6 +31,7 @@ olenemer:
 
   # Видимость столбцов
   column_status:
+    avatar: true
     nickname: true
     tank: true
     rating: true
