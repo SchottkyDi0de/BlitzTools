@@ -25,6 +25,10 @@ class Placeholder(BaseModel):
     subtitle: str
 
 
+class AdminNotice(BaseModel):
+    message: str
+
+
 class ModuleInfo(BaseModel):
     title: str
     body: str
@@ -68,6 +72,7 @@ class Main(BaseModel):
     intro: Intro
     home: Home
     placeholder: Placeholder
+    admin_notice: AdminNotice
     modules: Modules
     settings: Settings
 

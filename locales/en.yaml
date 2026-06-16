@@ -12,6 +12,8 @@ main:
   placeholder:
     title: "In development"
     subtitle: "This section will be available soon"
+  admin_notice:
+    message: "The app is not running as administrator. Some features (cluster blocking) may be unavailable."
   modules:
     sessions:
       title: "SESSIONS"

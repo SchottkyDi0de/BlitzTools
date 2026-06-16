@@ -1,7 +1,11 @@
 import yaml
 
 from utils.resource_path import get_current_directory, get_files_path
-from utils.window_geometry import is_valid_window_size, migrate_legacy_window_size_dict
+from utils.window_geometry import (
+    is_valid_window_pos,
+    is_valid_window_size,
+    migrate_legacy_window_size_dict,
+)
 
 
 def read_window_config() -> dict:
@@ -29,6 +33,9 @@ def read_window_config() -> dict:
     if not is_valid_window_size(int(window["width"]), int(window["height"])):
         window["width"] = default_window["width"]
         window["height"] = default_window["height"]
+
+    if not is_valid_window_pos(window.get("pos")):
+        window["pos"] = list(default_window["pos"])
 
     return window
 

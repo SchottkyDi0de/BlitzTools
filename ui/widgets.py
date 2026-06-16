@@ -3,7 +3,7 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics import Color, Ellipse
 from kivy.metrics import dp
-from kivy.properties import BooleanProperty, NumericProperty, StringProperty
+from kivy.properties import BooleanProperty, ListProperty, NumericProperty, ObjectProperty, StringProperty
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.widget import Widget
 from kivymd.app import MDApp
@@ -17,29 +17,57 @@ from utils.nav import navigate_to
 
 HOVER_ANIM_DURATION = 0.2
 ICON_TITLE_ICON_BLOCK = dp(26)
+TITLE_WIDTH_SLACK = dp(6)
+ICON_WIDGET_NAMES = frozenset({"MDIcon", "Icon"})
+CARD_TITLE_BLOCK_HEIGHT = dp(30)
+CARD_BODY_BLOCK_HEIGHT = dp(40)
+CARD_CONTENT_SPACING = dp(6)
 
 
-def sync_icon_title_row(label, row, anchor, icon_box, *, max_text_width: float) -> None:
+def is_icon_widget(widget) -> bool:
+    return type(widget).__name__ in ICON_WIDGET_NAMES
+
+
+def sync_icon_title_row(
+    label,
+    row,
+    anchor,
+    icon_box,
+    *,
+    max_text_width: float,
+    title_block_height: float | None = None,
+) -> None:
     if not label or not row or not anchor:
         return
 
     max_w = max(max_text_width, dp(80))
+    block_h = title_block_height or dp(14)
 
     label.text_size = (None, None)
     label.texture_update()
-    natural_w = max(label.texture_size[0], dp(1))
+    natural_w = max(label.texture_size[0], dp(1)) + TITLE_WIDTH_SLACK
 
-    if natural_w <= max_w:
-        label.width = natural_w
-        label.text_size = (natural_w, None)
-        row.width = ICON_TITLE_ICON_BLOCK + natural_w
+    use_w = min(natural_w, max_w)
+
+    if title_block_height:
+        label.width = use_w
+        label.height = block_h
+        label.text_size = (use_w, block_h)
+        label.texture_update()
     else:
-        label.width = max_w
-        label.text_size = (max_w, None)
-        row.width = ICON_TITLE_ICON_BLOCK + max_w
+        single_line_h = max(getattr(label, "font_size", dp(10)) * 1.35, dp(12))
+        for _ in range(4):
+            label.width = use_w
+            label.text_size = (use_w, None)
+            label.texture_update()
+            if label.texture_size[1] <= single_line_h:
+                break
+            use_w = min(use_w + dp(4), max_w)
+            if use_w >= max_w:
+                break
 
-    label.texture_update()
-    row.height = max(label.texture_size[1], dp(14))
+    row.width = ICON_TITLE_ICON_BLOCK + use_w
+    row.height = block_h if title_block_height else max(label.texture_size[1], dp(14))
     anchor.height = row.height
     if icon_box is not None:
         icon_box.height = row.height
@@ -49,18 +77,40 @@ def sync_icon_title_row(label, row, anchor, icon_box, *, max_text_width: float) 
 
 class IconTitleLayoutMixin:
     title_horizontal_inset = NumericProperty(dp(46))
+    title_block_height = NumericProperty(0)
 
     def _sync_title_layout(self):
+        if self.width <= 0:
+            return
+
+        layout_width = round(self.width, 1)
+        if getattr(self, "_title_layout_width", None) == layout_width:
+            return
+
+        block_h = self.title_block_height if self.title_block_height > 0 else None
         sync_icon_title_row(
             self.ids.get("title_label"),
             self.ids.get("title_row"),
             self.ids.get("title_anchor"),
             self.ids.get("title_icon_box"),
             max_text_width=self.width - self.title_horizontal_inset,
+            title_block_height=block_h,
         )
+        self._title_layout_width = layout_width
 
     def _schedule_title_layout(self):
-        Clock.schedule_once(lambda _dt: self._sync_title_layout(), 0)
+        if getattr(self, "_title_layout_scheduled", False):
+            return
+        self._title_layout_scheduled = True
+        Clock.schedule_once(self._run_title_layout, 0)
+
+    def _run_title_layout(self, _dt):
+        self._title_layout_scheduled = False
+        self._sync_title_layout()
+
+    def _refresh_title_layout(self, _dt):
+        self._title_layout_width = None
+        self._sync_title_layout()
 
     def on_size(self, *_args):
         self._schedule_title_layout()
@@ -433,8 +483,10 @@ class FuturaFeatureCard(HoverHighlightMixin, MDCard, IconTitleLayoutMixin):
     screen_name = StringProperty("")
     pressed = BooleanProperty(False)
     title_horizontal_inset = NumericProperty(dp(46))
+    title_block_height = NumericProperty(CARD_TITLE_BLOCK_HEIGHT)
 
     def on_card_title(self, *_args):
+        self._title_layout_width = None
         self._schedule_title_layout()
 
     def on_size(self, *_args):
@@ -445,6 +497,7 @@ class FuturaFeatureCard(HoverHighlightMixin, MDCard, IconTitleLayoutMixin):
             _hover_widget_attached()
             Clock.schedule_once(lambda _dt: self.sync_appearance(), 0)
             self._schedule_title_layout()
+            Clock.schedule_once(self._refresh_title_layout, 0.08)
         else:
             _hover_widget_detached()
             self._detach_hover()
@@ -504,8 +557,179 @@ class PlaceholderPane(IconTitleLayoutMixin, MDBoxLayout):
     title_horizontal_inset = NumericProperty(dp(74))
 
     def on_pane_title(self, *_args):
+        self._title_layout_width = None
         self._schedule_title_layout()
 
     def on_parent(self, _widget, parent):
         if parent is not None:
             self._schedule_title_layout()
+            Clock.schedule_once(self._refresh_title_layout, 0.08)
+
+
+NOTICE_STYLE = {
+    "dark": {
+        "bg": (0.36, 0.06, 0.08, 1),
+        "border": (0.92, 0.22, 0.26, 0.55),
+        "icon": (1, 0.42, 0.42, 1),
+        "text": (0.96, 0.86, 0.86, 1),
+        "dismiss": (0.82, 0.55, 0.55, 1),
+        "dismiss_glow": (0.92, 0.22, 0.26, 0.18),
+    },
+    "light": {
+        "bg": (0.94, 0.78, 0.78, 1),
+        "border": (0.72, 0.12, 0.16, 0.55),
+        "icon": (0.72, 0.08, 0.12, 1),
+        "text": (0.22, 0.02, 0.04, 1),
+        "dismiss": (0.52, 0.12, 0.14, 1),
+        "dismiss_glow": (0.72, 0.12, 0.16, 0.2),
+    },
+}
+
+
+def _find_admin_notice_bar(widget):
+    seen: set[int] = set()
+    bar = widget
+    depth = 0
+    while bar is not None and id(bar) not in seen and depth < 32:
+        if isinstance(bar, AdminNoticeBar):
+            return bar
+        seen.add(id(bar))
+        bar = bar.parent
+        depth += 1
+    return None
+
+
+def _apply_notice_icon_color(icon, color) -> None:
+    icon.theme_icon_color = "Custom"
+    icon.icon_color = color
+    icon.color = color
+
+
+class AdminNoticeDismissButton(ButtonBehavior, MDBoxLayout):
+    dismiss_icon_color = ListProperty([0.82, 0.55, 0.55, 1])
+
+    def on_state(self, *_args):
+        self.sync_appearance()
+
+    def on_parent(self, _widget, parent):
+        if parent is not None:
+            Clock.schedule_once(lambda _dt: self.sync_appearance(), 0)
+
+    def on_release(self):
+        bar = _find_admin_notice_bar(self)
+        if bar is not None:
+            bar.dismiss()
+
+    def sync_appearance(self, style: dict | None = None):
+        if style is None:
+            bar = _find_admin_notice_bar(self.parent)
+            if bar is not None:
+                style = bar.notice_style
+        if not style:
+            return
+
+        self.md_bg_color = (
+            style["dismiss_glow"] if self.state == "down" else (0, 0, 0, 0)
+        )
+        self.dismiss_icon_color = style["dismiss"]
+        for child in self.walk():
+            if is_icon_widget(child):
+                _apply_notice_icon_color(child, style["dismiss"])
+
+
+class AdminNoticeBar(MDBoxLayout):
+    visible = BooleanProperty(False)
+    message = StringProperty("")
+    notice_bg_color = ListProperty([0.36, 0.06, 0.08, 1])
+    notice_border_color = ListProperty([0.92, 0.22, 0.26, 0.55])
+    notice_icon_color = ListProperty([1, 0.42, 0.42, 1])
+    notice_text_color = ListProperty([0.96, 0.86, 0.86, 1])
+    notice_style = ObjectProperty(allownone=True)
+
+    def __init__(self, **kwargs):
+        self._visible_initialized = False
+        super().__init__(**kwargs)
+
+    def show(self, message: str):
+        self.message = message
+        if self.visible:
+            self.sync_appearance()
+            return
+        self.visible = True
+        self.opacity = 1
+        self.height = dp(44)
+        self.disabled = False
+        self.sync_appearance()
+        self._schedule_appearance_resync()
+        self._schedule_layout_refresh()
+
+    def dismiss(self):
+        if not self.visible:
+            return
+        self.visible = False
+        self.opacity = 0
+        self.height = 0
+        self.disabled = True
+        self._schedule_layout_refresh()
+
+    def on_visible(self, instance, value):
+        if not self._visible_initialized:
+            self._visible_initialized = True
+            self.opacity = 0
+            self.height = 0
+            return
+        self.disabled = not value
+        if value:
+            self.sync_appearance()
+            self._schedule_appearance_resync()
+
+    def _schedule_appearance_resync(self):
+        Clock.schedule_once(lambda _dt: self.sync_appearance(), 0)
+        Clock.schedule_once(lambda _dt: self.sync_appearance(), 0.05)
+        Clock.schedule_once(lambda _dt: self.sync_appearance(), 0.12)
+
+    def _schedule_layout_refresh(self):
+        app = MDApp.get_running_app()
+        if not app or not app.root:
+            return
+
+        from utils.screen_layout import prepare_screens
+
+        root = app.root
+
+        def _after_layout(_dt):
+            prepare_screens(root)
+            if self.visible:
+                self.sync_appearance()
+
+        Clock.schedule_once(_after_layout, 0)
+
+    def on_parent(self, _widget, parent):
+        if parent is not None:
+            Clock.schedule_once(lambda _dt: self.sync_appearance(), 0)
+
+    def sync_appearance(self):
+        app = MDApp.get_running_app()
+        if not app:
+            return
+
+        theme = app.config.app_global.theme
+        style = NOTICE_STYLE.get(theme, NOTICE_STYLE["dark"])
+        self.notice_style = style
+        self.notice_bg_color = style["bg"]
+        self.notice_border_color = style["border"]
+        self.notice_icon_color = style["icon"]
+        self.notice_text_color = style["text"]
+        self.md_bg_color = style["bg"]
+
+        for child in self.walk():
+            if is_icon_widget(child):
+                if getattr(child, "icon", "") == "close":
+                    _apply_notice_icon_color(child, style["dismiss"])
+                else:
+                    _apply_notice_icon_color(child, style["icon"])
+            elif isinstance(child, MDLabel):
+                child.text_color = style["text"]
+                child.color = style["text"]
+            elif isinstance(child, AdminNoticeDismissButton):
+                child.sync_appearance(style)

@@ -108,6 +108,16 @@ def _refresh_settings(screen, app: MDApp, loc) -> None:
             widget.sync_appearance()
 
 
+def _refresh_admin_notice(root, loc) -> None:
+    from ui.widgets import AdminNoticeBar
+
+    bar = root.ids.get("admin_notice")
+    if not isinstance(bar, AdminNoticeBar) or not bar.visible:
+        return
+    bar.message = loc.admin_notice.message
+    bar.sync_appearance()
+
+
 def refresh_ui(app: MDApp | None = None, *, apply_theme: bool = False) -> None:
     app = app or MDApp.get_running_app()
     if not app or not app.root:
@@ -130,3 +140,4 @@ def refresh_ui(app: MDApp | None = None, *, apply_theme: bool = False) -> None:
             _refresh_settings(screen, app, loc)
 
     _refresh_placeholders(root, loc)
+    _refresh_admin_notice(root, loc)

@@ -1,12 +1,28 @@
 MIN_WINDOW_WIDTH = 400
 MIN_WINDOW_HEIGHT = 300
+MAX_WINDOW_WIDTH = 7680
+MAX_WINDOW_HEIGHT = 4320
+MAX_WINDOW_POS = 16384
 
 LEGACY_DEFAULT_WIDTH = 800
 LEGACY_DEFAULT_HEIGHT = 500
 
 
 def is_valid_window_size(width: int, height: int) -> bool:
-    return width >= MIN_WINDOW_WIDTH and height >= MIN_WINDOW_HEIGHT
+    return (
+        MIN_WINDOW_WIDTH <= width <= MAX_WINDOW_WIDTH
+        and MIN_WINDOW_HEIGHT <= height <= MAX_WINDOW_HEIGHT
+    )
+
+
+def is_valid_window_pos(pos) -> bool:
+    if pos is None or len(pos) != 2:
+        return False
+    try:
+        x, y = int(pos[0]), int(pos[1])
+    except (TypeError, ValueError):
+        return False
+    return abs(x) <= MAX_WINDOW_POS and abs(y) <= MAX_WINDOW_POS
 
 
 def migrate_legacy_window_size(window, default_window) -> bool:
@@ -70,7 +86,10 @@ def sanitize_window_config(window, default_window) -> bool:
         window.height = default_window.height
         changed = True
 
-    if window.pos is None or len(window.pos) != 2:
+    if not is_valid_window_pos(window.pos):
+        window.pos = list(default_window.pos)
+        changed = True
+    elif window.pos is None or len(window.pos) != 2:
         window.pos = list(default_window.pos)
         changed = True
 

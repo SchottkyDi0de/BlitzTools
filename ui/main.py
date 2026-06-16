@@ -5,6 +5,8 @@ from kivymd.uix.screenmanager import MDScreenManager
 
 from ui.settings_screen import SettingsScreen  # noqa: F401
 from ui.widgets import (  # noqa: F401
+    AdminNoticeBar,
+    AdminNoticeDismissButton,
     CustomTitleBar,
     FuturaFeatureCard,
     FuturaNavButton,

@@ -14,41 +14,48 @@ _log = Logger
 class ConfigHandler:
     def __init__(self):
         self.config_path = get_files_path().joinpath('config/config.yaml')
-        with open(get_current_directory().joinpath('config/default_config.yaml'), 'r', encoding='utf-8') as default_config_file:
+        default_path = get_current_directory().joinpath('config/default_config.yaml')
+        with open(default_path, 'r', encoding='utf-8') as default_config_file:
             default_config_data = yaml.safe_load(default_config_file.read())
-            self.default_config = ConfigStruct.model_validate(default_config_data)
-        
-            if not self.config_path.exists():
-                self.config: ConfigStruct = self.default_config
-                _log.info('Config: config file not fount, loading default config...')
-                self.config_path.parent.mkdir(parents=True, exist_ok=True)
-                
-                with open(self.config_path, 'w', encoding='utf-8') as config_file:
-                    config_file.write(yaml.dump(default_config_data))
-                    
-                _log.info('Config: config created successfully!')
-                
-            else:
-                with open(self.config_path, 'r', encoding='utf-8') as config_file:
-                    try:
-                        self.config: ConfigStruct = ConfigStruct.model_validate(yaml.safe_load(config_file.read()))
-                        changed = False
-                        if sanitize_window_config(
-                            self.config.app_global.window,
-                            self.default_config.app_global.window,
-                        ):
-                            changed = True
-                        if migrate_window_config(self.config, self.default_config):
-                            changed = True
-                        if changed:
-                            _log.info("Config: window defaults migrated, saving config")
-                            self.write_config()
-                    except (ValidationError, FileNotFoundError, yaml.YAMLError):
-                        _log.warning('Config: Error while loading config, loading default config...')
-                        self.config = self.default_config
-                        config_file.close()
-                        self.config_path.unlink()
-                        self.__init__()
+        self.default_config = ConfigStruct.model_validate(default_config_data)
+        self.config = self._load_or_create_config()
+
+    def _load_or_create_config(self) -> ConfigStruct:
+        if not self.config_path.exists():
+            _log.info('Config: config file not fount, loading default config...')
+            self.config_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.config_path, 'w', encoding='utf-8') as config_file:
+                config_file.write(yaml.dump(self.default_config.model_dump(), sort_keys=False, indent=2))
+            _log.info('Config: config created successfully!')
+            return self.default_config.model_copy(deep=True)
+
+        try:
+            with open(self.config_path, 'r', encoding='utf-8') as config_file:
+                config = ConfigStruct.model_validate(yaml.safe_load(config_file.read()))
+        except (ValidationError, FileNotFoundError, yaml.YAMLError, OSError, TypeError) as exc:
+            _log.warning(f'Config: error while loading config ({exc}), resetting to default...')
+            try:
+                if self.config_path.exists():
+                    self.config_path.unlink()
+            except OSError:
+                pass
+            with open(self.config_path, 'w', encoding='utf-8') as config_file:
+                config_file.write(yaml.dump(self.default_config.model_dump(), sort_keys=False, indent=2))
+            return self.default_config.model_copy(deep=True)
+
+        changed = False
+        if sanitize_window_config(
+            config.app_global.window,
+            self.default_config.app_global.window,
+        ):
+            changed = True
+        if migrate_window_config(config, self.default_config):
+            changed = True
+        if changed:
+            _log.info("Config: window defaults migrated, saving config")
+            self.config = config
+            self.write_config()
+        return config
                         
     def _load_config(self) -> None:
         with open(self.config_path, 'r', encoding='utf-8') as config_file:

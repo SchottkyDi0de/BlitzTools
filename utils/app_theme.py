@@ -101,6 +101,8 @@ def _sync_label_render_colors(root) -> None:
     for widget in root.walk():
         if not isinstance(widget, MDLabel):
             continue
+        if _is_inside_admin_notice(widget):
+            continue
         if getattr(widget, "theme_text_color", None) != "Custom":
             continue
         if widget.text_color:
@@ -152,6 +154,7 @@ def _finalize_theme_transition(app: MDApp, target_theme: str) -> None:
     _clear_text_backgrounds(root)
     _sync_label_render_colors(root)
     sync_icon_colors(root, new_palette)
+    _sync_admin_notice(root)
 
     def _resync_cards(_dt):
         if app.root:
@@ -175,6 +178,7 @@ def _apply_interpolated_theme(app: MDApp, palette: dict) -> None:
     sync_feature_cards(root)
     _sync_label_render_colors(root)
     sync_icon_colors(root, palette)
+    _sync_admin_notice(root)
 
 
 def _animate_theme_transition(app: MDApp, target_theme: str) -> None:
@@ -237,9 +241,26 @@ def _label_color_role(label: MDLabel) -> str:
     return "text"
 
 
+def _is_inside_admin_notice(widget) -> bool:
+    from ui.widgets import AdminNoticeBar
+
+    seen: set[int] = set()
+    parent = widget.parent
+    depth = 0
+    while parent is not None and id(parent) not in seen and depth < 32:
+        if isinstance(parent, AdminNoticeBar):
+            return True
+        seen.add(id(parent))
+        parent = parent.parent
+        depth += 1
+    return False
+
+
 def _ensure_label_colors(root, palette: dict) -> None:
     for widget in root.walk():
         if not isinstance(widget, MDLabel):
+            continue
+        if _is_inside_admin_notice(widget):
             continue
         if getattr(widget, "theme_text_color", None) != "Custom":
             continue
@@ -249,7 +270,11 @@ def _ensure_label_colors(root, palette: dict) -> None:
 
 
 def _clear_text_backgrounds(root) -> None:
+    from ui.widgets import AdminNoticeBar
+
     for widget in root.walk():
+        if isinstance(widget, AdminNoticeBar):
+            continue
         if isinstance(widget, MDLabel):
             widget.canvas.before.remove_group("md-label-selection-color")
             widget.canvas.before.remove_group("md-label-selection-color-rectangle")
@@ -263,7 +288,7 @@ def _clear_text_backgrounds(root) -> None:
 
 
 def sync_icon_colors(root, palette: dict) -> None:
-    from ui.widgets import FuturaNavButton, TitleBarButton
+    from ui.widgets import FuturaNavButton, TitleBarButton, is_icon_widget
 
     titlebar = root.ids.titlebar
     titlebar_button_icon_ids: set[int] = set()
@@ -272,7 +297,7 @@ def sync_icon_colors(root, palette: dict) -> None:
         if isinstance(btn, TitleBarButton):
             btn.sync_appearance()
             for child in btn.walk():
-                if type(child).__name__ == "MDIcon":
+                if is_icon_widget(child):
                     titlebar_button_icon_ids.add(id(child))
 
     accent = palette["accent"]
@@ -281,18 +306,22 @@ def sync_icon_colors(root, palette: dict) -> None:
         if not isinstance(btn, FuturaNavButton):
             continue
         for icon in btn.walk():
-            if type(icon).__name__ == "MDIcon":
+            if is_icon_widget(icon):
                 nav_icon_ids.add(id(icon))
                 icon.icon_color = accent
 
     for widget in root.walk():
-        if type(widget).__name__ != "MDIcon":
+        if not is_icon_widget(widget):
+            continue
+        if _is_inside_admin_notice(widget):
             continue
         if getattr(widget, "theme_icon_color", None) != "Custom":
             continue
         if id(widget) in titlebar_button_icon_ids or id(widget) in nav_icon_ids:
             continue
         widget.icon_color = accent
+
+    _sync_admin_notice(root)
 
 
 _ensure_icon_colors = sync_icon_colors
@@ -345,6 +374,8 @@ def apply_palette_to_tree(root, new_palette: dict, *, theme: str) -> None:
     for widget in root.walk():
         if isinstance(widget, TitleBarButton):
             continue
+        if _is_inside_admin_notice(widget):
+            continue
         for prop in _COLOR_PROPS:
             if not hasattr(widget, prop):
                 continue
@@ -393,6 +424,15 @@ def apply_palette_to_tree(root, new_palette: dict, *, theme: str) -> None:
     _clear_text_backgrounds(root)
     sync_feature_cards(root)
     _sync_titlebar_chrome(root, new_palette)
+    _sync_admin_notice(root)
+
+
+def _sync_admin_notice(root) -> None:
+    from ui.widgets import AdminNoticeBar
+
+    bar = root.ids.get("admin_notice")
+    if isinstance(bar, AdminNoticeBar):
+        bar.sync_appearance()
 
 
 def _sync_nav_buttons(root, palette: dict) -> None:

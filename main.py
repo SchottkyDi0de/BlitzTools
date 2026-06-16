@@ -19,6 +19,7 @@ from ui.main import MainLayout
 from lib.locales.handler import locales
 from utils import assets_loader
 from lib.config.handler import ConfigHandler
+from utils.admin import needs_admin_notice
 from utils.app_theme import apply_theme_from_config, get_palette, sync_feature_cards
 from utils.config_persist import bind_window_geometry_persist, sync_window_geometry
 from utils.screen_layout import prepare_screens, prepare_screens_delayed
@@ -72,6 +73,7 @@ class MainApp(MDApp):
         if not self.root:
             return
         refresh_ui(self, apply_theme=True)
+        self._maybe_show_admin_notice()
         prepare_screens(self.root)
         prepare_screens_delayed(self.root, 0.05)
         prepare_screens_delayed(self.root, 0.2)
@@ -86,6 +88,16 @@ class MainApp(MDApp):
             manager.bind(current=self._on_screen_changed)
         Clock.schedule_once(self._bind_geometry, 0.3)
         Clock.schedule_once(lambda _dt: apply_window_settings(self.config), 0.05)
+
+    def _maybe_show_admin_notice(self):
+        if not needs_admin_notice() or not self.root:
+            return
+
+        code = self.config.app_global.language
+        if code not in self.locales.data:
+            code = "ru"
+        message = self.locales.data[code].main.admin_notice.message
+        self.root.ids.admin_notice.show(message)
 
     def _on_screen_changed(self, _manager, screen_name: str):
         if screen_name == "home" and self.root:

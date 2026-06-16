@@ -64,6 +64,12 @@ def prepare_screens(root, *, reapply_theme: bool = False) -> None:
         if app:
             apply_theme_from_config(app)
 
+    from ui.widgets import AdminNoticeBar
+
+    bar = root.ids.get("admin_notice")
+    if isinstance(bar, AdminNoticeBar) and bar.visible:
+        bar.sync_appearance()
+
 
 def prepare_screens_delayed(root, delay: float = 0, *, reapply_theme: bool = False) -> None:
     Clock.schedule_once(
