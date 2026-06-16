@@ -51,18 +51,29 @@ def navigate_to(screen_name: str) -> None:
         def _after_transition(_dt):
             prepare_screens(root)
             if getattr(app, "palette", None):
-                from utils.app_theme import sync_icon_colors
+                from utils.app_theme import sync_feature_cards, sync_icon_colors
 
+                sync_feature_cards(root)
                 sync_icon_colors(root, app.palette)
 
         Clock.schedule_once(_after_transition, duration + 0.02)
+
+    if screen_name != "home":
+        from ui.widgets import clear_feature_card_hover
+
+        clear_feature_card_hover(root)
 
     for child in root.ids.nav_panel.walk():
         if isinstance(child, FuturaNavButton):
             child.active = child.screen_name == screen_name
 
     if getattr(app, "palette", None):
-        from utils.app_theme import _sync_nav_buttons, sync_icon_colors
+        from utils.app_theme import _sync_nav_buttons, sync_feature_cards, sync_icon_colors
 
         _sync_nav_buttons(root, app.palette)
-        sync_icon_colors(root, app.palette)
+
+        def _deferred_card_sync(_dt):
+            sync_feature_cards(root)
+            sync_icon_colors(root, app.palette)
+
+        Clock.schedule_once(_deferred_card_sync, 0)

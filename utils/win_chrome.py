@@ -28,12 +28,17 @@ def reset_chrome_state() -> None:
 
 
 def apply_window_settings(config) -> None:
+    _apply_window_geometry(config)
+    Clock.schedule_once(lambda _dt: _apply_window_geometry(config), 0)
+
+
+def _apply_window_geometry(config) -> None:
     window_cfg = config.app_global.window
     pause_geometry_persist()
     Window.borderless = True
-    Window.size = (window_cfg.width, window_cfg.height)
-    Window.left = window_cfg.pos[0]
-    Window.top = window_cfg.pos[1]
+    Window.size = (int(window_cfg.width), int(window_cfg.height))
+    Window.left = int(window_cfg.pos[0])
+    Window.top = int(window_cfg.pos[1])
     Window.set_title("BlitzTools")
     _remember_window_state()
     resume_geometry_persist()

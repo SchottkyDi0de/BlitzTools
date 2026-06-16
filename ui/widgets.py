@@ -16,6 +16,54 @@ from utils.app_theme import is_theme_animating, lerp_color, toggle_theme
 from utils.nav import navigate_to
 
 HOVER_ANIM_DURATION = 0.2
+ICON_TITLE_ICON_BLOCK = dp(26)
+
+
+def sync_icon_title_row(label, row, anchor, icon_box, *, max_text_width: float) -> None:
+    if not label or not row or not anchor:
+        return
+
+    max_w = max(max_text_width, dp(80))
+
+    label.text_size = (None, None)
+    label.texture_update()
+    natural_w = max(label.texture_size[0], dp(1))
+
+    if natural_w <= max_w:
+        label.width = natural_w
+        label.text_size = (natural_w, None)
+        row.width = ICON_TITLE_ICON_BLOCK + natural_w
+    else:
+        label.width = max_w
+        label.text_size = (max_w, None)
+        row.width = ICON_TITLE_ICON_BLOCK + max_w
+
+    label.texture_update()
+    row.height = max(label.texture_size[1], dp(14))
+    anchor.height = row.height
+    if icon_box is not None:
+        icon_box.height = row.height
+    row.do_layout()
+    anchor.do_layout()
+
+
+class IconTitleLayoutMixin:
+    title_horizontal_inset = NumericProperty(dp(46))
+
+    def _sync_title_layout(self):
+        sync_icon_title_row(
+            self.ids.get("title_label"),
+            self.ids.get("title_row"),
+            self.ids.get("title_anchor"),
+            self.ids.get("title_icon_box"),
+            max_text_width=self.width - self.title_horizontal_inset,
+        )
+
+    def _schedule_title_layout(self):
+        Clock.schedule_once(lambda _dt: self._sync_title_layout(), 0)
+
+    def on_size(self, *_args):
+        self._schedule_title_layout()
 
 
 class HoverHighlightMixin:
@@ -96,6 +144,23 @@ def _pointer_over_widget(widget, pos) -> bool:
     return True
 
 
+def _home_screen_active(app) -> bool:
+    if not app or not app.root:
+        return False
+    manager = app.root.ids.get("screen_manager")
+    return bool(manager and manager.current == "home")
+
+
+def clear_feature_card_hover(root) -> None:
+    for widget in root.walk():
+        if type(widget).__name__ != "FuturaFeatureCard":
+            continue
+        if widget.hovered or widget.highlight > 0.001 or widget.pressed:
+            widget.pressed = False
+            widget._detach_hover()
+            widget.sync_appearance()
+
+
 def _update_hover_targets(pos) -> None:
     app = MDApp.get_running_app()
     if not app or not app.root:
@@ -104,8 +169,21 @@ def _update_hover_targets(pos) -> None:
     _last_mouse_pos[0] = pos[0]
     _last_mouse_pos[1] = pos[1]
 
+    home_active = _home_screen_active(app)
+
     for widget in app.root.walk():
-        if not isinstance(widget, (FuturaFeatureCard, FuturaNavButton)):
+        if isinstance(widget, FuturaFeatureCard):
+            if not home_active:
+                if widget.hovered or widget.highlight > 0.001:
+                    widget._detach_hover()
+                    widget.sync_appearance()
+                continue
+            inside = _pointer_over_widget(widget, pos)
+            if inside != widget.hovered:
+                widget.hovered = inside
+            continue
+
+        if not isinstance(widget, (FuturaNavButton, SettingsOptionButton)):
             continue
         inside = _pointer_over_widget(widget, pos)
         if inside != widget.hovered:
@@ -145,7 +223,7 @@ class StatusDot(Widget):
     _pulse = None
 
     def __init__(self, **kwargs):
-        super().__init__(size_hint=(None, None), size=(dp(7), dp(7)), **kwargs)
+        super().__init__(size_hint=(None, None), size=(dp(8), dp(8)), **kwargs)
         with self.canvas:
             self._color = Color(rgba=(0.2, 0.95, 0.55, 1))
             self._ellipse = Ellipse(pos=self.pos, size=self.size)
@@ -236,21 +314,47 @@ class ThemeToggleButton(ButtonBehavior, MDBoxLayout):
         self.theme_icon = "weather-sunny" if is_dark else "weather-night"
 
 
-class SettingsOptionButton(ButtonBehavior, MDBoxLayout):
+class SettingsOptionButton(ButtonBehavior, HoverHighlightMixin, MDBoxLayout):
     option_value = StringProperty("")
     option_label = StringProperty("")
     active = BooleanProperty(False)
 
     def on_active(self, *_args):
-        app = MDApp.get_running_app()
-        palette = getattr(app, "palette", None) if app else None
-        glow = palette["accent_glow"] if palette else (0, 0.941, 1, 0.08)
-        self.md_bg_color = glow if self.active else (0, 0, 0, 0)
-        self._sync_option_label_color()
+        self.sync_appearance()
+
+    def on_state(self, *_args):
+        self.sync_appearance()
 
     def on_parent(self, _widget, parent):
         if parent is not None:
-            Clock.schedule_once(lambda _dt: self._sync_option_label_color(), 0)
+            _hover_widget_attached()
+            Clock.schedule_once(lambda _dt: self.sync_appearance(), 0)
+        else:
+            _hover_widget_detached()
+            self._detach_hover()
+
+    def sync_appearance(self):
+        app = MDApp.get_running_app()
+        palette = getattr(app, "palette", None) if app else None
+        if not palette:
+            return
+
+        surface = palette["surface"]
+        glow = palette["accent_glow"]
+        accent = palette["accent"]
+        accent_dim = palette["accent_dim"]
+
+        if self.active:
+            self.md_bg_color = glow
+            self.line_color = accent
+        else:
+            mix = self.highlight
+            if self.state == "down":
+                mix = min(1.0, mix + 0.55)
+            self.md_bg_color = lerp_color(surface, glow, mix * 0.55)
+            self.line_color = lerp_color(accent_dim, accent, mix)
+
+        self._sync_option_label_color()
 
     def _sync_option_label_color(self):
         app = MDApp.get_running_app()
@@ -322,17 +426,25 @@ class FuturaNavButton(ButtonBehavior, HoverHighlightMixin, MDBoxLayout):
         navigate_to(self.screen_name)
 
 
-class FuturaFeatureCard(HoverHighlightMixin, MDCard):
+class FuturaFeatureCard(HoverHighlightMixin, MDCard, IconTitleLayoutMixin):
     card_icon = StringProperty("circle")
     card_title = StringProperty("")
     card_body = StringProperty("")
     screen_name = StringProperty("")
     pressed = BooleanProperty(False)
+    title_horizontal_inset = NumericProperty(dp(46))
+
+    def on_card_title(self, *_args):
+        self._schedule_title_layout()
+
+    def on_size(self, *_args):
+        self._schedule_title_layout()
 
     def on_parent(self, _widget, parent):
         if parent is not None:
             _hover_widget_attached()
             Clock.schedule_once(lambda _dt: self.sync_appearance(), 0)
+            self._schedule_title_layout()
         else:
             _hover_widget_detached()
             self._detach_hover()
@@ -346,10 +458,10 @@ class FuturaFeatureCard(HoverHighlightMixin, MDCard):
         if not palette:
             return
 
-        base = palette["surface"]
-        glow = palette["accent_glow"]
-        accent = palette["accent"]
-        accent_dim = palette["accent_dim"]
+        base = tuple(palette["surface"])
+        glow = tuple(palette["accent_glow"])
+        accent = tuple(palette["accent"])
+        accent_dim = tuple(palette["accent_dim"])
         hover_bg = lerp_color(base, glow, 0.55)
 
         mix = self.highlight
@@ -358,22 +470,42 @@ class FuturaFeatureCard(HoverHighlightMixin, MDCard):
 
         self.md_bg_color = lerp_color(base, hover_bg, mix)
         self.line_color = lerp_color(accent_dim, accent, mix)
+        self.canvas.ask_update()
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
+            touch.grab(self)
             self.pressed = True
             return True
         return super().on_touch_down(touch)
 
     def on_touch_up(self, touch):
-        if self.pressed:
+        if touch.grab_current is self:
+            touch.ungrab(self)
+            was_pressed = self.pressed
             self.pressed = False
-            if self.collide_point(*touch.pos) and self.screen_name:
+            if was_pressed and self.collide_point(*touch.pos) and self.screen_name:
                 navigate_to(self.screen_name)
             return True
         return super().on_touch_up(touch)
 
     def on_touch_move(self, touch):
-        if self.pressed and not self.collide_point(*touch.pos):
-            self.pressed = False
+        if touch.grab_current is self:
+            if self.pressed and not self.collide_point(*touch.pos):
+                self.pressed = False
+            return True
         return super().on_touch_move(touch)
+
+
+class PlaceholderPane(IconTitleLayoutMixin, MDBoxLayout):
+    module_icon = StringProperty("hammer-wrench")
+    pane_title = StringProperty("")
+    pane_subtitle = StringProperty("")
+    title_horizontal_inset = NumericProperty(dp(74))
+
+    def on_pane_title(self, *_args):
+        self._schedule_title_layout()
+
+    def on_parent(self, _widget, parent):
+        if parent is not None:
+            self._schedule_title_layout()

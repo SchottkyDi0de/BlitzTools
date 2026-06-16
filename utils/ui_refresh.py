@@ -63,13 +63,13 @@ def _refresh_home(root, screen, app: MDApp, loc) -> None:
 
 
 def _refresh_placeholders(root, loc) -> None:
+    from ui.widgets import PlaceholderPane
+
     for widget in root.walk():
-        if type(widget).__name__ != "PlaceholderPane":
+        if not isinstance(widget, PlaceholderPane):
             continue
-        children = [c for c in widget.children if isinstance(c, MDLabel)]
-        if len(children) >= 2:
-            children[0].text = loc.placeholder.title
-            children[1].text = loc.placeholder.subtitle
+        widget.pane_title = loc.placeholder.title
+        widget.pane_subtitle = loc.placeholder.subtitle
 
 
 def _refresh_settings(screen, app: MDApp, loc) -> None:
@@ -101,11 +101,11 @@ def _refresh_settings(screen, app: MDApp, loc) -> None:
         if widget.option_value in font_labels:
             widget.option_label = font_labels[widget.option_value]
             widget.active = widget.option_value == app.config.app_global.font.name
-            widget._sync_option_label_color()
+            widget.sync_appearance()
         elif widget.option_value in lang_labels:
             widget.option_label = lang_labels[widget.option_value]
             widget.active = widget.option_value == app.config.app_global.language
-            widget._sync_option_label_color()
+            widget.sync_appearance()
 
 
 def refresh_ui(app: MDApp | None = None, *, apply_theme: bool = False) -> None:

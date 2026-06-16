@@ -18,22 +18,22 @@ main:
       body: "On-screen session statistics in real time"
     olenemer:
       title: "OLENEMER"
-      body: "Redesigned player lists with extra statistics"
+      body: "Reworked player lists with additional statistics"
     cluster:
       title: "CLUSTERS"
-      body: "Block specific server clusters"
+      body: "Block selected clusters and check ping / packet loss"
     replay:
       title: "REPLAYS"
-      body: "Parse and analyze replay files"
+      body: "Parse and break down replay files"
     dvp:
       title: "DVP CONVERTER"
-      body: "Converter for DVPL, DVPM, DVLD files"
+      body: "Converter for DVPL, DVPM, and DVLD files"
     ui_manager:
-      title: "UI MANAGER"
+      title: "GUI MANAGER"
       body: "Fonts · text editor · layout and UI elements"
     settings:
       title: "APP SETTINGS"
-      body: "Application and module configuration"
+      body: "App and module configuration"
   settings:
     title: "SETTINGS"
     sections:

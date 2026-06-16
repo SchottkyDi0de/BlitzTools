@@ -112,15 +112,18 @@ def _sync_settings_options(root) -> None:
 
     for widget in root.walk():
         if isinstance(widget, SettingsOptionButton):
-            widget._sync_option_label_color()
+            widget.sync_appearance()
 
 
-def _sync_feature_cards(root) -> None:
+def sync_feature_cards(root) -> None:
     from ui.widgets import FuturaFeatureCard
 
     for widget in root.walk():
         if isinstance(widget, FuturaFeatureCard):
             widget.sync_appearance()
+
+
+_sync_feature_cards = sync_feature_cards
 
 
 def _sync_status_dot(root, palette: dict) -> None:
@@ -145,10 +148,17 @@ def _finalize_theme_transition(app: MDApp, target_theme: str) -> None:
     _sync_titlebar_chrome(root, new_palette)
     _sync_settings_options(root)
     _sync_status_dot(root, new_palette)
-    _sync_feature_cards(root)
+    sync_feature_cards(root)
     _clear_text_backgrounds(root)
     _sync_label_render_colors(root)
     sync_icon_colors(root, new_palette)
+
+    def _resync_cards(_dt):
+        if app.root:
+            sync_feature_cards(app.root)
+
+    Clock.schedule_once(_resync_cards, 0)
+    Clock.schedule_once(_resync_cards, 0.12)
 
 
 def _apply_interpolated_theme(app: MDApp, palette: dict) -> None:
@@ -162,7 +172,7 @@ def _apply_interpolated_theme(app: MDApp, palette: dict) -> None:
     _sync_titlebar_chrome(root, palette)
     _sync_settings_options(root)
     _sync_status_dot(root, palette)
-    _sync_feature_cards(root)
+    sync_feature_cards(root)
     _sync_label_render_colors(root)
     sync_icon_colors(root, palette)
 
@@ -325,7 +335,12 @@ def _fallback_bg_color(widget, current, theme: str, palette: dict):
 
 
 def apply_palette_to_tree(root, new_palette: dict, *, theme: str) -> None:
-    from ui.widgets import FuturaFeatureCard, FuturaNavButton, TitleBarButton
+    from ui.widgets import (
+        FuturaFeatureCard,
+        FuturaNavButton,
+        SettingsOptionButton,
+        TitleBarButton,
+    )
 
     for widget in root.walk():
         if isinstance(widget, TitleBarButton):
@@ -334,6 +349,11 @@ def apply_palette_to_tree(root, new_palette: dict, *, theme: str) -> None:
             if not hasattr(widget, prop):
                 continue
             if isinstance(widget, FuturaFeatureCard) and prop in (
+                "md_bg_color",
+                "line_color",
+            ):
+                continue
+            if isinstance(widget, SettingsOptionButton) and prop in (
                 "md_bg_color",
                 "line_color",
             ):
@@ -357,7 +377,7 @@ def apply_palette_to_tree(root, new_palette: dict, *, theme: str) -> None:
             if key is not None:
                 widget._color.rgba = new_palette[key]
 
-        if isinstance(widget, (FuturaFeatureCard, FuturaNavButton)):
+        if isinstance(widget, (FuturaFeatureCard, FuturaNavButton, SettingsOptionButton)):
             continue
 
         for canvas in (widget.canvas, widget.canvas.before, widget.canvas.after):
@@ -371,7 +391,7 @@ def apply_palette_to_tree(root, new_palette: dict, *, theme: str) -> None:
     _ensure_label_colors(root, new_palette)
     sync_icon_colors(root, new_palette)
     _clear_text_backgrounds(root)
-    _sync_feature_cards(root)
+    sync_feature_cards(root)
     _sync_titlebar_chrome(root, new_palette)
 
 

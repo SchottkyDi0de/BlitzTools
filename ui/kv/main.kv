@@ -8,7 +8,7 @@
     screen_name: "home"
     size_hint_x: 1
     size_hint_y: None
-    height: dp(44)
+    height: dp(48)
     padding: 0
     radius: dp(6)
 
@@ -20,9 +20,9 @@
             icon: root.icon
             theme_icon_color: "Custom"
             icon_color: app.palette['accent']
-            font_size: sp(20)
+            font_size: sp(22)
             size_hint: None, None
-            size: dp(22), dp(22)
+            size: dp(24), dp(24)
             pos_hint: {}
 
 <FuturaFeatureCard>:
@@ -31,100 +31,186 @@
     theme_line_color: "Custom"
     orientation: "vertical"
     padding: dp(10), dp(8)
-    spacing: dp(6)
+    spacing: 0
     size_hint_y: 1
     radius: dp(8)
     line_width: dp(1)
     ripple_behavior: False
     screen_name: ""
 
+    Widget:
+        size_hint_y: 1
+        size_hint_min_y: 0
+
     MDBoxLayout:
+        orientation: "vertical"
         size_hint_y: None
-        height: dp(32)
         spacing: dp(6)
         md_bg_color: 0, 0, 0, 0
 
-        MDIcon:
-            icon: root.card_icon
-            theme_icon_color: "Custom"
-            icon_color: app.palette['accent']
-            font_size: sp(14)
-            size_hint_x: None
-            width: dp(18)
-            pos_hint: {"center_y": 0.5}
+        MDBoxLayout:
+            id: title_anchor
+            orientation: "horizontal"
+            size_hint_x: 1
+            size_hint_y: None
+            height: title_row.height if title_row.height else dp(14)
+            md_bg_color: 0, 0, 0, 0
+
+            Widget:
+                size_hint_x: 1
+                size_hint_min_x: 0
+
+            MDBoxLayout:
+                id: title_row
+                orientation: "horizontal"
+                size_hint_x: None
+                spacing: dp(6)
+                md_bg_color: 0, 0, 0, 0
+
+                FloatLayout:
+                    id: title_icon_box
+                    size_hint_x: None
+                    width: dp(20)
+                    size_hint_y: None
+
+                    MDIcon:
+                        icon: root.card_icon
+                        theme_icon_color: "Custom"
+                        icon_color: app.palette['accent']
+                        font_size: sp(16)
+                        size_hint: None, None
+                        size: dp(20), dp(20)
+                        pos_hint: {"center_x": 0.5, "center_y": 0.6}
+
+                MDLabel:
+                    id: title_label
+                    markup: True
+                    text: root.card_title
+                    font_size: sp(10)
+                    theme_font_size: "Custom"
+                    theme_font_name: "Custom"
+                    font_name: app.get_font("robotomono")
+                    theme_text_color: "Custom"
+                    text_color: app.palette['accent']
+                    md_bg_color: 0, 0, 0, 0
+                    bold: True
+                    halign: "left"
+                    adaptive_height: True
+                    valign: "middle"
+                    size_hint_x: None
+                    size_hint_y: None
+
+            Widget:
+                size_hint_x: 1
+                size_hint_min_x: 0
 
         MDLabel:
             markup: True
-            text: root.card_title
+            text: root.card_body
             font_size: sp(10)
-            bold: True
+            theme_font_size: "Custom"
+            theme_line_height: "Custom"
+            line_height: 0.74
             theme_font_name: "Custom"
-            font_name: app.get_font("robotomono")
+            font_name: app.get_font(app.config.app_global.font.name)
             theme_text_color: "Custom"
-            text_color: app.palette['accent']
+            text_color: app.palette['muted']
             md_bg_color: 0, 0, 0, 0
+            halign: "center"
             valign: "middle"
             text_size: self.width, None
-            size_hint_x: 1
+            size_hint_y: None
+            adaptive_height: True
 
-    MDLabel:
-        markup: True
-        text: root.card_body
-        font_size: sp(10)
-        line_height: 1.25
-        theme_font_name: "Custom"
-        font_name: app.get_font(app.config.app_global.font.name)
-        theme_text_color: "Custom"
-        text_color: app.palette['muted']
-        md_bg_color: 0, 0, 0, 0
-        valign: "top"
-        text_size: self.width, None
+    Widget:
         size_hint_y: 1
+        size_hint_min_y: 0
 
-<PlaceholderPane@MDBoxLayout>:
+<PlaceholderPane>:
     module_icon: "hammer-wrench"
+    pane_title: app.locales.data['ru'].main.placeholder.title
+    pane_subtitle: app.locales.data['ru'].main.placeholder.subtitle
     orientation: "vertical"
     size_hint: None, None
     width: dp(340)
     height: self.minimum_height
     padding: dp(24), dp(16)
-    spacing: dp(8)
+    spacing: dp(6)
+    md_bg_color: 0, 0, 0, 0
 
-    MDIcon:
-        icon: root.module_icon
-        theme_icon_color: "Custom"
-        icon_color: app.palette['accent']
-        font_size: sp(36)
+    MDBoxLayout:
+        id: title_anchor
+        orientation: "horizontal"
+        size_hint_x: 1
         size_hint_y: None
-        height: dp(40)
-        halign: "center"
-
-    MDLabel:
-        text: app.locales.data['ru'].main.placeholder.title
-        font_size: sp(14)
-        bold: True
-        halign: "center"
-        theme_font_name: "Custom"
-        font_name: app.get_font("robotomono")
-        theme_text_color: "Custom"
-        text_color: app.palette['accent']
+        height: title_row.height if title_row.height else dp(14)
         md_bg_color: 0, 0, 0, 0
-        text_size: root.width, None
-        size_hint_y: None
-        height: self.texture_size[1]
+
+        Widget:
+            size_hint_x: 1
+            size_hint_min_x: 0
+
+        MDBoxLayout:
+            id: title_row
+            orientation: "horizontal"
+            size_hint_x: None
+            spacing: dp(6)
+            md_bg_color: 0, 0, 0, 0
+
+            FloatLayout:
+                id: title_icon_box
+                size_hint_x: None
+                width: dp(20)
+                size_hint_y: None
+
+                MDIcon:
+                    icon: root.module_icon
+                    theme_icon_color: "Custom"
+                    icon_color: app.palette['accent']
+                    font_size: sp(16)
+                    size_hint: None, None
+                    size: dp(20), dp(20)
+                    pos_hint: {"center_x": 0.5, "center_y": 0.6}
+
+            MDLabel:
+                id: title_label
+                markup: True
+                text: root.pane_title
+                font_size: sp(10)
+                theme_font_size: "Custom"
+                theme_font_name: "Custom"
+                font_name: app.get_font("robotomono")
+                theme_text_color: "Custom"
+                text_color: app.palette['accent']
+                md_bg_color: 0, 0, 0, 0
+                bold: True
+                halign: "left"
+                adaptive_height: True
+                valign: "middle"
+                size_hint_x: None
+                size_hint_y: None
+
+        Widget:
+            size_hint_x: 1
+            size_hint_min_x: 0
 
     MDLabel:
-        text: app.locales.data['ru'].main.placeholder.subtitle
-        font_size: sp(11)
-        halign: "center"
+        markup: True
+        text: root.pane_subtitle
+        font_size: sp(10)
+        theme_font_size: "Custom"
+        theme_line_height: "Custom"
+        line_height: 0.74
         theme_font_name: "Custom"
         font_name: app.get_font(app.config.app_global.font.name)
         theme_text_color: "Custom"
         text_color: app.palette['muted']
         md_bg_color: 0, 0, 0, 0
-        text_size: root.width, None
+        halign: "center"
+        valign: "middle"
+        text_size: self.width, None
         size_hint_y: None
-        height: self.texture_size[1]
+        adaptive_height: True
 
 <MainLayout>:
     md_bg_color: app.palette['bg']
@@ -144,7 +230,7 @@
             id: nav_panel
             orientation: "vertical"
             size_hint_x: None
-            width: dp(56)
+            width: dp(60)
             padding: dp(8), dp(10)
             spacing: dp(4)
             md_bg_color: app.palette['bg_panel']
@@ -246,8 +332,8 @@
                             spacing: dp(8)
                             size_hint_y: None
                             row_force_default: True
-                            row_default_height: dp(108)
-                            height: dp(108) * 2 + dp(8)
+                            row_default_height: dp(118)
+                            height: dp(118) * 2 + dp(8)
 
                             FuturaFeatureCard:
                                 screen_name: "sessions"

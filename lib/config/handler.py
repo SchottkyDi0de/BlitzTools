@@ -6,7 +6,7 @@ from pydantic_core import ValidationError
 from lib.dataclasses.configs.main_config import ConfigStruct
 from utils.resource_path import get_current_directory, get_files_path
 from utils.singleton_factory import singleton
-from utils.window_geometry import sanitize_window_config
+from utils.window_geometry import migrate_window_config, sanitize_window_config
 
 _log = Logger
 
@@ -32,11 +32,16 @@ class ConfigHandler:
                 with open(self.config_path, 'r', encoding='utf-8') as config_file:
                     try:
                         self.config: ConfigStruct = ConfigStruct.model_validate(yaml.safe_load(config_file.read()))
+                        changed = False
                         if sanitize_window_config(
                             self.config.app_global.window,
                             self.default_config.app_global.window,
                         ):
-                            _log.warning('Config: invalid window geometry, restored defaults')
+                            changed = True
+                        if migrate_window_config(self.config, self.default_config):
+                            changed = True
+                        if changed:
+                            _log.info("Config: window defaults migrated, saving config")
                             self.write_config()
                     except (ValidationError, FileNotFoundError, yaml.YAMLError):
                         _log.warning('Config: Error while loading config, loading default config...')

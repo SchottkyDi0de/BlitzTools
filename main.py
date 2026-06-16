@@ -19,10 +19,11 @@ from ui.main import MainLayout
 from lib.locales.handler import locales
 from utils import assets_loader
 from lib.config.handler import ConfigHandler
-from utils.app_theme import apply_theme_from_config, get_palette
+from utils.app_theme import apply_theme_from_config, get_palette, sync_feature_cards
 from utils.config_persist import bind_window_geometry_persist, sync_window_geometry
 from utils.screen_layout import prepare_screens, prepare_screens_delayed
 from utils.ui_refresh import refresh_ui
+from utils.ui_scale import apply_ui_scale
 from utils.win_chrome import apply_window_settings, reset_chrome_state, restore_window_appearance
 # TESTS
 from tests.locales import run; run()  # noqa: E702
@@ -56,6 +57,9 @@ class MainApp(MDApp):
         self.fonts = assets_loader.get_available_fonts()
         self.get_font = assets_loader.get_font
 
+        window_cfg = self.config.app_global.window
+        apply_ui_scale(window_cfg.width, window_cfg.height)
+
         root = MainLayout()
         apply_theme_from_config(self)
         apply_window_settings(self.config)
@@ -76,7 +80,20 @@ class MainApp(MDApp):
         if not getattr(self, "_layout_bound", False):
             self._layout_bound = True
             Window.bind(on_resize=self._on_window_resize)
+        manager = self.root.ids.screen_manager
+        if not getattr(self, "_screen_bound", False):
+            self._screen_bound = True
+            manager.bind(current=self._on_screen_changed)
         Clock.schedule_once(self._bind_geometry, 0.3)
+        Clock.schedule_once(lambda _dt: apply_window_settings(self.config), 0.05)
+
+    def _on_screen_changed(self, _manager, screen_name: str):
+        if screen_name == "home" and self.root:
+            sync_feature_cards(self.root)
+            Clock.schedule_once(
+                lambda _dt: sync_feature_cards(self.root) if self.root else None,
+                0.05,
+            )
 
     def _on_window_resize(self, *_args):
         if not self.root:

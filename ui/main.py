@@ -8,6 +8,7 @@ from ui.widgets import (  # noqa: F401
     CustomTitleBar,
     FuturaFeatureCard,
     FuturaNavButton,
+    PlaceholderPane,
     SettingsOptionButton,
     StatusDot,
     ThemeToggleButton,

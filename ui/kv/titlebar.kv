@@ -5,7 +5,7 @@
     icon: "minus"
     action: ""
     size_hint_x: None
-    width: dp(36)
+    width: dp(40)
     size_hint_y: 1
     padding: 0
     radius: 0
@@ -19,14 +19,14 @@
             icon: root.icon
             theme_icon_color: "Custom"
             icon_color: app.palette['accent']
-            font_size: sp(14)
+            font_size: sp(16)
             size_hint: None, None
-            size: dp(16), dp(16)
+            size: dp(18), dp(18)
 
 <ThemeToggleButton>:
     theme_icon: "weather-sunny"
     size_hint_x: None
-    width: dp(28)
+    width: dp(32)
     padding: 0
     radius: [dp(4)] * 4
     md_bg_color: (0, 0, 0, 0)
@@ -39,14 +39,14 @@
             icon: root.theme_icon
             theme_icon_color: "Custom"
             icon_color: app.palette['accent']
-            font_size: sp(14)
+            font_size: sp(16)
             size_hint: None, None
-            size: dp(16), dp(16)
+            size: dp(18), dp(18)
 
 <CustomTitleBar>:
     orientation: "horizontal"
     size_hint_y: None
-    height: dp(36)
+    height: dp(40)
     padding: dp(10), 0, 0, 0
     spacing: dp(8)
     md_bg_color: app.palette['bg_panel']
@@ -60,16 +60,16 @@
 
     AnchorLayout:
         size_hint_x: None
-        width: dp(18)
+        width: dp(20)
         anchor_y: "center"
 
         MDIcon:
             icon: "flash-outline"
             theme_icon_color: "Custom"
             icon_color: app.palette['accent']
-            font_size: sp(15)
+            font_size: sp(17)
             size_hint: None, None
-            size: dp(16), dp(16)
+            size: dp(18), dp(18)
 
     MDLabel:
         text: "BLITZ//TOOLS"
@@ -91,19 +91,16 @@
         size_hint_y: 1
         spacing: dp(5)
         md_bg_color: 0, 0, 0, 0
-        width: dp(28) + dp(12) + (status_label.texture_size[0] if status_label.texture_size[0] else dp(72))
-
-        ThemeToggleButton:
-            pos_hint: {"center_y": 0.5}
+        width: dp(12) + dp(12) + (status_label.texture_size[0] if status_label.texture_size[0] else dp(72)) + dp(32)
 
         AnchorLayout:
             size_hint_x: None
-            width: dp(10)
+            width: dp(12)
             anchor_y: "center"
 
             StatusDot:
                 size_hint: None, None
-                size: dp(7), dp(7)
+                size: dp(8), dp(8)
 
         AnchorLayout:
             size_hint_x: None
@@ -126,6 +123,9 @@
                 max_lines: 1
                 halign: "left"
                 valign: "middle"
+
+        ThemeToggleButton:
+            pos_hint: {"center_y": 0.5}
 
     TitleBarButton:
         icon: "minus"
