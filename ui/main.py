@@ -3,6 +3,8 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.screenmanager import MDScreenManager
 
+from utils.resource_path import get_resource_path
+
 from ui.cluster_screen import ClusterScreen  # noqa: F401
 from ui.dvp_screen import DvpScreen  # noqa: F401
 from ui.replay_screen import ReplayScreen  # noqa: F401
@@ -25,12 +27,17 @@ from ui.widgets import (  # noqa: F401
     TitleBarButton,
 )
 
-Builder.load_file("ui/kv/titlebar.kv")
-Builder.load_file("ui/kv/screens/settings.kv")
-Builder.load_file("ui/kv/screens/dvp.kv")
-Builder.load_file("ui/kv/screens/replay.kv")
-Builder.load_file("ui/kv/screens/cluster.kv")
-Builder.load_file("ui/kv/main.kv")
+_KV_FILES = (
+    "ui/kv/titlebar.kv",
+    "ui/kv/screens/settings.kv",
+    "ui/kv/screens/dvp.kv",
+    "ui/kv/screens/replay.kv",
+    "ui/kv/screens/cluster.kv",
+    "ui/kv/main.kv",
+)
+
+for _kv_file in _KV_FILES:
+    Builder.load_file(str(get_resource_path(_kv_file)))
 
 class MainLayout(MDBoxLayout):
     pass

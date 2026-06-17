@@ -60,6 +60,8 @@ def _refresh_home(root, screen, app: MDApp, loc) -> None:
         module = getattr(modules, module_key)
         card.card_title = module.title
         card.card_body = module.body
+        card.invalidate_title_layout()
+        card._schedule_title_layout()
 
 
 def _refresh_placeholders(root, loc) -> None:
@@ -162,3 +164,7 @@ def refresh_ui(app: MDApp | None = None, *, apply_theme: bool = False) -> None:
 
     _refresh_placeholders(root, loc)
     _refresh_admin_notice(root, loc)
+
+    from ui.widgets import relayout_feature_cards
+
+    relayout_feature_cards(root)

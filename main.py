@@ -1,5 +1,10 @@
 import platform
 
+from utils.dpi_awareness import enable_dpi_awareness
+
+if platform.system() == "Windows":
+    enable_dpi_awareness()
+
 from kivy.config import Config
 
 if platform.system() == "Windows":
@@ -103,6 +108,9 @@ class MainApp(MDApp):
 
     def _on_screen_changed(self, _manager, screen_name: str):
         if screen_name == "home" and self.root:
+            from ui.widgets import relayout_feature_cards
+
+            relayout_feature_cards(self.root)
             sync_feature_cards(self.root)
             Clock.schedule_once(
                 lambda _dt: sync_feature_cards(self.root) if self.root else None,

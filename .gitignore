@@ -3,3 +3,9 @@ __pycache__
 .vscode
 .*
 /*.pyc
+
+output/
+build/
+dist/
+
+*.spec

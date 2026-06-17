@@ -19,6 +19,7 @@ class RoomType(IntEnum):
     GRAVITY_MODE = 24
     SKIRMISH = 25
     BURNING_GAMES = 26
+    GLADIATOR = 48
 
 
 class MapId(IntEnum):

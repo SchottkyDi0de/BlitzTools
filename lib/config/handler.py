@@ -10,37 +10,49 @@ from utils.window_geometry import migrate_clusters_config, migrate_window_config
 
 _log = Logger
 
+
+def _deep_merge(base: dict, override: dict) -> dict:
+    merged = dict(base)
+    for key, value in override.items():
+        if (
+            key in merged
+            and isinstance(merged[key], dict)
+            and isinstance(value, dict)
+        ):
+            merged[key] = _deep_merge(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
 @singleton
 class ConfigHandler:
     def __init__(self):
-        self.config_path = get_files_path().joinpath('config/config.yaml')
-        default_path = get_current_directory().joinpath('config/default_config.yaml')
-        with open(default_path, 'r', encoding='utf-8') as default_config_file:
-            default_config_data = yaml.safe_load(default_config_file.read())
-        self.default_config = ConfigStruct.model_validate(default_config_data)
+        self.config_path = get_files_path().joinpath("config/config.yaml")
+        default_path = get_current_directory().joinpath("config/default_config.yaml")
+        with open(default_path, "r", encoding="utf-8") as default_config_file:
+            self.default_config_data = yaml.safe_load(default_config_file.read())
+        self.default_config = ConfigStruct.model_validate(self.default_config_data)
         self.config = self._load_or_create_config()
 
     def _load_or_create_config(self) -> ConfigStruct:
+        _log.info(f"Config: user config path is {self.config_path}")
+
         if not self.config_path.exists():
-            _log.info('Config: config file not fount, loading default config...')
-            self.config_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(self.config_path, 'w', encoding='utf-8') as config_file:
-                config_file.write(yaml.dump(self.default_config.model_dump(), sort_keys=False, indent=2))
-            _log.info('Config: config created successfully!')
+            _log.info("Config: config file not found, creating from defaults...")
+            self._write_config(self.default_config)
             return self.default_config.model_copy(deep=True)
 
         try:
-            with open(self.config_path, 'r', encoding='utf-8') as config_file:
-                config = ConfigStruct.model_validate(yaml.safe_load(config_file.read()))
-        except (ValidationError, FileNotFoundError, yaml.YAMLError, OSError, TypeError) as exc:
-            _log.warning(f'Config: error while loading config ({exc}), resetting to default...')
-            try:
-                if self.config_path.exists():
-                    self.config_path.unlink()
-            except OSError:
-                pass
-            with open(self.config_path, 'w', encoding='utf-8') as config_file:
-                config_file.write(yaml.dump(self.default_config.model_dump(), sort_keys=False, indent=2))
+            with open(self.config_path, "r", encoding="utf-8") as config_file:
+                user_data = yaml.safe_load(config_file.read()) or {}
+            merged_data = _deep_merge(self.default_config_data, user_data)
+            config = ConfigStruct.model_validate(merged_data)
+        except (ValidationError, yaml.YAMLError, OSError, TypeError) as exc:
+            _log.warning(
+                f"Config: error while loading config ({exc}), falling back to defaults..."
+            )
+            self._write_config(self.default_config)
             return self.default_config.model_copy(deep=True)
 
         changed = False
@@ -54,30 +66,18 @@ class ConfigHandler:
         if migrate_clusters_config(config, self.default_config):
             changed = True
         if changed:
-            _log.info("Config: window defaults migrated, saving config")
+            _log.info("Config: defaults migrated, saving config")
             self.config = config
             self.write_config()
         return config
-                        
-    def _load_config(self) -> None:
-        with open(self.config_path, 'r', encoding='utf-8') as config_file:
-            self.config = ConfigStruct.model_validate(yaml.safe_load(config_file.read()))
-                        
+
+    def _write_config(self, config: ConfigStruct) -> None:
+        self.config_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(self.config_path, "w", encoding="utf-8") as config_file:
+            config_file.write(yaml.dump(config.model_dump(), sort_keys=False, indent=2))
+
     def get_config(self) -> ConfigStruct:
-        """
-        Return the current configuration.
-
-        Returns:
-            ConfigStruct: The current configuration.
-        """
         return self.config
-    
-    def write_config(self) -> None:
-        """
-        Write the given configuration to the config file.
 
-        Args:
-            config (ConfigStruct): The configuration to write.
-        """
-        with open(get_files_path().joinpath('config/config.yaml'), 'w', encoding='utf-8') as f:
-            f.write(yaml.dump(self.config.model_dump(), sort_keys=False, indent=2))
+    def write_config(self) -> None:
+        self._write_config(self.config)

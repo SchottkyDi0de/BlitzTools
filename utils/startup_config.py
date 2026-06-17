@@ -13,7 +13,7 @@ def read_window_config() -> dict:
     config_path = get_files_path().joinpath("config/config.yaml")
 
     with open(default_path, "r", encoding="utf-8") as f:
-        default_data = yaml.safe_load(f)
+        default_data = yaml.safe_load(f) or {}
 
     default_window = default_data["app_global"]["window"]
     window = dict(default_window)
@@ -21,9 +21,9 @@ def read_window_config() -> dict:
     if config_path.exists():
         try:
             with open(config_path, "r", encoding="utf-8") as f:
-                user_data = yaml.safe_load(f)
+                user_data = yaml.safe_load(f) or {}
             user_window = user_data.get("app_global", {}).get("window")
-            if user_window:
+            if isinstance(user_window, dict):
                 window.update(user_window)
         except (OSError, yaml.YAMLError, TypeError, KeyError):
             pass

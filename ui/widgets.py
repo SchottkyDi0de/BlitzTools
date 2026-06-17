@@ -66,6 +66,27 @@ def _finish_progress_bar_width(fill, ratio: float) -> None:
     track.do_layout()
 
 
+def _label_text_width(label) -> float:
+    """Measure label width with CoreLabel so fonts are resolved reliably."""
+    text = label.text or ""
+    if not text:
+        return dp(1)
+
+    from kivy.core.text import Label as CoreLabel
+
+    font_size = label.font_size or dp(10)
+    core = CoreLabel(
+        text=text,
+        font_size=font_size,
+        font_name=label.font_name or "Roboto",
+        bold=bool(getattr(label, "bold", False)),
+    )
+    core.refresh()
+    measured = core.texture.size[0]
+    estimated = len(text) * font_size * 0.62
+    return max(measured, estimated)
+
+
 def sync_icon_title_row(
     label,
     row,
@@ -81,11 +102,8 @@ def sync_icon_title_row(
     max_w = max(max_text_width, dp(80))
     block_h = title_block_height or dp(14)
 
-    label.text_size = (None, None)
-    label.texture_update()
-    natural_w = max(label.texture_size[0], dp(1)) + TITLE_WIDTH_SLACK
-
-    use_w = min(natural_w, max_w)
+    natural_w = _label_text_width(label) + TITLE_WIDTH_SLACK
+    use_w = natural_w if natural_w <= max_w else max_w
 
     if title_block_height:
         label.width = use_w
@@ -113,28 +131,71 @@ def sync_icon_title_row(
     anchor.do_layout()
 
 
+def relayout_feature_cards(root, *, delays: tuple[float, ...] = (0, 0.12, 0.35)) -> None:
+    cards = [
+        widget
+        for widget in root.walk()
+        if type(widget).__name__ == "FuturaFeatureCard"
+    ]
+    for card in cards:
+        card.invalidate_title_layout()
+        card._schedule_title_layout()
+    for delay in delays:
+        for card in cards:
+            Clock.schedule_once(card._refresh_title_layout, delay)
+
+
 class IconTitleLayoutMixin:
     title_horizontal_inset = NumericProperty(dp(46))
     title_block_height = NumericProperty(0)
+
+    def invalidate_title_layout(self) -> None:
+        self._title_layout_stamp = None
+
+    def _title_layout_key(self) -> tuple[float, str]:
+        label = self.ids.get("title_label")
+        title = label.text if label else ""
+        return (round(self.width, 1), title)
 
     def _sync_title_layout(self):
         if self.width <= 0:
             return
 
-        layout_width = round(self.width, 1)
-        if getattr(self, "_title_layout_width", None) == layout_width:
-            return
+        layout_key = self._title_layout_key()
+        label = self.ids.get("title_label")
+        if layout_key == getattr(self, "_title_layout_stamp", None):
+            if label and self._title_fits(label):
+                return
 
         block_h = self.title_block_height if self.title_block_height > 0 else None
         sync_icon_title_row(
-            self.ids.get("title_label"),
+            label,
             self.ids.get("title_row"),
             self.ids.get("title_anchor"),
             self.ids.get("title_icon_box"),
             max_text_width=self.width - self.title_horizontal_inset,
             title_block_height=block_h,
         )
-        self._title_layout_width = layout_width
+        self._title_layout_stamp = layout_key
+        if label and not self._title_fits(label):
+            self._schedule_title_layout_retry()
+
+    def _title_fits(self, label) -> bool:
+        if not label.text:
+            return True
+        min_width = len(label.text) * (label.font_size or dp(10)) * 0.45
+        return label.width >= min_width
+
+    def _schedule_title_layout_retry(self) -> None:
+        if getattr(self, "_title_layout_retry_scheduled", False):
+            return
+        self._title_layout_retry_scheduled = True
+        Clock.schedule_once(self._retry_title_layout, 0.15)
+
+    def _retry_title_layout(self, _dt):
+        self._title_layout_retry_scheduled = False
+        self.invalidate_title_layout()
+        self._sync_title_layout()
 
     def _schedule_title_layout(self):
         if getattr(self, "_title_layout_scheduled", False):
@@ -147,7 +208,7 @@ class IconTitleLayoutMixin:
         self._sync_title_layout()
 
     def _refresh_title_layout(self, _dt):
-        self._title_layout_width = None
+        self.invalidate_title_layout()
         self._sync_title_layout()
 
     def on_size(self, *_args):
@@ -694,8 +755,9 @@ class FuturaFeatureCard(HoverHighlightMixin, MDCard, IconTitleLayoutMixin):
         self.canvas.ask_update()
 
     def on_card_title(self, *_args):
-        self._title_layout_width = None
+        self.invalidate_title_layout()
         self._schedule_title_layout()
+        Clock.schedule_once(self._refresh_title_layout, 0.12)
 
     def on_size(self, *_args):
         self._schedule_title_layout()
@@ -765,7 +827,7 @@ class PlaceholderPane(IconTitleLayoutMixin, MDBoxLayout):
     title_horizontal_inset = NumericProperty(dp(74))
 
     def on_pane_title(self, *_args):
-        self._title_layout_width = None
+        self.invalidate_title_layout()
         self._schedule_title_layout()
 
     def on_parent(self, _widget, parent):
