@@ -1,4 +1,8 @@
 ---
+api:
+  base_url: "http://77.221.157.72:8000/"
+  timeout: 10
+
 app_global:
   window:
     width: 1200

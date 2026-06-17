@@ -57,7 +57,12 @@ class ClustersConfig(BaseModel):
     na: List[ClusterEntry] = []
 
 
+class APIConfig(BaseModel):
+    base_url: str
+    timeout: int
+
 class ConfigStruct(BaseModel):
+    api: APIConfig
     app_global: AppGlobal
     sessions: None
     olenemer: Olenemer
