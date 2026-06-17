@@ -39,4 +39,40 @@ olenemer:
 converter:
   # Пустая строка — сохранять рядом с исходными файлами
   output_dir: ""
+
+clusters:
+  ru:
+    - id: 0
+      name: "login0.tanksblitz.ru"
+    - id: 1
+      name: "login1.tanksblitz.ru"
+    - id: 2
+      name: "login2.tanksblitz.ru"
+    - id: 3
+      name: "login3.tanksblitz.ru"
+  eu:
+    - id: 0
+      name: "login0.wotblitz.eu"
+    - id: 1
+      name: "login1.wotblitz.eu"
+    - id: 2
+      name: "login2.wotblitz.eu"
+    - id: 3
+      name: "login3.wotblitz.eu"
+    - id: 4
+      name: "login4.wotblitz.eu"
+  asia:
+    - id: 0
+      name: "login0.wotblitz.asia"
+    - id: 1
+      name: "login1.wotblitz.asia"
+    - id: 2
+      name: "login2.wotblitz.asia"
+  na:
+    - id: 0
+      name: "login0.wotblitz.com"
+    - id: 1
+      name: "login1.wotblitz.com"
+    - id: 2
+      name: "login2.wotblitz.com"
 ...

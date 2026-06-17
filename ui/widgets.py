@@ -28,6 +28,44 @@ def is_icon_widget(widget) -> bool:
     return type(widget).__name__ in ICON_WIDGET_NAMES
 
 
+def reset_progress_bar(fill) -> None:
+    fill.size_hint_x = None
+    fill.width = 0
+    track = fill.parent
+    if track is not None:
+        track.do_layout()
+
+
+def sync_progress_bar(fill, current: int, total: int) -> None:
+    track = fill.parent
+    if track is None:
+        return
+    if total <= 0:
+        reset_progress_bar(fill)
+        return
+
+    ratio = min(1.0, max(0.0, current / total))
+    fill.size_hint_x = None
+    track_width = track.width
+    if track_width > 0:
+        fill.width = track_width * ratio
+        track.do_layout()
+        return
+
+    fill.size_hint_x = ratio
+    track.do_layout()
+    Clock.schedule_once(lambda _dt, f=fill, r=ratio: _finish_progress_bar_width(f, r), 0)
+
+
+def _finish_progress_bar_width(fill, ratio: float) -> None:
+    track = fill.parent
+    if track is None or track.width <= 0:
+        return
+    fill.size_hint_x = None
+    fill.width = track.width * ratio
+    track.do_layout()
+
+
 def sync_icon_title_row(
     label,
     row,

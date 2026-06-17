@@ -6,7 +6,7 @@ from pydantic_core import ValidationError
 from lib.dataclasses.configs.main_config import ConfigStruct
 from utils.resource_path import get_current_directory, get_files_path
 from utils.singleton_factory import singleton
-from utils.window_geometry import migrate_window_config, sanitize_window_config
+from utils.window_geometry import migrate_clusters_config, migrate_window_config, sanitize_window_config
 
 _log = Logger
 
@@ -50,6 +50,8 @@ class ConfigHandler:
         ):
             changed = True
         if migrate_window_config(config, self.default_config):
+            changed = True
+        if migrate_clusters_config(config, self.default_config):
             changed = True
         if changed:
             _log.info("Config: window defaults migrated, saving config")

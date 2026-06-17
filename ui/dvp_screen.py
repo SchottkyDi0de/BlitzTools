@@ -12,6 +12,7 @@ from lib.config.handler import ConfigHandler
 from lib.dvpl_converter.batch import BatchResult, pack_files, pack_folder, unpack_files, unpack_folder
 from lib.dvpl_converter.classes import CompressionTypes
 from utils.file_dialogs import pick_files, pick_folder
+from ui.widgets import reset_progress_bar, sync_progress_bar
 
 
 _COMPRESSION_MAP = {
@@ -327,7 +328,7 @@ class DvpScreen(MDScreen):
         Thread(target=run, daemon=True).start()
 
     def _reset_progress(self) -> None:
-        self.ids.progress_fill.size_hint_x = 0
+        reset_progress_bar(self.ids.progress_fill)
         loc = self._locale()
         if loc:
             self.ids.progress_label.text = loc.log.working
@@ -341,14 +342,12 @@ class DvpScreen(MDScreen):
             return
 
         label = self.ids.progress_label
-        fill = self.ids.progress_fill
         if total <= 0:
-            fill.size_hint_x = 0
+            reset_progress_bar(self.ids.progress_fill)
             label.text = loc.log.working
             return
 
-        ratio = min(1.0, max(0.0, current / total))
-        fill.size_hint_x = ratio if ratio > 0 else 0
+        sync_progress_bar(self.ids.progress_fill, current, total)
         display_name = name or "…"
         label.text = loc.log.progress.format(
             current=current,
@@ -364,7 +363,7 @@ class DvpScreen(MDScreen):
         if visible:
             self._reset_progress()
         else:
-            self.ids.progress_fill.size_hint_x = 0
+            reset_progress_bar(self.ids.progress_fill)
             self.ids.progress_label.text = ""
 
     def _emit_result(self, payload: str):

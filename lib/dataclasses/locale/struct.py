@@ -193,6 +193,82 @@ class Replay(BaseModel):
     columns: ReplayColumns
 
 
+class ClusterSections(BaseModel):
+    regions: str
+    clusters: str
+    ping: str
+    stats: str
+    summary: str
+
+
+class ClusterRegions(BaseModel):
+    ru: str
+    eu: str
+    asia: str
+    na: str
+
+
+class ClusterLabels(BaseModel):
+    cluster_row: str
+    blocked_suffix: str
+
+
+class ClusterActions(BaseModel):
+    block: str
+    unblock: str
+    unblock_all: str
+    ping: str
+    stop_ping: str
+
+
+class ClusterStatus(BaseModel):
+    admin_required: str
+    no_selection: str
+    blocked: str
+    unblocked: str
+    unblocked_all: str
+    block_failed: str
+    unblock_failed: str
+    ping_idle: str
+    ping_running: str
+    ping_progress: str
+    ping_batch_running: str
+    ping_batch_progress: str
+    ping_done: str
+    ping_batch_done: str
+    ping_batch_stopped: str
+    ping_stopped: str
+    ping_stopping: str
+    ping_summary_line: str
+    ping_summary_unavailable: str
+    ping_summary_blocked: str
+
+
+class ClusterStats(BaseModel):
+    na: str
+    host: str
+    status: str
+    status_unavailable: str
+    status_blocked: str
+    min: str
+    avg: str
+    max: str
+    loss: str
+    jitter: str
+    duration: str
+
+
+class Cluster(BaseModel):
+    title: str
+    description: str
+    sections: ClusterSections
+    regions: ClusterRegions
+    labels: ClusterLabels
+    actions: ClusterActions
+    status: ClusterStatus
+    stats: ClusterStats
+
+
 class Main(BaseModel):
     titlebar: Titlebar
     intro: Intro
@@ -203,6 +279,7 @@ class Main(BaseModel):
     settings: Settings
     dvp: Dvp
     replay: Replay
+    cluster: Cluster
 
 
 class LocaleStruct(BaseModel):

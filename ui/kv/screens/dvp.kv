@@ -320,12 +320,14 @@
                 height: self.texture_size[1]
 
             MDBoxLayout:
+                id: progress_track
                 size_hint_y: None
                 height: dp(4)
                 md_bg_color: app.palette['surface']
 
                 MDBoxLayout:
                     id: progress_fill
-                    size_hint_x: 0
+                    size_hint_x: None
+                    width: 0
                     size_hint_y: 1
                     md_bg_color: app.palette['accent']

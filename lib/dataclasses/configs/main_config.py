@@ -45,8 +45,21 @@ class Converter(BaseModel):
     output_dir: str = ""
 
 
+class ClusterEntry(BaseModel):
+    id: int
+    name: str
+
+
+class ClustersConfig(BaseModel):
+    ru: List[ClusterEntry] = []
+    eu: List[ClusterEntry] = []
+    asia: List[ClusterEntry] = []
+    na: List[ClusterEntry] = []
+
+
 class ConfigStruct(BaseModel):
     app_global: AppGlobal
     sessions: None
     olenemer: Olenemer
     converter: Converter = Converter()
+    clusters: ClustersConfig = ClustersConfig()

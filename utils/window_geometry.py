@@ -103,3 +103,16 @@ def migrate_window_config(config, default_config) -> bool:
     if migrate_legacy_olenemer_positions(config, default_config):
         changed = True
     return changed
+
+
+def migrate_clusters_config(config, default_config) -> bool:
+    current = config.clusters
+    default = default_config.clusters
+    empty = not any(
+        getattr(current, region)
+        for region in ("ru", "eu", "asia", "na")
+    )
+    if not empty:
+        return False
+    config.clusters = default.model_copy(deep=True)
+    return True
