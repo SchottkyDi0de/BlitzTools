@@ -3,17 +3,13 @@ from __future__ import annotations
 from pathlib import Path
 
 from lib.config.handler import ConfigHandler
+from lib.olenemer.live.messages import loading_message
 from lib.olenemer.live.poller import LiveReplayPoller
 from lib.olenemer.live.paths import replay_dirs_from_handler
 from lib.olenemer.live.watchdog import RecordingFolderWatchdog
 from lib.olenemer.window.app import OlenemerApp
 from lib.olenemer.window.models import TeamViewData
 from lib.replay_parser import LiveReplay
-
-
-def _loading_message(config_handler: ConfigHandler) -> str:
-    language = config_handler.config.app_global.language
-    return "Загрузка..." if language == "ru" else "Loading..."
 
 
 class LiveOlenemerController:
@@ -56,8 +52,12 @@ class LiveOlenemerController:
 
     def _handle_folder_found(self, folder: Path) -> None:
         self._poller.start(folder)
-        self.app.show_loading(_loading_message(self.config_handler))
+        self.app.show_loading(loading_message(self.config_handler))
 
     def _handle_folder_lost(self) -> None:
         self._poller.stop()
         self.app.clear_and_hide()
+
+    def apply_config(self) -> None:
+        self._watchdog.replay_dirs = replay_dirs_from_handler(self.config_handler)
+        self._poller.profile_skins = self.config_handler.config.olenemer.profile_skins

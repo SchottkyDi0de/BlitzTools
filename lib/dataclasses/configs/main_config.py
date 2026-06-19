@@ -4,7 +4,7 @@
 
 from typing import List, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 
 class Window(BaseModel):
@@ -60,7 +60,7 @@ class Olenemer(BaseModel):
     window_pos_left: List[int]
     window_pos_right: List[int]
     auto_open: bool = True
-    background_type: Literal["transparent", "color", "image"] = "transparent"
+    background_type: Literal["transparent", "image"] = "transparent"
     background_color: str = "#242424"
     background_image: str = "res/images/olenemer_background.png"
     keybinds: OlenemerKeybinds = OlenemerKeybinds()
@@ -69,6 +69,14 @@ class Olenemer(BaseModel):
     tank_display_type: Literal["icon", "color"] = "icon"
     show_border: bool = True
     show_window_border: bool = True
+    show_summary: bool = True
+
+    @field_validator("background_type", mode="before")
+    @classmethod
+    def _normalize_background_type(cls, value):
+        if value == "color":
+            return "transparent"
+        return value
 
 
 class Converter(BaseModel):

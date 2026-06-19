@@ -134,6 +134,62 @@ main:
       kills: "Фраги"
       xp: "XP"
       credits: "Серебро"
+  olenemer:
+    title: "ОЛЕНЕМЕР"
+    description: "Оверлей со списками команд в реальном времени. Отслеживает папки реплеев и показывает статистику игроков во время боя."
+    sections:
+      launch: "// ЗАПУСК"
+      general: "// ОБЩЕЕ"
+      regions: "// РЕГИОНЫ"
+      appearance: "// ВНЕШНИЙ ВИД"
+      columns: "// СТОЛБЦЫ"
+      replay_paths: "// ПАПКИ РЕПЛЕЕВ"
+      keybinds: "// ГОРЯЧИЕ КЛАВИШИ"
+    status:
+      idle: "Оленемер не запущен. Нажмите «Запустить» для отслеживания реплеев."
+      running: "Оленемер работает. Окна появятся при обнаружении активного реплея."
+    options:
+      auto_open: "Автооткрытие окон"
+      profile_skins: "Фоны профилей"
+      show_border: "Разделители строк"
+      show_window_border: "Обводка окна"
+      show_summary: "Сводка по команде"
+      transparency_value: "Прозрачность: {value}%"
+    regions:
+      ru: "RU"
+      eu: "EU"
+    background:
+      transparent: "Прозрачный"
+      image: "Изображение"
+    tank_display:
+      icon: "Иконка класса"
+      color: "Цвет названия"
+    columns:
+      avatar: "Аватар"
+      nickname: "Ник"
+      tank: "Танк"
+      rating: "Рейтинг"
+      platoon: "Взвод"
+      battles: "Бои"
+      winrate: "Винрейт"
+      damage: "Урон"
+    replay_paths:
+      ru_active: "RU: {path}"
+      eu_active: "EU: {path}"
+    actions:
+      start: "Запустить"
+      stop: "Остановить"
+      pick_ru_replays: "Выбрать папку RU"
+      pick_eu_replays: "Выбрать папку EU"
+      pick_ru_replays_dialog: "Выберите папку с реплеями RU"
+      pick_eu_replays_dialog: "Выберите папку с реплеями EU"
+      opacity_down: "−"
+      opacity_up: "+"
+    keybinds:
+      hint: "Горячие клавиши применяются после перезапуска оленемера. Измените значения в config.yaml."
+      show_hide: "Показать / скрыть: {value}"
+      increase_opacity: "Прозрачнее: {value}"
+      decrease_opacity: "Непрозрачнее: {value}"
   cluster:
     title: "КЛАСТЕРЫ"
     description: "Блокировка серверов через hosts и проверка пинга (100 ICMP-запросов на кластер)."

@@ -269,6 +269,94 @@ class Cluster(BaseModel):
     stats: ClusterStats
 
 
+class OlenemerSections(BaseModel):
+    launch: str
+    general: str
+    regions: str
+    appearance: str
+    columns: str
+    replay_paths: str
+    keybinds: str
+
+
+class OlenemerStatus(BaseModel):
+    idle: str
+    running: str
+
+
+class OlenemerOptions(BaseModel):
+    auto_open: str
+    profile_skins: str
+    show_border: str
+    show_window_border: str
+    show_summary: str
+    transparency_value: str
+
+
+class OlenemerRegions(BaseModel):
+    ru: str
+    eu: str
+
+
+class OlenemerBackground(BaseModel):
+    transparent: str
+    image: str
+
+
+class OlenemerTankDisplay(BaseModel):
+    icon: str
+    color: str
+
+
+class OlenemerColumns(BaseModel):
+    avatar: str
+    nickname: str
+    tank: str
+    rating: str
+    platoon: str
+    battles: str
+    winrate: str
+    damage: str
+
+
+class OlenemerReplayPaths(BaseModel):
+    ru_active: str
+    eu_active: str
+
+
+class OlenemerActions(BaseModel):
+    start: str
+    stop: str
+    pick_ru_replays: str
+    pick_eu_replays: str
+    pick_ru_replays_dialog: str
+    pick_eu_replays_dialog: str
+    opacity_down: str
+    opacity_up: str
+
+
+class OlenemerKeybinds(BaseModel):
+    hint: str
+    show_hide: str
+    increase_opacity: str
+    decrease_opacity: str
+
+
+class Olenemer(BaseModel):
+    title: str
+    description: str
+    sections: OlenemerSections
+    status: OlenemerStatus
+    options: OlenemerOptions
+    regions: OlenemerRegions
+    background: OlenemerBackground
+    tank_display: OlenemerTankDisplay
+    columns: OlenemerColumns
+    replay_paths: OlenemerReplayPaths
+    actions: OlenemerActions
+    keybinds: OlenemerKeybinds
+
+
 class Main(BaseModel):
     titlebar: Titlebar
     intro: Intro
@@ -279,6 +367,7 @@ class Main(BaseModel):
     settings: Settings
     dvp: Dvp
     replay: Replay
+    olenemer: Olenemer
     cluster: Cluster
 
 

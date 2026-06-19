@@ -43,7 +43,10 @@ class OlenemerBackground:
 
 
 def background_from_config(olenemer_config) -> OlenemerBackground:
-    mode = BackgroundType(olenemer_config.background_type)
+    bg_type = olenemer_config.background_type
+    if bg_type == "color":
+        bg_type = "transparent"
+    mode = BackgroundType(bg_type)
     if mode == BackgroundType.TRANSPARENT:
         color = PANEL_BG
     elif mode == BackgroundType.COLOR:

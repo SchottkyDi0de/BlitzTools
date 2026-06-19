@@ -134,6 +134,62 @@ main:
       kills: "Kills"
       xp: "XP"
       credits: "Credits"
+  olenemer:
+    title: "OLENEMER"
+    description: "Live team overlay. Watches replay folders and shows player stats during a battle."
+    sections:
+      launch: "// LAUNCH"
+      general: "// GENERAL"
+      regions: "// REGIONS"
+      appearance: "// APPEARANCE"
+      columns: "// COLUMNS"
+      replay_paths: "// REPLAY FOLDERS"
+      keybinds: "// HOTKEYS"
+    status:
+      idle: "Olenemer is not running. Press Start to watch replay folders."
+      running: "Olenemer is running. Windows appear when an active replay is found."
+    options:
+      auto_open: "Auto-open windows"
+      profile_skins: "Profile backgrounds"
+      show_border: "Row separators"
+      show_window_border: "Window border"
+      show_summary: "Team summary"
+      transparency_value: "Opacity: {value}%"
+    regions:
+      ru: "RU"
+      eu: "EU"
+    background:
+      transparent: "Transparent"
+      image: "Image"
+    tank_display:
+      icon: "Class icon"
+      color: "Colored name"
+    columns:
+      avatar: "Avatar"
+      nickname: "Nickname"
+      tank: "Tank"
+      rating: "Rating"
+      platoon: "Platoon"
+      battles: "Battles"
+      winrate: "Win rate"
+      damage: "Damage"
+    replay_paths:
+      ru_active: "RU: {path}"
+      eu_active: "EU: {path}"
+    actions:
+      start: "Start"
+      stop: "Stop"
+      pick_ru_replays: "Pick RU folder"
+      pick_eu_replays: "Pick EU folder"
+      pick_ru_replays_dialog: "Select the RU replays folder"
+      pick_eu_replays_dialog: "Select the EU replays folder"
+      opacity_down: "−"
+      opacity_up: "+"
+    keybinds:
+      hint: "Hotkeys apply after restarting olenemer. Edit values in config.yaml."
+      show_hide: "Show / hide: {value}"
+      increase_opacity: "More opaque: {value}"
+      decrease_opacity: "Less opaque: {value}"
   cluster:
     title: "CLUSTERS"
     description: "Block servers via the hosts file and run a 100-ping benchmark per cluster."

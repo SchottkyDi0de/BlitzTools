@@ -13,6 +13,10 @@ from lib.replay_parser.models.battle_results_dat import BattleResultsDat
 from lib.replay_parser.models.region import Region
 
 _UINT64_MAX = 18446744073709551615
+_MAX_RAW_TEAM = 15
+_PLAYER_PATTERN = re.compile(
+    rb"(?P<nick>[A-Za-z0-9_]{2,32})\x20(?P<team>[\x01-\x0f])\x28\x01\x38"
+)
 
 
 class LivePlayer(BaseModel):
@@ -21,7 +25,7 @@ class LivePlayer(BaseModel):
     model_config = ConfigDict(frozen=False)
 
     nickname: str
-    team: int = Field(ge=1, le=2, description="1 или 2 — номер команды в реплее")
+    team: int = Field(ge=1, le=_MAX_RAW_TEAM, description="Номер команды в реплее (1–2 в обычном бою)")
     account_id: int | None = None
     clan_tag: str | None = None
     tank_id: int = 0
@@ -40,12 +44,13 @@ class LivePlayer(BaseModel):
 
 
 class LiveReplay(BaseModel):
-    """Roster боя из live-файла реплея; team_1 — команда автора."""
+    """Roster боя из live-файла реплея; team_1 — команда автора (если он в ростере)."""
 
     model_config = ConfigDict(frozen=False)
 
     author_nickname: str
     author_team: int = Field(ge=1, le=2)
+    author_in_roster: bool = True
     region: Region
     team_1: list[LivePlayer] = Field(default_factory=list)
     team_2: list[LivePlayer] = Field(default_factory=list)
@@ -56,6 +61,11 @@ class LiveReplay(BaseModel):
 
     @property
     def author(self) -> LivePlayer:
+        if not self.author_in_roster:
+            raise ReplayParserError(
+                f"Author nickname '{self.author_nickname}' is not in replay players "
+                "(temporary mode or non-standard battle)"
+            )
         for player in self.all_players:
             if player.nickname == self.author_nickname:
                 return player
@@ -96,27 +106,60 @@ class LiveReplayExtractor:
             raise ReplayParserError("No players found in replay")
 
         author_nickname = self.author_nickname_from_path(path)
-        author_team = next(
-            (player.team for player in players if player.nickname == author_nickname),
-            None,
-        )
-        if author_team is None:
-            raise ReplayParserError(f"Author nickname '{author_nickname}' not found in replay players")
-
-        team_1_raw = [player for player in players if player.team == 1]
-        team_2_raw = [player for player in players if player.team == 2]
-        if author_team == 1:
-            team_1, team_2 = team_1_raw, team_2_raw
-        else:
-            team_1, team_2 = team_2_raw, team_1_raw
+        team_1, team_2, author_team, author_in_roster = self._split_teams(players, author_nickname)
 
         return LiveReplay(
             author_nickname=author_nickname,
             author_team=author_team,
+            author_in_roster=author_in_roster,
             region=region,
             team_1=team_1,
             team_2=team_2,
         )
+
+    @staticmethod
+    def _is_free_for_all(players: list[LivePlayer]) -> bool:
+        return len({player.team for player in players}) > 2
+
+    @classmethod
+    def _split_teams(
+        cls,
+        players: list[LivePlayer],
+        author_nickname: str,
+    ) -> tuple[list[LivePlayer], list[LivePlayer], int, bool]:
+        author_player = next(
+            (player for player in players if player.nickname == author_nickname),
+            None,
+        )
+
+        if author_player is None:
+            if cls._is_free_for_all(players):
+                for player in players:
+                    player.team = 2
+                    player.platoon_id = None
+                    player.platoon_index = 0
+                return [], players, 1, False
+
+            team_1 = [player for player in players if player.team == 1]
+            team_2 = [player for player in players if player.team == 2]
+            return team_1, team_2, 1, False
+
+        if cls._is_free_for_all(players):
+            team_1 = [author_player]
+            team_2 = [player for player in players if player.nickname != author_nickname]
+            author_player.team = 1
+            for player in team_2:
+                player.team = 2
+                player.platoon_id = None
+                player.platoon_index = 0
+            return team_1, team_2, 1, True
+
+        author_team = author_player.team
+        team_1_raw = [player for player in players if player.team == 1]
+        team_2_raw = [player for player in players if player.team == 2]
+        if author_team == 1:
+            return team_1_raw, team_2_raw, author_team, True
+        return team_2_raw, team_1_raw, author_team, True
 
     def _bytes_from_hxd_text(self, txt: str) -> bytes:
         out = bytearray()
@@ -360,12 +403,12 @@ class LiveReplayExtractor:
             player._proto_start = None
 
     def _extract_players(self, buf: bytes) -> list[LivePlayer]:
-        pattern = re.compile(rb"(?P<nick>[A-Za-z0-9_]{2,32})\x20(?P<team>[\x01|\x02])\x28\x01\x38")
         players: list[LivePlayer] = []
+        seen_accounts: set[int] = set()
 
-        for match in pattern.finditer(buf):
+        for match in _PLAYER_PATTERN.finditer(buf):
             nickname = match.group("nick").decode("ascii", errors="replace")
-            team = 1 if match.group("team") == b"\x01" else 2
+            team = match.group("team")[0]
 
             header_start = match.start() - 17
             if header_start >= 0 and header_start + 2 <= len(buf):
@@ -378,6 +421,10 @@ class LiveReplayExtractor:
                 tank_id = 0
 
             account_id, after_varint_idx = self._read_varint(buf, match.end())
+            if account_id is not None and account_id in seen_accounts:
+                continue
+            if account_id is not None:
+                seen_accounts.add(account_id)
 
             win_start = after_varint_idx
             win_end = min(len(buf), after_varint_idx + 120)

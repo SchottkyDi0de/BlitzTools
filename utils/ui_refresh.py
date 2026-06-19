@@ -125,6 +125,11 @@ def _refresh_cluster(screen) -> None:
         screen.refresh_locale()
 
 
+def _refresh_olenemer(screen) -> None:
+    if hasattr(screen, "refresh_locale"):
+        screen.refresh_locale()
+
+
 def _refresh_admin_notice(root, loc) -> None:
     from ui.widgets import AdminNoticeBar
 
@@ -161,6 +166,8 @@ def refresh_ui(app: MDApp | None = None, *, apply_theme: bool = False) -> None:
             _refresh_replay(screen)
         elif screen.name == "cluster":
             _refresh_cluster(screen)
+        elif screen.name == "olenemer":
+            _refresh_olenemer(screen)
 
     _refresh_placeholders(root, loc)
     _refresh_admin_notice(root, loc)

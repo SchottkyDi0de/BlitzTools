@@ -38,6 +38,7 @@ class OlenemerWindow(ctk.CTkToplevel):
         tank_display_type: str = "icon",
         show_window_border: bool = True,
         show_border: bool = True,
+        show_summary: bool = True,
         **kwargs,
     ):
         super().__init__(master, **kwargs)
@@ -98,6 +99,7 @@ class OlenemerWindow(ctk.CTkToplevel):
             tank_display_type=tank_display_type,
             border_color=border_color,
             show_border=show_border,
+            show_summary=show_summary,
         )
 
         for widget in (self, self.border_frame, self.root_layer):
@@ -118,6 +120,27 @@ class OlenemerWindow(ctk.CTkToplevel):
         if not self.show_window_border:
             return 0, 0
         return self._border_width, self._border_width
+
+    def _bottom_border_height(self) -> int:
+        return ACCENT_BORDER_WIDTH if self.show_window_border else 0
+
+    def _measure_outer_size(self) -> tuple[int, int]:
+        self.update_idletasks()
+        pad_x, pad_top = self._outer_padding()
+        bottom = self._bottom_border_height()
+        inner_w = max(self.root_layer.winfo_reqwidth(), 1)
+        inner_h = max(self.root_layer.winfo_reqheight(), 1)
+        if self.panel.winfo_ismapped():
+            inner_w = max(inner_w, self.panel.winfo_reqwidth())
+            inner_h = max(inner_h, self.panel.winfo_reqheight())
+        if self.status_label.winfo_ismapped():
+            inner_w = max(inner_w, self.status_label.winfo_reqwidth())
+            inner_h = max(inner_h, self.status_label.winfo_reqheight())
+        return inner_w + pad_x * 2, pad_top + inner_h + bottom
+
+    def _fit_outer_geometry(self) -> None:
+        outer_w, outer_h = self._measure_outer_size()
+        self._apply_outer_geometry(outer_w, outer_h)
 
     def _sync_window_border_chrome(self, *, compact: bool = False) -> None:
         if self._bottom_border_bar is not None:
@@ -161,6 +184,7 @@ class OlenemerWindow(ctk.CTkToplevel):
             self._team_data and self._team_data.rows and self.panel.winfo_ismapped()
         )
         self._sync_window_border_chrome(compact=compact)
+        self._fit_outer_geometry()
 
     def _root_inner_color(self) -> str:
         return self.background.color if not self.background.uses_image else PANEL_BG
@@ -190,9 +214,25 @@ class OlenemerWindow(ctk.CTkToplevel):
         self.status_label.place(relx=0.5, rely=0.5, anchor="center")
         self._apply_loading_geometry()
 
+    def _anchors_top_right(self) -> bool:
+        return self.team == 2
+
+    def _screen_origin(self, outer_w: int) -> tuple[int, int]:
+        anchor_x, anchor_y = self._window_pos
+        if self._anchors_top_right():
+            return anchor_x - outer_w, anchor_y
+        return anchor_x, anchor_y
+
+    def _set_screen_origin(self, x: int, y: int, *, outer_w: int | None = None) -> None:
+        width = outer_w if outer_w is not None else max(self.winfo_width(), 1)
+        if self._anchors_top_right():
+            self._window_pos = [x + width, y]
+        else:
+            self._window_pos = [x, y]
+
     def _apply_outer_geometry(self, outer_w: int, outer_h: int) -> None:
         self._last_outer_size = (outer_w, outer_h)
-        x, y = self._window_pos
+        x, y = self._screen_origin(outer_w)
         self.geometry(f"{outer_w}x{outer_h}+{x}+{y}")
         self.minsize(outer_w, outer_h)
         self.maxsize(outer_w, outer_h)
@@ -203,9 +243,8 @@ class OlenemerWindow(ctk.CTkToplevel):
         if self._last_outer_size is not None:
             outer_w, outer_h = self._last_outer_size
         else:
-            border = self._border_width * 2
-            outer_w = 220 + border
-            outer_h = 56 + border
+            self._fit_outer_geometry()
+            return
         self._apply_outer_geometry(outer_w, outer_h)
 
     def clear_content(self) -> None:
@@ -275,10 +314,7 @@ class OlenemerWindow(ctk.CTkToplevel):
             self.root_layer.configure(fg_color=self.background.color)
             self.configure(fg_color=self.background.color)
 
-        pad_x, pad_top = self._outer_padding()
-        outer_w = inner_w + pad_x * 2
-        outer_h = inner_h + pad_top * 2
-        self._apply_outer_geometry(outer_w, outer_h)
+        self._fit_outer_geometry()
         if self._bg_canvas is not None and cover_image is not None:
             _stack_widget_below(self._bg_canvas, self.panel)
         _apply_window_opacity(self, self.background.opacity)
@@ -291,8 +327,61 @@ class OlenemerWindow(ctk.CTkToplevel):
             image_path=self.background.image_path,
             opacity=opacity,
         )
+        self.panel.background = self.background
         _apply_window_opacity(self, opacity)
         self._ensure_topmost()
+
+    def apply_settings(
+        self,
+        *,
+        background: OlenemerBackground,
+        columns: ColumnVisibility,
+        border_color: str,
+        profile_skins: bool,
+        tank_display_type: str,
+        show_border: bool,
+        show_window_border: bool,
+        show_summary: bool,
+    ) -> None:
+        self.background = background
+        self.border_color = border_color
+        self.panel.background = background
+        self.panel.columns = columns
+        self.panel.show_profile_skins = profile_skins
+        self.panel.tank_display_type = tank_display_type
+        self.panel.show_border = show_border
+        self.panel.show_summary = show_summary
+        self.panel._border_color = border_color
+
+        if background.uses_image:
+            self._ensure_bg_canvas()
+        elif self._bg_canvas is not None:
+            self._bg_canvas.place_forget()
+
+        root_color = self._root_inner_color()
+        self.configure(fg_color=root_color if not background.uses_image else PANEL_BG)
+        self.root_layer.configure(fg_color=root_color)
+        self.apply_window_border_settings(show_window_border)
+
+        if self._team_data and self._team_data.rows:
+            self._rerender()
+        elif self.status_label.winfo_ismapped():
+            self.status_label.configure(fg_color=root_color)
+
+    def _ensure_bg_canvas(self) -> None:
+        if self._bg_canvas is not None:
+            return
+        self._bg_canvas = tk.Canvas(
+            self.root_layer,
+            highlightthickness=0,
+            bd=0,
+            borderwidth=0,
+            bg=PANEL_BG,
+        )
+        self._bg_canvas.place(x=0, y=0)
+        self._bg_canvas.bind("<ButtonPress-1>", self.start_move)
+        self._bg_canvas.bind("<B1-Motion>", self.do_move)
+        self._bg_canvas.bind("<ButtonRelease-1>", self.stop_move)
 
     def start_move(self, event):
         self.x = event.x_root - self.winfo_x()
@@ -324,7 +413,7 @@ class OlenemerWindow(ctk.CTkToplevel):
         elif monitor["y"] + monitor["height"] - (y + win_h) < MAGNET_THRESHOLD:
             y = monitor["y"] + monitor["height"] - win_h
 
-        self._window_pos = [x, y]
+        self._set_screen_origin(x, y, outer_w=win_w)
         self.geometry(f"+{x}+{y}")
 
         app = self.master
@@ -336,6 +425,12 @@ class OlenemerWindow(ctk.CTkToplevel):
             return
 
         other_w = other.winfo_width()
-        mirror_x = monitor["x"] + monitor["width"] - other_w - (x - monitor["x"])
-        other._window_pos = [mirror_x, y]
-        other.geometry(f"+{mirror_x}+{y}")
+        if self.team == 1:
+            other_anchor_x = monitor["x"] + monitor["width"] - (x - monitor["x"])
+            other._window_pos = [other_anchor_x, y]
+            other.geometry(f"+{other_anchor_x - other_w}+{y}")
+        else:
+            anchor_x = x + win_w
+            other_x = monitor["x"] + monitor["width"] - anchor_x
+            other._window_pos = [other_x, y]
+            other.geometry(f"+{other_x}+{y}")

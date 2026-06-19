@@ -3,6 +3,7 @@ from kivy.core.window import Window
 
 from lib.config.handler import ConfigHandler
 from utils.window_geometry import is_valid_window_size
+from utils.win_dpi import to_logical_pixels
 
 _save_event = None
 _geometry_sync_enabled = False
@@ -12,15 +13,18 @@ _startup_grace_event = None
 
 
 def sync_window_geometry(config, *, include_size: bool = True) -> None:
-    width = int(Window.width)
-    height = int(Window.height)
+    width = to_logical_pixels(int(Window.width))
+    height = to_logical_pixels(int(Window.height))
     if include_size and not is_valid_window_size(width, height):
         return
 
     if include_size:
         config.app_global.window.width = width
         config.app_global.window.height = height
-    config.app_global.window.pos = [int(Window.left), int(Window.top)]
+    config.app_global.window.pos = [
+        to_logical_pixels(int(Window.left)),
+        to_logical_pixels(int(Window.top)),
+    ]
 
 
 def persist_config(config) -> None:

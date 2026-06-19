@@ -97,18 +97,44 @@ def _average_team_rating(rows: list[PlayerRowData]) -> float:
     return sum(ratings) / len(ratings)
 
 
-def _fetch_account_stats(region: str, account_ids: list[int]) -> dict[int, dict]:
+def _fetch_account_stats(region: str, account_ids: list[int]) -> tuple[dict[int, dict], dict[str, dict]]:
     stats_by_id: dict[int, dict] = {}
+    stats_by_nickname: dict[str, dict] = {}
     if not account_ids:
-        return stats_by_id
+        return stats_by_id, stats_by_nickname
 
     stats_items = _fetch_json(f"/v1/accounts/{region}/stats", {"ids": ",".join(map(str, account_ids))})
     for item in stats_items:
         stats = item.get("stats")
         if not stats or not stats.get("data"):
             continue
-        stats_by_id[int(item["account_id"])] = stats["data"]
-    return stats_by_id
+        data = stats["data"]
+        stats_by_id[int(item["account_id"])] = data
+        nickname = data.get("nickname")
+        if nickname:
+            stats_by_nickname[str(nickname)] = data
+    return stats_by_id, stats_by_nickname
+
+
+def _player_account_stats(
+    player,
+    stats_by_id: dict[int, dict],
+    stats_by_nickname: dict[str, dict],
+) -> dict:
+    account_id = player.account_id
+    if account_id:
+        by_id = stats_by_id.get(int(account_id), {})
+        if by_id and by_id.get("nickname") == player.nickname:
+            return by_id
+
+    return stats_by_nickname.get(player.nickname, {})
+
+
+def _author_clan_tag(replay: LiveReplay) -> str | None:
+    for player in replay.all_players:
+        if player.nickname == replay.author_nickname:
+            return player.clan_tag
+    return None
 
 
 def build_team_view(
@@ -117,21 +143,24 @@ def build_team_view(
     team: int = 1,
     *,
     stats_by_id: dict[int, dict] | None = None,
+    stats_by_nickname: dict[str, dict] | None = None,
     tank_info: dict[int, tuple[str, int, str]] | None = None,
+    author_clan_tag: str | None = None,
 ) -> TeamViewData:
     team_players = replay.team_1 if team == 1 else replay.team_2
-    title = "Союзники" if team == 1 else "Противники"
+    if replay.author_in_roster:
+        title = "Союзники" if team == 1 else "Противники"
+    else:
+        title = f"Команда {team}"
     account_ids = [int(player.account_id) for player in team_players if player.account_id]
 
-    if stats_by_id is None:
-        stats_by_id = _fetch_account_stats(region, account_ids)
+    if stats_by_id is None or stats_by_nickname is None:
+        stats_by_id, stats_by_nickname = _fetch_account_stats(region, account_ids)
     if tank_info is None:
         tank_info = _fetch_tank_info(region, {player.tank_id for player in team_players})
 
-    author_clan_tag = next(
-        (player.clan_tag for player in team_players if player.nickname == replay.author_nickname),
-        None,
-    )
+    if author_clan_tag is None:
+        author_clan_tag = _author_clan_tag(replay)
 
     rows: list[PlayerRowData] = []
     for player in sorted(
@@ -142,7 +171,7 @@ def build_team_view(
         ),
     ):
         tank_name, tank_level, tank_category = tank_info.get(player.tank_id, ("?", 0, ""))
-        account_stats = stats_by_id.get(int(player.account_id or 0), {})
+        account_stats = _player_account_stats(player, stats_by_id, stats_by_nickname)
         rating_block = (account_stats.get("statistics") or {}).get("rating") or {}
         mm_rating = rating_block.get("mm_rating")
         calibration_left = rating_block.get("calibration_battles_left")
@@ -200,22 +229,27 @@ def build_teams_view(replay: LiveReplay, region: str | None = None) -> dict[int,
     api_region = region or replay_region(replay)
     all_players = replay.all_players
     account_ids = [int(player.account_id) for player in all_players if player.account_id]
-    stats_by_id = _fetch_account_stats(api_region, account_ids)
+    stats_by_id, stats_by_nickname = _fetch_account_stats(api_region, account_ids)
     tank_info = _fetch_tank_info(api_region, {player.tank_id for player in all_players})
+    author_clan_tag = _author_clan_tag(replay)
     return {
         1: build_team_view(
             replay,
             api_region,
             team=1,
             stats_by_id=stats_by_id,
+            stats_by_nickname=stats_by_nickname,
             tank_info=tank_info,
+            author_clan_tag=author_clan_tag,
         ),
         2: build_team_view(
             replay,
             api_region,
             team=2,
             stats_by_id=stats_by_id,
+            stats_by_nickname=stats_by_nickname,
             tank_info=tank_info,
+            author_clan_tag=author_clan_tag,
         ),
     }
 
@@ -224,8 +258,6 @@ def prefetch_team_assets(*teams: TeamViewData, workers: int = 8, profile_skins: 
     jobs: set[tuple[str, str]] = set()
     for team in teams:
         for row in team.rows:
-            if row.avatar_url:
-                jobs.add(("avatar", row.avatar_url))
             if profile_skins and row.profile_skin_url:
                 jobs.add(("skin", row.profile_skin_url))
     if not jobs:

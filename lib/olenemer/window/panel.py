@@ -7,6 +7,7 @@ from io import BytesIO
 import customtkinter as ctk
 from PIL import Image, ImageTk
 
+from lib.olenemer.window.columns import FIXED_COLUMNS, HIDDEN_COLUMNS, TOGGLEABLE_COLUMNS
 from lib.olenemer.window.assets import (
     PROFILE_SKIN_NATIVE_SIZE,
     battles_color,
@@ -49,7 +50,7 @@ TITLE_BLOCK_HEIGHT = TITLE_HEIGHT + 6
 
 class ColumnVisibility:
     def __init__(self) -> None:
-        self.avatar = True
+        self.avatar = False
         self.platoon = True
         self.nickname = True
         self.tank = True
@@ -61,8 +62,12 @@ class ColumnVisibility:
     @classmethod
     def from_config(cls, column_status) -> ColumnVisibility:
         visibility = cls()
-        for field in ("avatar", "platoon", "nickname", "tank", "battles", "winrate", "damage", "rating"):
+        for field in TOGGLEABLE_COLUMNS:
             setattr(visibility, field, getattr(column_status, field, True))
+        for field in FIXED_COLUMNS:
+            setattr(visibility, field, True)
+        for field in HIDDEN_COLUMNS:
+            setattr(visibility, field, False)
         return visibility
 
     @classmethod
@@ -171,6 +176,7 @@ class OlenemerPanel(ctk.CTkFrame):
         tank_display_type: str = "icon",
         border_color: str = "#00f0ff",
         show_border: bool = True,
+        show_summary: bool = True,
         **kwargs,
     ):
         self.background = background or OlenemerBackground(
@@ -189,6 +195,7 @@ class OlenemerPanel(ctk.CTkFrame):
         self.tank_display_type = tank_display_type
         self._border_color = border_color
         self.show_border = show_border
+        self.show_summary = show_summary
         self._images: list[ImageTk.PhotoImage | ctk.CTkImage] = []
         self._table_width = BASE_TABLE_WIDTH
 
@@ -298,17 +305,18 @@ class OlenemerPanel(ctk.CTkFrame):
             self._pack_row_separator()
             y_offset += self._separator_height()
 
-        summary = tk.Canvas(
-            self.body,
-            width=self._table_width,
-            height=SUMMARY_HEIGHT,
-            highlightthickness=0,
-            bd=0,
-            bg=canvas_bg,
-        )
-        summary.pack(anchor="nw")
-        self._apply_canvas_background(summary, y_offset, SUMMARY_HEIGHT)
-        self._draw_summary_row(summary, data, col_widths, visible)
+        if self.show_summary:
+            summary = tk.Canvas(
+                self.body,
+                width=self._table_width,
+                height=SUMMARY_HEIGHT,
+                highlightthickness=0,
+                bd=0,
+                bg=canvas_bg,
+            )
+            summary.pack(anchor="nw")
+            self._apply_canvas_background(summary, y_offset, SUMMARY_HEIGHT)
+            self._draw_summary_row(summary, data, col_widths, visible)
 
         self.configure(width=self._table_width, fg_color=self.background.surface_color)
 
@@ -321,7 +329,10 @@ class OlenemerPanel(ctk.CTkFrame):
 
     def content_height(self, row_count: int) -> int:
         separators = self._row_separator_count(row_count) * self._separator_height()
-        return TITLE_BLOCK_HEIGHT + HEADER_HEIGHT + row_count * ROW_HEIGHT + SUMMARY_HEIGHT + separators
+        height = TITLE_BLOCK_HEIGHT + HEADER_HEIGHT + row_count * ROW_HEIGHT + separators
+        if self.show_summary:
+            height += SUMMARY_HEIGHT
+        return height
 
     def _render_title(self, data: TeamViewData, width: int, y_offset: int) -> None:
         canvas = tk.Canvas(

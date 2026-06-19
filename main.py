@@ -10,6 +10,8 @@ from kivy.config import Config
 if platform.system() == "Windows":
     Config.set("graphics", "borderless", "1")
 
+Config.set("input", "mouse", "mouse,disable_multitouch")
+
 from utils.startup_config import apply_early_window_config
 
 apply_early_window_config()
@@ -19,6 +21,10 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.properties import DictProperty
 from kivymd.app import MDApp
+
+from utils.quiet_loggers import quiet_third_party_loggers
+
+quiet_third_party_loggers()
 
 from ui.main import MainLayout
 from lib.locales.handler import locales
@@ -32,19 +38,18 @@ from ui.widgets import ensure_hover_listener
 from utils.ui_refresh import refresh_ui
 from utils.ui_scale import apply_ui_scale
 from utils.win_chrome import apply_window_settings, reset_chrome_state, restore_window_appearance
-# TESTS
-from tests.locales import run; run()  # noqa: E702
-#
 
-# Load assets
 assets_loader.add_assets()
-#
 
 _log = Logger
 
 
 class MainApp(MDApp):
     palette = DictProperty({})
+    use_kivy_settings = False
+
+    def open_settings(self, *_args):
+        return True
 
     def build(self):
         reset_chrome_state()
@@ -126,6 +131,9 @@ class MainApp(MDApp):
         bind_window_geometry_persist(self.config)
 
     def on_stop(self):
+        from lib.olenemer.service import get_olenemer_runtime
+
+        get_olenemer_runtime().stop()
         sync_window_geometry(self.config)
         ConfigHandler().config = self.config
         ConfigHandler().write_config()

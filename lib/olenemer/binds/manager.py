@@ -61,6 +61,17 @@ class OlenemerKeybindManager:
         if self._listener is not None:
             self._listener.stop()
             self._listener = None
+        self._thread = None
+
+    def reload(self, keybinds: OlenemerKeybinds) -> None:
+        self.stop()
+        self._actions.clear()
+        self._pressed.clear()
+        self._last_action_at.clear()
+        self._register(keybinds.show_hide, self._toggle_visibility)
+        self._register(keybinds.increase_opacity, self._increase_opacity)
+        self._register(keybinds.decrease_opacity, self._decrease_opacity)
+        self.start()
 
     def _on_press(self, key: Key) -> None:
         action = self._actions.get(key)

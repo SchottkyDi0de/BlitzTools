@@ -55,7 +55,8 @@ class LiveReplayPoller:
                         self.on_teams_ready(tv_data, region, replay)
                         return
             except ReplayParserError as exc:
-                if "No players found" not in str(exc):
+                message = str(exc)
+                if "No players found" not in message and "not found in replay players" not in message:
                     traceback.print_exc()
             except FileNotFoundError:
                 pass

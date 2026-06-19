@@ -4,7 +4,7 @@ from kivy.logger import Logger
 from pydantic_core import ValidationError
 
 from lib.dataclasses.configs.main_config import ConfigStruct
-from utils.resource_path import get_current_directory, get_files_path
+from utils.resource_path import get_default_config_path, get_files_path
 from utils.singleton_factory import singleton
 from utils.window_geometry import migrate_clusters_config, migrate_window_config, sanitize_window_config
 
@@ -29,7 +29,7 @@ def _deep_merge(base: dict, override: dict) -> dict:
 class ConfigHandler:
     def __init__(self):
         self.config_path = get_files_path().joinpath("config/config.yaml")
-        default_path = get_current_directory().joinpath("config/default_config.yaml")
+        default_path = get_default_config_path()
         with open(default_path, "r", encoding="utf-8") as default_config_file:
             self.default_config_data = yaml.safe_load(default_config_file.read())
         self.default_config = ConfigStruct.model_validate(self.default_config_data)

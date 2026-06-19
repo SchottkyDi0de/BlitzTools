@@ -29,6 +29,18 @@ def get_resource_path(relative_path: str) -> Path:
     return get_bundle_root().joinpath(relative_path)
 
 
+def get_default_config_path() -> Path:
+    """Bundled default config (PyInstaller _MEIPASS or dev tree)."""
+    candidates = (
+        get_bundle_root().joinpath("config/default_config.yaml"),
+        get_exe_directory().joinpath("config/default_config.yaml"),
+    )
+    for path in candidates:
+        if path.is_file():
+            return path
+    return candidates[0]
+
+
 def _get_documents_path() -> Path:
     if sys.platform == "win32":
         try:

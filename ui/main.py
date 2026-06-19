@@ -7,6 +7,7 @@ from utils.resource_path import get_resource_path
 
 from ui.cluster_screen import ClusterScreen  # noqa: F401
 from ui.dvp_screen import DvpScreen  # noqa: F401
+from ui.olenemer_screen import OlenemerScreen  # noqa: F401
 from ui.replay_screen import ReplayScreen  # noqa: F401
 from ui.settings_screen import SettingsScreen  # noqa: F401
 from ui.cluster_widgets import ClusterSelectButton  # noqa: F401
@@ -33,6 +34,7 @@ _KV_FILES = (
     "ui/kv/screens/dvp.kv",
     "ui/kv/screens/replay.kv",
     "ui/kv/screens/cluster.kv",
+    "ui/kv/screens/olenemer.kv",
     "ui/kv/main.kv",
 )
 

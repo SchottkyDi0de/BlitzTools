@@ -1,6 +1,6 @@
 import yaml
 
-from utils.resource_path import get_current_directory, get_files_path
+from utils.resource_path import get_default_config_path, get_files_path
 from utils.window_geometry import (
     is_valid_window_pos,
     is_valid_window_size,
@@ -9,7 +9,12 @@ from utils.window_geometry import (
 
 
 def read_window_config() -> dict:
-    default_path = get_current_directory().joinpath("config/default_config.yaml")
+    default_path = get_default_config_path()
+    if not default_path.is_file():
+        raise FileNotFoundError(
+            f"Default config not found: {default_path}. "
+            "Rebuild the app with packaging\\build.ps1 (PyInstaller datas)."
+        )
     config_path = get_files_path().joinpath("config/config.yaml")
 
     with open(default_path, "r", encoding="utf-8") as f:

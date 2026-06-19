@@ -9,7 +9,7 @@ from lib.olenemer.window.background import background_from_config
 from lib.olenemer.window.models import TeamViewData
 from lib.olenemer.window.panel import ColumnVisibility
 from lib.olenemer.window.service import load_teams_for_replay
-from lib.olenemer.window.tcl_env import configure_tcl_tk
+from lib.olenemer.window.tcl_env import prepare_olenemer_tk_env
 from lib.olenemer.window.team_window import OlenemerWindow
 from lib.olenemer.window.theme import accent_color_hex
 
@@ -61,6 +61,8 @@ class OlenemerApp(ctk.CTk):
             self.add_window(team, tv_data[team])
         self.update_idletasks()
         for window in self.windows:
+            if window._last_outer_size is not None:
+                window._apply_outer_geometry(*window._last_outer_size)
             window.deiconify()
             window._ensure_topmost()
 
@@ -76,7 +78,10 @@ class OlenemerApp(ctk.CTk):
         if left is not None and left.winfo_exists():
             self.olenemer_config.window_pos_left = [left.winfo_x(), left.winfo_y()]
         if right is not None and right.winfo_exists():
-            self.olenemer_config.window_pos_right = [right.winfo_x(), right.winfo_y()]
+            self.olenemer_config.window_pos_right = [
+                right.winfo_x() + right.winfo_width(),
+                right.winfo_y(),
+            ]
         self.config_handler.write_config()
 
     def add_window(self, team: int, team_data: TeamViewData) -> OlenemerWindow:
@@ -97,6 +102,7 @@ class OlenemerApp(ctk.CTk):
             tank_display_type=self.olenemer_config.tank_display_type,
             show_window_border=self.olenemer_config.show_window_border,
             show_border=self.olenemer_config.show_border,
+            show_summary=self.olenemer_config.show_summary,
         )
         self.windows.append(window)
         return window
@@ -132,6 +138,7 @@ class OlenemerApp(ctk.CTk):
             window.panel.show_profile_skins = self.olenemer_config.profile_skins
             window.panel.tank_display_type = self.olenemer_config.tank_display_type
             window.panel.show_border = self.olenemer_config.show_border
+            window.panel.show_summary = self.olenemer_config.show_summary
             window.panel._border_color = self.accent_color
             window.apply_window_border_settings(self.olenemer_config.show_window_border)
             self.update_window(team, tv_data[team])
@@ -166,10 +173,10 @@ class OlenemerApp(ctk.CTk):
         if region is not None:
             self.region = region
         self.update_teams(tv_data)
-        for team in (1, 2):
-            window = self.get_window(team)
-            if window is None:
-                continue
+        self.update_idletasks()
+        for window in self.windows:
+            if window._last_outer_size is not None:
+                window._apply_outer_geometry(*window._last_outer_size)
             window.deiconify()
             window.lift()
             window._ensure_topmost()
@@ -187,12 +194,55 @@ class OlenemerApp(ctk.CTk):
 
         _toggle(self)
 
+    def _current_tv_data(self) -> dict[int, TeamViewData]:
+        tv_data: dict[int, TeamViewData] = {}
+        for team in (1, 2):
+            window = self.get_window(team)
+            if window is not None and window._team_data is not None:
+                tv_data[team] = window._team_data
+        return tv_data
+
+    def apply_settings(self) -> None:
+        from lib.olenemer.live.messages import loading_message
+
+        self.olenemer_config = self.config_handler.config.olenemer
+        self.background = background_from_config(self.olenemer_config)
+        self.accent_color = accent_color_hex(self.config_handler.config.app_global.theme)
+
+        tv_data = self._current_tv_data()
+        if tv_data and any(team_data.rows for team_data in tv_data.values()):
+            self.column_visibility = ColumnVisibility.from_config_for_battle(
+                self.olenemer_config.column_status,
+                tv_data,
+            )
+        else:
+            self.column_visibility = ColumnVisibility.from_config(self.olenemer_config.column_status)
+
+        loading_text = loading_message(self.config_handler)
+        for window in self.windows:
+            if not window.winfo_exists():
+                continue
+            window.apply_settings(
+                background=self.background,
+                columns=self.column_visibility,
+                border_color=self.accent_color,
+                profile_skins=self.olenemer_config.profile_skins,
+                tank_display_type=self.olenemer_config.tank_display_type,
+                show_border=self.olenemer_config.show_border,
+                show_window_border=self.olenemer_config.show_window_border,
+                show_summary=self.olenemer_config.show_summary,
+            )
+            if window.status_label.winfo_ismapped() and not (
+                window._team_data and window._team_data.rows
+            ):
+                window.status_label.configure(text=loading_text)
+
 
 def run_olenemer_for_replay(
     replay_path: Path | str,
     config_handler: ConfigHandler | None = None,
 ) -> None:
-    configure_tcl_tk()
+    prepare_olenemer_tk_env()
     config_handler = config_handler or ConfigHandler()
     olenemer = config_handler.config.olenemer
     tv_data, region, _replay = load_teams_for_replay(
