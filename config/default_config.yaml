@@ -1,6 +1,6 @@
 ---
 api:
-  base_url: "http://77.221.157.72:8000/"
+  base_url: "http://77.221.157.72:8000/api/"
   timeout: 10
 
 app_global:
@@ -20,11 +20,21 @@ app_global:
   # Язык интерфейса
   language: "ru"  # "en", "ru"
 
+  replay_paths:
+    ru: "%userprofile%/Documents/TanksBlitz/replays"
+    eu: "%userprofile%/AppData/Local/wotblitz/DAVAProject/replays"
+
 sessions:
 
 olenemer:
+  enabled: true
+
+  regions:
+    ru: true
+    eu: true
+
   # Прозрачность окон оленемера
-  window_transparency: 0.7
+  window_transparency: 0.8
 
   # Позиция окон
   window_pos_left: [0, 0]
@@ -33,12 +43,37 @@ olenemer:
   # Автоматическое открытие окон после нахождения реплея
   auto_open: true
 
+  background_type: "transparent" # "transparent", "image", "color"
+  background_color: "#242424"
+  background_image: "res/images/olenemer_background.png"
+
+  keybinds:
+    show_hide: "F1"
+    increase_opacity: "F2"
+    decrease_opacity: "F3"
+
   # Видимость столбцов
   column_status:
-    avatar: true
+    avatar: false
     nickname: true
     tank: true
     rating: true
+    platoon: true
+    battles: true
+    winrate: true
+    damage: true
+
+  # Фоны профилей (карточки) в строках игроков
+  profile_skins: true
+
+  # Отображение класса техники в колонке «Танк»: "icon" — иконка, "color" — цвет названия
+  tank_display_type: "icon"
+
+  # Разделители строк (акцентные полосы между строками)
+  show_border: true
+
+  # Обводка окна (акцентная рамка вокруг панели)
+  show_window_border: true
 
 converter:
   # Пустая строка — сохранять рядом с исходными файлами

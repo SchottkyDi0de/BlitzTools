@@ -2,7 +2,7 @@
 #   filename:  default_config.yaml
 #   timestamp: 2025-12-09T22:43:01+00:00
 
-from typing import List
+from typing import List, Literal
 
 from pydantic import BaseModel
 
@@ -18,27 +18,57 @@ class Font(BaseModel):
     italic: bool
 
 
+class ReplayPaths(BaseModel):
+    ru: str = ""
+    eu: str = ""
+
 
 class AppGlobal(BaseModel):
     window: Window
     font: Font
     theme: str
     language: str
+    replay_paths: ReplayPaths = ReplayPaths()
 
 
 class ColumnStatus(BaseModel):
-    avatar: bool
-    nickname: bool
-    tank: bool
-    rating: bool
+    avatar: bool = True
+    nickname: bool = True
+    tank: bool = True
+    rating: bool = True
+    platoon: bool = True
+    battles: bool = True
+    winrate: bool = True
+    damage: bool = True
+
+
+class OlenemerRegions(BaseModel):
+    ru: bool = True
+    eu: bool = True
+
+
+class OlenemerKeybinds(BaseModel):
+    show_hide: str = "F1"
+    increase_opacity: str = "F2"
+    decrease_opacity: str = "F3"
 
 
 class Olenemer(BaseModel):
+    enabled: bool = True
+    regions: OlenemerRegions = OlenemerRegions()
     window_transparency: float
     window_pos_left: List[int]
     window_pos_right: List[int]
-    auto_open: bool
+    auto_open: bool = True
+    background_type: Literal["transparent", "color", "image"] = "transparent"
+    background_color: str = "#242424"
+    background_image: str = "res/images/olenemer_background.png"
+    keybinds: OlenemerKeybinds = OlenemerKeybinds()
     column_status: ColumnStatus
+    profile_skins: bool = True
+    tank_display_type: Literal["icon", "color"] = "icon"
+    show_border: bool = True
+    show_window_border: bool = True
 
 
 class Converter(BaseModel):

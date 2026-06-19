@@ -4,8 +4,10 @@ __pycache__
 .*
 /*.pyc
 
+.VSCodeCounter/
 output/
 build/
 dist/
+indev/
 
 *.spec

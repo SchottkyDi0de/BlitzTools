@@ -1,4 +1,5 @@
 from .errors import InvalidMagicError, PacketPayloadParsingError, ReplayParserError
+from .live_replay import LivePlayer, LiveReplay, LiveReplayExtractor, parse_live_replay
 from .models.base_player_create import BasePlayerCreate, TurboBattlesStatistics
 from .models.data import Data
 from .models.battle_results_dat import BattleResultsDat
@@ -21,11 +22,15 @@ __all__ = [
     "EntityMethod",
     "EntityMethodPayload",
     "InvalidMagicError",
+    "LivePlayer",
+    "LiveReplay",
+    "LiveReplayExtractor",
     "MapId",
     "Meta",
     "Packet",
     "PacketPayloadParsingError",
     "Payload",
+    "parse_live_replay",
     "Region",
     "Replay",
     "ReplayParserError",
