@@ -115,6 +115,12 @@ class OlenemerWindow(ctk.CTkToplevel):
             self._bind_drag(self.panel)
 
         self._sync_window_border_chrome(compact=not team_data.rows)
+        self._apply_window_icon()
+
+    def _apply_window_icon(self) -> None:
+        from utils.app_icon import apply_tk_window_icon
+
+        self.after(0, lambda: apply_tk_window_icon(self))
 
     def _outer_padding(self) -> tuple[int, int]:
         if not self.show_window_border:

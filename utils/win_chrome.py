@@ -8,6 +8,7 @@ from kivy.metrics import dp
 from kivymd.app import MDApp
 
 from utils.config_persist import pause_geometry_persist, resume_geometry_persist
+from utils.app_icon import apply_kivy_app_icon
 
 WM_NCLBUTTONDOWN = 0xA1
 HTCAPTION = 2
@@ -40,6 +41,7 @@ def _apply_window_geometry(config) -> None:
     Window.left = int(window_cfg.pos[0])
     Window.top = int(window_cfg.pos[1])
     Window.set_title("BlitzTools")
+    apply_kivy_app_icon()
     _remember_window_state()
     resume_geometry_persist()
 

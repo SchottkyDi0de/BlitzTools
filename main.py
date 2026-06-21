@@ -53,6 +53,8 @@ class MainApp(MDApp):
 
     def build(self):
         reset_chrome_state()
+        self.icon = "images/icon.png"
+        self.title = "BlitzTools"
         self.config = ConfigHandler().get_config()
 
         self.theme_cls.primary_palette = "Cyan"
@@ -75,6 +77,9 @@ class MainApp(MDApp):
         root = MainLayout()
         apply_theme_from_config(self)
         apply_window_settings(self.config)
+        from utils.app_icon import apply_kivy_app_icon
+
+        apply_kivy_app_icon(self)
         return root
 
     def on_start(self):
@@ -83,6 +88,8 @@ class MainApp(MDApp):
     def _finish_start(self, _dt):
         if not self.root:
             return
+        from utils.app_icon import apply_kivy_app_icon
+
         refresh_ui(self, apply_theme=True)
         self._maybe_show_admin_notice()
         prepare_screens(self.root)
@@ -100,6 +107,8 @@ class MainApp(MDApp):
             manager.bind(current=self._on_screen_changed)
         Clock.schedule_once(self._bind_geometry, 0.3)
         Clock.schedule_once(lambda _dt: apply_window_settings(self.config), 0.05)
+        Clock.schedule_once(lambda _dt: apply_kivy_app_icon(self), 0.1)
+        Clock.schedule_once(lambda _dt: apply_kivy_app_icon(self), 0.35)
 
     def _maybe_show_admin_notice(self):
         if not needs_admin_notice() or not self.root:

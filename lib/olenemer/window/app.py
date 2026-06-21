@@ -12,6 +12,7 @@ from lib.olenemer.window.service import load_teams_for_replay
 from lib.olenemer.window.tcl_env import prepare_olenemer_tk_env
 from lib.olenemer.window.team_window import OlenemerWindow
 from lib.olenemer.window.theme import accent_color_hex
+from utils.app_icon import apply_tk_window_icon
 
 
 class OlenemerApp(ctk.CTk):
@@ -28,6 +29,7 @@ class OlenemerApp(ctk.CTk):
         self.title("BlitzTools — Оленемер")
         self.withdraw()
         self.geometry("1x1+-2000+-2000")
+        self.after(0, lambda: apply_tk_window_icon(self))
         self.region = region
         self.live_mode = live_mode
         self.config_handler = config_handler

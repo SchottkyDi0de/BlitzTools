@@ -60,16 +60,15 @@
 
     AnchorLayout:
         size_hint_x: None
-        width: dp(20)
+        width: dp(30)
         anchor_y: "center"
 
-        MDIcon:
-            icon: "flash-outline"
-            theme_icon_color: "Custom"
-            icon_color: app.palette['accent']
-            font_size: sp(17)
+        Image:
+            source: "images/icon.png"
             size_hint: None, None
-            size: dp(18), dp(18)
+            size: dp(28), dp(28)
+            allow_stretch: True
+            keep_ratio: True
 
     MDLabel:
         text: "BLITZ//TOOLS"
