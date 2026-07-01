@@ -4,6 +4,10 @@ from the_retry import retry
 from lib.tankopedia.data_classes import TankData
 from lib.config.handler import ConfigHandler
 
+#
+# Онет requests вместо aiohttp... любой запрос -> зависание потока на ping время (я хз у интерфейса свой поток или не)
+#
+
 class BlitzAPI:
     def __init__(self):
         self.config = ConfigHandler()

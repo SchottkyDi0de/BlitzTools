@@ -5,7 +5,7 @@ from pathlib import Path
 from struct import pack
 import lz4.block
 
-from lib.io_utils import IO
+from lib.io.utils import IO
 from lib.dvpx.data_classes import FolderMeta
 
 
