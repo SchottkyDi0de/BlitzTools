@@ -1,12 +1,17 @@
 from __future__ import annotations
 
+import yaml
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Callable
+from functools import lru_cache
 
 from lib.config.handler import ConfigHandler
 from lib.replay_parser import LiveReplay, parse_live_replay
+from lib.tankopedia import Tankopedia
+from lib.dvpl_converter import Converter
+from utils.game_locator import get_game_paths_from_regedit
 
 from lib.olenemer.window.assets import RATING_COEF, load_image
 from lib.olenemer.window.models import PlayerRowData, TeamViewData
@@ -34,7 +39,7 @@ def _fetch_tank_info(region: str, tank_ids: set[int]) -> dict[int, tuple[str, in
         return info
 
     try:
-        tanks = _fetch_json(f"/v1/tankopedia/{region}/tanks", {})
+        tanks = _fetch_json(f"/tankopedia/{region}/tanks", {})
         lookup = {
             int(tank["id"]): (
                 tank.get("ru_name") or tank.get("en_name") or "?",
@@ -53,7 +58,7 @@ def _fetch_tank_info(region: str, tank_ids: set[int]) -> dict[int, tuple[str, in
         if tank_id <= 0:
             continue
         try:
-            data = _fetch_json(f"/v1/tankopedia/{region}/tanks/{tank_id}", {})
+            data = _fetch_json(f"/tankopedia/{region}/tanks/{tank_id}", {})
             info[tank_id] = (
                 data.get("ru_name") or data.get("en_name") or "?",
                 int(data.get("level") or 0),
@@ -90,6 +95,15 @@ def tank_name_sort_key(name: str) -> tuple:
     return tuple(_tank_name_char_order(char) for char in name)
 
 
+def _player_sort_key(player, tank_info: dict[int, tuple[str, int, str]]) -> tuple:
+    tank_name, tank_level, _ = tank_info.get(player.tank_id, ("", 0, ""))
+    return (
+        -tank_level,
+        tank_name_sort_key(tank_name),
+        player.nickname.casefold(),
+    )
+
+
 def _average_team_rating(rows: list[PlayerRowData]) -> float:
     ratings = [row.rating for row in rows if row.rating > 0]
     if not ratings:
@@ -103,7 +117,7 @@ def _fetch_account_stats(region: str, account_ids: list[int]) -> tuple[dict[int,
     if not account_ids:
         return stats_by_id, stats_by_nickname
 
-    stats_items = _fetch_json(f"/v1/accounts/{region}/stats", {"ids": ",".join(map(str, account_ids))})
+    stats_items = _fetch_json(f"/accounts/{region}/stats", {"ids": ",".join(map(str, account_ids))})
     for item in stats_items:
         stats = item.get("stats")
         if not stats or not stats.get("data"):
@@ -136,6 +150,35 @@ def _author_clan_tag(replay: LiveReplay) -> str | None:
             return player.clan_tag
     return None
 
+TANKOPEDIAS = {
+    "ru": Tankopedia("ru"),
+    "eu": Tankopedia("eu"),
+}
+
+CONVERTER = Converter()
+GAME_PATHS = get_game_paths_from_regedit()
+LOCALIZATION_DATA = {}
+for region in GAME_PATHS:
+    path_to_localization = Path(GAME_PATHS[region]) / "Data" / "Strings" / f"{region}.yaml.dvpl"
+    localization_data = CONVERTER.unpack_file(path_to_localization, f"{region}.yaml", None)
+    localization_data = yaml.load(localization_data, Loader=yaml.FullLoader)
+    LOCALIZATION_DATA[region] = localization_data
+
+@lru_cache(maxsize=1000)
+def _get_tank_name(region: str, tank_name: str) -> str:
+    if region not in LOCALIZATION_DATA:
+        return tank_name
+    localization_data = LOCALIZATION_DATA[region]
+    for key, value in localization_data.items():
+        if value == tank_name:
+            if "chassis" in key.lower():
+                continue
+            if "turret" in key.lower():
+                continue
+            if localization_data.get(f"{key}_short", None) is not None:
+                return localization_data[f"{key}_short"]
+    return tank_name
+
 
 def build_team_view(
     replay: LiveReplay,
@@ -163,14 +206,10 @@ def build_team_view(
         author_clan_tag = _author_clan_tag(replay)
 
     rows: list[PlayerRowData] = []
-    for player in sorted(
-        team_players,
-        key=lambda item: (
-            tank_name_sort_key(tank_info.get(item.tank_id, ("", 0, ""))[0]),
-            item.nickname.casefold(),
-        ),
-    ):
-        tank_name, tank_level, tank_category = tank_info.get(player.tank_id, ("?", 0, ""))
+    for player in sorted(team_players, key=lambda item: _player_sort_key(item, tank_info)):
+        _tank_name, tank_level, tank_category = tank_info.get(player.tank_id, ("?", 0, ""))
+        tank_name = _get_tank_name(region, _tank_name)
+
         account_stats = _player_account_stats(player, stats_by_id, stats_by_nickname)
         rating_block = (account_stats.get("statistics") or {}).get("rating") or {}
         mm_rating = rating_block.get("mm_rating")

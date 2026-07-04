@@ -17,6 +17,8 @@ from utils.startup_config import apply_early_window_config
 apply_early_window_config()
 
 from kivy import Logger
+from threading import Thread
+
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.properties import DictProperty
@@ -27,15 +29,16 @@ from utils.quiet_loggers import quiet_third_party_loggers
 quiet_third_party_loggers()
 
 from ui.main import MainLayout
-from lib.locales.handler import locales
-from utils import assets_loader
+from lib.api import BlitzAPI
 from lib.config.handler import ConfigHandler
+from lib.locales.handler import locales
+from ui.widgets import ensure_hover_listener
+from utils import assets_loader
 from utils.admin import needs_admin_notice
 from utils.app_theme import apply_theme_from_config, get_palette, sync_feature_cards
 from utils.config_persist import bind_window_geometry_persist, sync_window_geometry
 from utils.screen_layout import prepare_screens, prepare_screens_delayed
-from ui.widgets import ensure_hover_listener
-from utils.ui_refresh import refresh_ui
+from utils.ui_refresh import refresh_ui, titlebar_status_text
 from utils.ui_scale import apply_ui_scale
 from utils.win_chrome import apply_window_settings, reset_chrome_state, restore_window_appearance
 
@@ -109,6 +112,21 @@ class MainApp(MDApp):
         Clock.schedule_once(lambda _dt: apply_window_settings(self.config), 0.05)
         Clock.schedule_once(lambda _dt: apply_kivy_app_icon(self), 0.1)
         Clock.schedule_once(lambda _dt: apply_kivy_app_icon(self), 0.35)
+        self._fetch_app_version()
+
+    def _fetch_app_version(self):
+        def worker():
+            version = BlitzAPI().get_version()
+            if version:
+                Clock.schedule_once(lambda _dt, v=version: self._apply_app_version(v), 0)
+
+        Thread(target=worker, daemon=True).start()
+
+    def _apply_app_version(self, version: str):
+        if not self.root:
+            return
+        self._remote_version = version
+        self.root.ids.titlebar.ids.status_label.text = titlebar_status_text(self)
 
     def _maybe_show_admin_notice(self):
         if not needs_admin_notice() or not self.root:

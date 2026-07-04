@@ -1,4 +1,4 @@
-from lib.api import BlitzAPI
+from lib.api.api import BlitzAPI
 
 from .exceptions import NameNotSpecified
 from .data_classes import TankData

@@ -98,6 +98,9 @@ class ClustersConfig(BaseModel):
 class APIConfig(BaseModel):
     base_url: str
     timeout: int
+    access_token: str
+    account_id: int
+    expires_at: int
 
 class ConfigStruct(BaseModel):
     api: APIConfig

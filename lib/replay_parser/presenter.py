@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from zipfile import ZipFile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
@@ -59,7 +60,7 @@ def parse_replay_file(
     language: str = "ru",
 ) -> ReplayBattleView:
     parse_region = region or region_from_filename(path)
-    with open(path, "rb") as handle:
+    with ZipFile(path, "r") as handle:
         with Replay.open(handle, parse_region) as replay:
             meta = replay.read_meta()
             results = replay.read_battle_results()

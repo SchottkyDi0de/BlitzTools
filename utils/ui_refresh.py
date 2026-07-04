@@ -32,11 +32,19 @@ def _apply_fonts(root, app: MDApp) -> None:
         widget.font_name = font
 
 
+def titlebar_status_text(app: MDApp) -> str:
+    status = _locale(app).titlebar.status
+    version = getattr(app, "_remote_version", None)
+    if version:
+        status = f"{status} v{version}"
+    return status
+
+
 def _refresh_titlebar(root, app: MDApp, loc) -> None:
     from ui.widgets import ThemeToggleButton
 
     titlebar = root.ids.titlebar
-    titlebar.ids.status_label.text = loc.titlebar.status
+    titlebar.ids.status_label.text = titlebar_status_text(app)
 
     for widget in titlebar.walk():
         if isinstance(widget, ThemeToggleButton):
