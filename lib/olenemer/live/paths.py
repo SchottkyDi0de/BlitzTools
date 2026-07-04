@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 from lib.config.handler import ConfigHandler
-from lib.dataclasses.configs.main_config import ConfigStruct
+from lib.config.main_config import ConfigStruct
 
 
 def expand_config_path(path: str) -> Path:

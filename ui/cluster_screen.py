@@ -9,7 +9,7 @@ from kivymd.uix.screen import MDScreen
 
 from lib.cluster.hosts_blocker import HostsBlocker, HostsBlockerError
 from lib.cluster.ping_benchmark import PingBenchmarkResult, run_ping_benchmark
-from lib.dataclasses.configs.main_config import ClusterEntry
+from lib.config.main_config import ClusterEntry
 from ui.cluster_widgets import ClusterSelectButton
 from ui.widgets import DvpActionButton, SettingsOptionButton, reset_progress_bar, sync_progress_bar
 from utils.admin import is_elevated

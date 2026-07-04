@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 
 from pynput.keyboard import Key, Listener
 
-from lib.dataclasses.configs.main_config import OlenemerKeybinds
+from lib.config.main_config import OlenemerKeybinds
 from lib.olenemer.binds.actions import adjust_opacity, toggle_windows_visibility
 from lib.olenemer.binds.keys import parse_keybind
 

@@ -2,7 +2,7 @@ from yaml import safe_load
 from kivy.logger import Logger
 
 from utils.resource_path import get_current_directory
-from lib.dataclasses.locale.struct import LocaleStruct
+from lib.locales.struct import LocaleStruct
 
 
 _log = Logger

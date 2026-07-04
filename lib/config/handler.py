@@ -3,7 +3,7 @@ from kivy.logger import Logger
 
 from pydantic_core import ValidationError
 
-from lib.dataclasses.configs.main_config import ConfigStruct
+from lib.config.main_config import ConfigStruct
 from utils.resource_path import get_default_config_path, get_files_path
 from utils.singleton_factory import singleton
 from utils.window_geometry import migrate_clusters_config, migrate_window_config, sanitize_window_config
