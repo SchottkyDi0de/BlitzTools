@@ -20,6 +20,10 @@ def generate_token(size: int = 10) -> str:
     symbols = string.ascii_letters + string.digits
     return ''.join(random.choice(symbols) for _ in range(size))
 
+#
+# Онет requests вместо aiohttp... любой запрос -> зависание потока на ping время (я хз у интерфейса свой поток или не)
+#
+
 @singleton
 class BlitzAPI:
     def __init__(self):
