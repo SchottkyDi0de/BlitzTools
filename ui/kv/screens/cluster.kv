@@ -1,0 +1,337 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+
+<ClusterSection@MDLabel>:
+    font_size: sp(9)
+    theme_font_name: "Custom"
+    font_name: app.get_font("robotomono")
+    theme_text_color: "Custom"
+    text_color: app.palette['accent']
+    md_bg_color: 0, 0, 0, 0
+    adaptive_height: True
+    size_hint_y: None
+    height: self.texture_size[1]
+    padding: 0, dp(10), 0, dp(4)
+
+<ClusterSelectButton>:
+    size_hint_x: 1
+    size_hint_y: None
+    height: dp(36)
+    padding: dp(10), dp(6)
+    radius: dp(6)
+    theme_bg_color: "Custom"
+    theme_line_color: "Custom"
+    md_bg_color: app.palette['surface']
+    line_color: app.palette['accent_dim']
+    line_width: dp(1)
+
+<ClusterStatLabel@MDLabel>:
+    font_size: sp(9)
+    theme_font_size: "Custom"
+    theme_font_name: "Custom"
+    font_name: app.get_font(app.config.app_global.font.name)
+    theme_text_color: "Custom"
+    text_color: app.palette['muted']
+    md_bg_color: 0, 0, 0, 0
+    adaptive_height: True
+    size_hint_y: None
+    height: self.texture_size[1]
+    halign: "left"
+    valign: "top"
+
+<ClusterScreen>:
+    md_bg_color: app.palette['bg']
+
+    ScrollView:
+        id: cluster_scroll
+        do_scroll_x: False
+        bar_width: dp(4)
+        scroll_type: ["bars", "content"]
+
+        MDBoxLayout:
+            id: cluster_content
+            orientation: "vertical"
+            padding: dp(14), dp(12)
+            spacing: dp(8)
+            adaptive_height: True
+            size_hint_y: None
+            height: self.minimum_height
+            md_bg_color: app.palette['bg']
+
+            MDLabel:
+                id: screen_title
+                text: app.locales.data['ru'].main.cluster.title
+                font_size: sp(14)
+                bold: True
+                theme_font_name: "Custom"
+                font_name: app.get_font("robotomono")
+                theme_text_color: "Custom"
+                text_color: app.palette['accent']
+                md_bg_color: 0, 0, 0, 0
+                adaptive_height: True
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                id: screen_hint
+                text: app.locales.data['ru'].main.cluster.description
+                font_size: sp(10)
+                theme_font_name: "Custom"
+                font_name: app.get_font(app.config.app_global.font.name)
+                theme_text_color: "Custom"
+                text_color: app.palette['muted']
+                md_bg_color: 0, 0, 0, 0
+                adaptive_height: True
+                size_hint_y: None
+                height: self.texture_size[1]
+                padding: 0, 0, 0, dp(4)
+
+            MDLabel:
+                id: admin_hint
+                text: ""
+                font_size: sp(9)
+                theme_font_name: "Custom"
+                font_name: app.get_font(app.config.app_global.font.name)
+                theme_text_color: "Custom"
+                text_color: app.palette['danger']
+                md_bg_color: 0, 0, 0, 0
+                adaptive_height: True
+                size_hint_y: None
+                height: self.texture_size[1]
+                padding: 0, 0, dp(4), dp(4)
+
+            ClusterSection:
+                id: section_regions
+                text: app.locales.data['ru'].main.cluster.sections.regions
+
+            MDGridLayout:
+                id: region_row
+                cols: 4
+                spacing: dp(6)
+                adaptive_height: True
+                size_hint_y: None
+                height: self.minimum_height
+
+                SettingsOptionButton:
+                    option_value: "ru"
+                    option_label: app.locales.data['ru'].main.cluster.regions.ru
+                    on_release: root.select_region("ru")
+
+                SettingsOptionButton:
+                    option_value: "eu"
+                    option_label: app.locales.data['ru'].main.cluster.regions.eu
+                    on_release: root.select_region("eu")
+
+                SettingsOptionButton:
+                    option_value: "asia"
+                    option_label: app.locales.data['ru'].main.cluster.regions.asia
+                    on_release: root.select_region("asia")
+
+                SettingsOptionButton:
+                    option_value: "na"
+                    option_label: app.locales.data['ru'].main.cluster.regions.na
+                    on_release: root.select_region("na")
+
+            ClusterSection:
+                id: section_clusters
+                text: app.locales.data['ru'].main.cluster.sections.clusters
+
+            MDBoxLayout:
+                id: cluster_list
+                orientation: "vertical"
+                spacing: dp(6)
+                adaptive_height: True
+                size_hint_y: None
+                height: self.minimum_height
+
+            MDGridLayout:
+                cols: 3
+                spacing: dp(6)
+                adaptive_height: True
+                size_hint_y: None
+                height: self.minimum_height
+
+                DvpActionButton:
+                    id: btn_block
+                    action_label: app.locales.data['ru'].main.cluster.actions.block
+                    on_release: root.block_selected()
+
+                DvpActionButton:
+                    id: btn_unblock
+                    action_label: app.locales.data['ru'].main.cluster.actions.unblock
+                    on_release: root.unblock_selected()
+
+                DvpActionButton:
+                    id: btn_unblock_all
+                    action_label: app.locales.data['ru'].main.cluster.actions.unblock_all
+                    on_release: root.unblock_all()
+
+            MDLabel:
+                id: status_label
+                text: ""
+                font_size: sp(9)
+                theme_font_name: "Custom"
+                font_name: app.get_font(app.config.app_global.font.name)
+                theme_text_color: "Custom"
+                text_color: app.palette['muted']
+                md_bg_color: 0, 0, 0, 0
+                adaptive_height: True
+                size_hint_y: None
+                height: self.texture_size[1]
+                padding: 0, dp(4), 0, dp(4)
+
+            ClusterSection:
+                id: section_ping
+                text: app.locales.data['ru'].main.cluster.sections.ping
+
+            MDGridLayout:
+                cols: 2
+                spacing: dp(6)
+                adaptive_height: True
+                size_hint_y: None
+                height: self.minimum_height
+
+                DvpActionButton:
+                    id: btn_ping
+                    action_label: app.locales.data['ru'].main.cluster.actions.ping
+                    on_release: root.start_ping_test()
+
+                DvpActionButton:
+                    id: btn_stop_ping
+                    action_label: app.locales.data['ru'].main.cluster.actions.stop_ping
+                    on_release: root.stop_ping_test()
+
+            MDLabel:
+                id: ping_status
+                text: app.locales.data['ru'].main.cluster.status.ping_idle
+                font_size: sp(9)
+                theme_font_name: "Custom"
+                font_name: app.get_font(app.config.app_global.font.name)
+                theme_text_color: "Custom"
+                text_color: app.palette['muted']
+                md_bg_color: 0, 0, 0, 0
+                adaptive_height: True
+                size_hint_y: None
+                height: self.texture_size[1]
+                padding: 0, 0, 0, dp(4)
+
+            MDBoxLayout:
+                id: ping_progress_panel
+                orientation: "vertical"
+                size_hint_y: None
+                height: 0
+                opacity: 0
+                disabled: True
+                spacing: dp(4)
+                md_bg_color: 0, 0, 0, 0
+
+                MDLabel:
+                    id: ping_progress_label
+                    text: ""
+                    font_size: sp(9)
+                    theme_font_size: "Custom"
+                    theme_font_name: "Custom"
+                    font_name: app.get_font("robotomono")
+                    theme_text_color: "Custom"
+                    text_color: app.palette['muted']
+                    md_bg_color: 0, 0, 0, 0
+                    shorten: True
+                    shorten_from: "right"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDBoxLayout:
+                    id: ping_progress_track
+                    size_hint_y: None
+                    height: dp(4)
+                    md_bg_color: app.palette['surface']
+
+                    MDBoxLayout:
+                        id: ping_progress_fill
+                        size_hint_x: None
+                        width: 0
+                        size_hint_y: 1
+                        md_bg_color: app.palette['accent']
+
+            TopAlignedHBox:
+                id: ping_details_row
+                spacing: dp(20)
+                size_hint_y: None
+                adaptive_height: True
+                padding: 0
+                md_bg_color: 0, 0, 0, 0
+
+                MDBoxLayout:
+                    id: stats_box
+                    orientation: "vertical"
+                    spacing: dp(4)
+                    size_hint_x: 0.5
+                    size_hint_y: None
+                    adaptive_height: True
+                    padding: 0
+                    md_bg_color: 0, 0, 0, 0
+
+                    ClusterSection:
+                        id: section_stats
+                        text: app.locales.data['ru'].main.cluster.sections.stats
+
+                    ClusterStatLabel:
+                        id: stat_host
+                        text: app.locales.data['ru'].main.cluster.stats.host.format(value="—")
+
+                    ClusterStatLabel:
+                        id: stat_min
+                        text: app.locales.data['ru'].main.cluster.stats.min.format(value="—")
+
+                    ClusterStatLabel:
+                        id: stat_avg
+                        text: app.locales.data['ru'].main.cluster.stats.avg.format(value="—")
+
+                    ClusterStatLabel:
+                        id: stat_max
+                        text: app.locales.data['ru'].main.cluster.stats.max.format(value="—")
+
+                    ClusterStatLabel:
+                        id: stat_loss
+                        text: app.locales.data['ru'].main.cluster.stats.loss.format(value="—")
+
+                    ClusterStatLabel:
+                        id: stat_jitter
+                        text: app.locales.data['ru'].main.cluster.stats.jitter.format(value="—")
+
+                    ClusterStatLabel:
+                        id: stat_duration
+                        text: app.locales.data['ru'].main.cluster.stats.duration.format(value="—")
+
+                MDBoxLayout:
+                    id: summary_box
+                    orientation: "vertical"
+                    spacing: dp(4)
+                    size_hint_x: 0.5
+                    size_hint_y: None
+                    adaptive_height: True
+                    padding: 0
+                    md_bg_color: 0, 0, 0, 0
+
+                    ClusterSection:
+                        id: section_summary
+                        text: app.locales.data['ru'].main.cluster.sections.summary
+
+                    MDLabel:
+                        id: ping_summary
+                        text: ""
+                        font_size: sp(8)
+                        theme_font_size: "Custom"
+                        theme_line_height: "Custom"
+                        line_height: 1.35
+                        theme_font_name: "Custom"
+                        font_name: app.get_font("robotomono")
+                        theme_text_color: "Custom"
+                        text_color: app.palette['muted']
+                        md_bg_color: 0, 0, 0, 0
+                        size_hint_y: None
+                        adaptive_height: True
+                        text_size: self.width, None
+                        halign: "left"
+                        valign: "top"
+                        padding: 0, 0, 0, dp(4)

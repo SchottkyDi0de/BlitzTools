@@ -1,0 +1,325 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+
+<OlenemerSection@MDLabel>:
+    font_size: sp(9)
+    theme_font_name: "Custom"
+    font_name: app.get_font("robotomono")
+    theme_text_color: "Custom"
+    text_color: app.palette['accent']
+    md_bg_color: 0, 0, 0, 0
+    adaptive_height: True
+    size_hint_y: None
+    height: self.texture_size[1]
+    padding: 0, dp(10), 0, dp(4)
+
+<OlenemerScreen>:
+    md_bg_color: app.palette['bg']
+
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: 0
+        md_bg_color: app.palette['bg']
+
+        ScrollView:
+            size_hint_y: 1
+            do_scroll_x: False
+            bar_width: dp(4)
+
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: dp(14), dp(12)
+                spacing: dp(8)
+                adaptive_height: True
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDLabel:
+                    id: screen_title
+                    text: app.locales.data['ru'].main.olenemer.title
+                    font_size: sp(14)
+                    bold: True
+                    theme_font_name: "Custom"
+                    font_name: app.get_font("robotomono")
+                    theme_text_color: "Custom"
+                    text_color: app.palette['accent']
+                    md_bg_color: 0, 0, 0, 0
+                    adaptive_height: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    padding: 0, 0, 0, dp(2)
+
+                MDLabel:
+                    id: screen_hint
+                    text: app.locales.data['ru'].main.olenemer.description
+                    font_size: sp(10)
+                    theme_font_name: "Custom"
+                    font_name: app.get_font(app.config.app_global.font.name)
+                    theme_text_color: "Custom"
+                    text_color: app.palette['muted']
+                    md_bg_color: 0, 0, 0, 0
+                    adaptive_height: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    padding: 0, 0, 0, dp(6)
+
+                OlenemerSection:
+                    id: launch_section
+                    text: app.locales.data['ru'].main.olenemer.sections.launch
+
+                MDGridLayout:
+                    cols: 2
+                    spacing: dp(6)
+                    size_hint_y: None
+                    height: dp(38)
+
+                    DvpActionButton:
+                        id: start_btn
+                        action_label: app.locales.data['ru'].main.olenemer.actions.start
+                        on_release: root.start_olenemer()
+
+                    DvpActionButton:
+                        id: stop_btn
+                        action_label: app.locales.data['ru'].main.olenemer.actions.stop
+                        on_release: root.stop_olenemer()
+
+                PassThroughHint:
+                    id: launch_status
+                    text: app.locales.data['ru'].main.olenemer.status.idle
+
+                OlenemerSection:
+                    id: general_section
+                    text: app.locales.data['ru'].main.olenemer.sections.general
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(3)
+                    size_hint_y: None
+                    adaptive_height: True
+
+                    SettingsOptionButton:
+                        id: auto_open_btn
+                        option_value: "auto_open"
+                        option_label: app.locales.data['ru'].main.olenemer.options.auto_open
+                        size_hint_x: 1
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_auto_open()
+
+                    SettingsOptionButton:
+                        id: profile_skins_btn
+                        option_value: "profile_skins"
+                        option_label: app.locales.data['ru'].main.olenemer.options.profile_skins
+                        size_hint_x: 1
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_profile_skins()
+
+                OlenemerSection:
+                    id: regions_section
+                    text: app.locales.data['ru'].main.olenemer.sections.regions
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    spacing: dp(6)
+                    size_hint_y: None
+                    height: dp(38)
+
+                    SettingsOptionButton:
+                        id: region_ru_btn
+                        option_value: "ru"
+                        option_label: app.locales.data['ru'].main.olenemer.regions.ru
+                        on_release: root.toggle_region_ru()
+
+                    SettingsOptionButton:
+                        id: region_eu_btn
+                        option_value: "eu"
+                        option_label: app.locales.data['ru'].main.olenemer.regions.eu
+                        on_release: root.toggle_region_eu()
+
+                OlenemerSection:
+                    id: replay_paths_section
+                    text: app.locales.data['ru'].main.olenemer.sections.replay_paths
+
+                PassThroughHint:
+                    id: ru_path_label
+                    text: app.locales.data['ru'].main.olenemer.replay_paths.ru_active.format(path=app.config.app_global.replay_paths.ru)
+
+                DvpActionButton:
+                    id: pick_ru_path_btn
+                    action_label: app.locales.data['ru'].main.olenemer.actions.pick_ru_replays
+                    on_release: root.pick_replay_path("ru")
+
+                PassThroughHint:
+                    id: eu_path_label
+                    text: app.locales.data['ru'].main.olenemer.replay_paths.eu_active.format(path=app.config.app_global.replay_paths.eu)
+
+                DvpActionButton:
+                    id: pick_eu_path_btn
+                    action_label: app.locales.data['ru'].main.olenemer.actions.pick_eu_replays
+                    on_release: root.pick_replay_path("eu")
+
+                OlenemerSection:
+                    id: appearance_section
+                    text: app.locales.data['ru'].main.olenemer.sections.appearance
+
+                PassThroughHint:
+                    id: transparency_label
+                    text: app.locales.data['ru'].main.olenemer.options.transparency_value.format(value=80)
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    spacing: dp(6)
+                    size_hint_y: None
+                    height: dp(38)
+
+                    DvpActionButton:
+                        id: opacity_down_btn
+                        action_label: app.locales.data['ru'].main.olenemer.actions.opacity_down
+                        on_release: root.adjust_transparency(-0.05)
+
+                    DvpActionButton:
+                        id: opacity_up_btn
+                        action_label: app.locales.data['ru'].main.olenemer.actions.opacity_up
+                        on_release: root.adjust_transparency(0.05)
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    spacing: dp(6)
+                    size_hint_y: None
+                    height: dp(38)
+
+                    SettingsOptionButton:
+                        id: bg_transparent_btn
+                        option_value: "transparent"
+                        option_label: app.locales.data['ru'].main.olenemer.background.transparent
+                        on_release: root.select_background_type("transparent")
+
+                    SettingsOptionButton:
+                        id: bg_image_btn
+                        option_value: "image"
+                        option_label: app.locales.data['ru'].main.olenemer.background.image
+                        on_release: root.select_background_type("image")
+
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    spacing: dp(6)
+                    size_hint_y: None
+                    height: dp(38)
+
+                    SettingsOptionButton:
+                        id: tank_icon_btn
+                        option_value: "icon"
+                        option_label: app.locales.data['ru'].main.olenemer.tank_display.icon
+                        on_release: root.select_tank_display_type("icon")
+
+                    SettingsOptionButton:
+                        id: tank_color_btn
+                        option_value: "color"
+                        option_label: app.locales.data['ru'].main.olenemer.tank_display.color
+                        on_release: root.select_tank_display_type("color")
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(3)
+                    size_hint_y: None
+                    adaptive_height: True
+
+                    SettingsOptionButton:
+                        id: show_border_btn
+                        option_value: "show_border"
+                        option_label: app.locales.data['ru'].main.olenemer.options.show_border
+                        size_hint_x: 1
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_show_border()
+
+                    SettingsOptionButton:
+                        id: show_window_border_btn
+                        option_value: "show_window_border"
+                        option_label: app.locales.data['ru'].main.olenemer.options.show_window_border
+                        size_hint_x: 1
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_show_window_border()
+
+                    SettingsOptionButton:
+                        id: show_summary_btn
+                        option_value: "show_summary"
+                        option_label: app.locales.data['ru'].main.olenemer.options.show_summary
+                        size_hint_x: 1
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_show_summary()
+
+                OlenemerSection:
+                    id: columns_section
+                    text: app.locales.data['ru'].main.olenemer.sections.columns
+
+                MDGridLayout:
+                    cols: 2
+                    spacing: dp(6)
+                    size_hint_y: None
+                    adaptive_height: True
+
+                    SettingsOptionButton:
+                        id: col_rating_btn
+                        option_value: "rating"
+                        option_label: app.locales.data['ru'].main.olenemer.columns.rating
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_column("rating")
+
+                    SettingsOptionButton:
+                        id: col_battles_btn
+                        option_value: "battles"
+                        option_label: app.locales.data['ru'].main.olenemer.columns.battles
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_column("battles")
+
+                    SettingsOptionButton:
+                        id: col_winrate_btn
+                        option_value: "winrate"
+                        option_label: app.locales.data['ru'].main.olenemer.columns.winrate
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_column("winrate")
+
+                    SettingsOptionButton:
+                        id: col_damage_btn
+                        option_value: "damage"
+                        option_label: app.locales.data['ru'].main.olenemer.columns.damage
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_column("damage")
+
+                OlenemerSection:
+                    id: keybinds_section
+                    text: app.locales.data['ru'].main.olenemer.sections.keybinds
+
+                PassThroughHint:
+                    id: keybinds_hint
+                    text: app.locales.data['ru'].main.olenemer.keybinds.hint
+
+                PassThroughHint:
+                    id: keybind_show_hide_label
+                    text: app.locales.data['ru'].main.olenemer.keybinds.show_hide.format(value="F1")
+
+                PassThroughHint:
+                    id: keybind_increase_label
+                    text: app.locales.data['ru'].main.olenemer.keybinds.increase_opacity.format(value="F2")
+
+                PassThroughHint:
+                    id: keybind_decrease_label
+                    text: app.locales.data['ru'].main.olenemer.keybinds.decrease_opacity.format(value="F3")

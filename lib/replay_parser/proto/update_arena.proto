@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package wotbreplay;
+
+message UpdateArena {
+  ArenaPlayers players = 1;
+}
+
+message ArenaPlayers {
+  repeated ArenaPlayer players = 1;
+}
+
+message ArenaPlayer {
+  string nickname = 3;
+  uint32 team_number = 4;
+  uint32 account_id = 7;
+  optional string clan_tag = 8;
+  optional uint32 platoon_number = 11;
+}

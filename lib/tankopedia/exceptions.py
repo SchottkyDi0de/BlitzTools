@@ -1,0 +1,2 @@
+class NameNotSpecified(Exception):
+    pass

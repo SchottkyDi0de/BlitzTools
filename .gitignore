@@ -3,3 +3,12 @@ __pycache__
 .vscode
 .*
 /*.pyc
+
+.VSCodeCounter/
+output/
+build/
+dist/
+indev/
+
+*.spec
+*.log

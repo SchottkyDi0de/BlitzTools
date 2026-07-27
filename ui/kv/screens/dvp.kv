@@ -1,0 +1,333 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+
+<DvpSection@MDLabel>:
+    font_size: sp(9)
+    theme_font_name: "Custom"
+    font_name: app.get_font("robotomono")
+    theme_text_color: "Custom"
+    text_color: app.palette['accent']
+    md_bg_color: 0, 0, 0, 0
+    adaptive_height: True
+    size_hint_y: None
+    height: self.texture_size[1]
+    padding: 0, dp(10), 0, dp(4)
+
+<DvpActionButton>:
+    size_hint_x: 1
+    size_hint_y: None
+    height: dp(38)
+    padding: dp(10), dp(6)
+    radius: dp(6)
+    theme_bg_color: "Custom"
+    theme_line_color: "Custom"
+    md_bg_color: app.palette['surface']
+    line_color: app.palette['accent_dim']
+    line_width: dp(1)
+
+    PassThroughLabel:
+        text: root.action_label
+        size_hint: 1, 1
+        text_size: self.size
+        font_size: sp(10)
+        theme_font_size: "Custom"
+        theme_font_name: "Custom"
+        font_name: app.get_font(app.config.app_global.font.name)
+        theme_text_color: "Custom"
+        md_bg_color: 0, 0, 0, 0
+        halign: "center"
+        valign: "middle"
+
+<PassThroughHint>:
+    font_size: sp(9)
+    theme_font_size: "Custom"
+    theme_line_height: "Custom"
+    line_height: 1.3
+    theme_font_name: "Custom"
+    font_name: app.get_font(app.config.app_global.font.name)
+    theme_text_color: "Custom"
+    text_color: app.palette['muted']
+    md_bg_color: 0, 0, 0, 0
+    halign: "left"
+    valign: "top"
+    adaptive_height: True
+    size_hint_x: 1
+    size_hint_y: None
+    height: self.texture_size[1]
+    padding: 0, 0, 0, dp(6)
+
+<DvpScreen>:
+    md_bg_color: app.palette['bg']
+
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: 0
+        md_bg_color: app.palette['bg']
+
+        ScrollView:
+            size_hint_y: 1
+            do_scroll_x: False
+            bar_width: dp(4)
+
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: dp(14), dp(12)
+                spacing: dp(8)
+                adaptive_height: True
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDLabel:
+                    id: screen_title
+                    text: app.locales.data['ru'].main.dvp.title
+                    font_size: sp(14)
+                    bold: True
+                    theme_font_name: "Custom"
+                    font_name: app.get_font("robotomono")
+                    theme_text_color: "Custom"
+                    text_color: app.palette['accent']
+                    md_bg_color: 0, 0, 0, 0
+                    adaptive_height: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    padding: 0, 0, 0, dp(2)
+
+                MDLabel:
+                    id: screen_hint
+                    text: app.locales.data['ru'].main.dvp.description
+                    font_size: sp(10)
+                    theme_font_name: "Custom"
+                    font_name: app.get_font(app.config.app_global.font.name)
+                    theme_text_color: "Custom"
+                    text_color: app.palette['muted']
+                    md_bg_color: 0, 0, 0, 0
+                    adaptive_height: True
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    padding: 0, 0, 0, dp(6)
+
+                DvpSection:
+                    id: compression_section
+                    text: app.locales.data['ru'].main.dvp.sections.compression
+
+                MDBoxLayout:
+                    id: compression_group
+                    orientation: "horizontal"
+                    spacing: dp(6)
+                    size_hint_y: None
+                    height: dp(38)
+
+                    SettingsOptionButton:
+                        option_value: "none"
+                        option_label: app.locales.data['ru'].main.dvp.compression.none
+                        on_release: root.select_compression("none")
+
+                    SettingsOptionButton:
+                        option_value: "lz4"
+                        option_label: app.locales.data['ru'].main.dvp.compression.lz4
+                        on_release: root.select_compression("lz4")
+
+                    SettingsOptionButton:
+                        option_value: "lz4_hc"
+                        option_label: app.locales.data['ru'].main.dvp.compression.lz4_hc
+                        on_release: root.select_compression("lz4_hc")
+
+                PassThroughHint:
+                    id: compression_hint
+                    text: app.locales.data['ru'].main.dvp.compression.lz4_hc_hint
+
+                DvpSection:
+                    id: options_section
+                    text: app.locales.data['ru'].main.dvp.sections.options
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(3)
+                    size_hint_y: None
+                    adaptive_height: True
+
+                    SettingsOptionButton:
+                        id: keep_original_btn
+                        option_value: "keep_original"
+                        option_label: app.locales.data['ru'].main.dvp.options.keep_original
+                        size_hint_x: 1
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_keep_original()
+
+                    PassThroughHint:
+                        id: keep_original_hint
+                        text: app.locales.data['ru'].main.dvp.options.keep_original_hint
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(3)
+                    size_hint_y: None
+                    adaptive_height: True
+
+                    SettingsOptionButton:
+                        id: fast_mode_btn
+                        option_value: "fast_mode"
+                        option_label: app.locales.data['ru'].main.dvp.options.fast_mode
+                        size_hint_x: 1
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_fast_mode()
+
+                    PassThroughHint:
+                        id: fast_mode_hint
+                        text: app.locales.data['ru'].main.dvp.options.fast_mode_hint
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(3)
+                    size_hint_y: None
+                    adaptive_height: True
+
+                    SettingsOptionButton:
+                        id: skip_if_exist_btn
+                        option_value: "skip_if_exist"
+                        option_label: app.locales.data['ru'].main.dvp.options.skip_if_exist
+                        size_hint_x: 1
+                        size_hint_y: None
+                        height: dp(30)
+                        padding: dp(8), dp(4)
+                        on_release: root.toggle_skip_if_exist()
+
+                    PassThroughHint:
+                        id: skip_if_exist_hint
+                        text: app.locales.data['ru'].main.dvp.options.skip_if_exist_hint
+
+                MDGridLayout:
+                    cols: 2
+                    spacing: dp(6)
+                    size_hint_y: None
+                    height: dp(84)
+
+                    DvpActionButton:
+                        id: pack_btn
+                        action_label: app.locales.data['ru'].main.dvp.actions.pack
+                        on_release: root.pick_and_pack()
+
+                    DvpActionButton:
+                        id: unpack_btn
+                        action_label: app.locales.data['ru'].main.dvp.actions.unpack
+                        on_release: root.pick_and_unpack()
+
+                    DvpActionButton:
+                        id: pack_folder_btn
+                        action_label: app.locales.data['ru'].main.dvp.actions.pack_folder
+                        on_release: root.pick_folder_and_pack()
+
+                    DvpActionButton:
+                        id: unpack_folder_btn
+                        action_label: app.locales.data['ru'].main.dvp.actions.unpack_folder
+                        on_release: root.pick_folder_and_unpack()
+
+                DvpActionButton:
+                    id: clear_log_btn
+                    action_label: app.locales.data['ru'].main.dvp.actions.clear_log
+                    on_release: root.clear_log()
+
+                MDBoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(3)
+                    size_hint_y: None
+                    adaptive_height: True
+
+                    DvpActionButton:
+                        id: pick_output_dir_btn
+                        action_label: app.locales.data['ru'].main.dvp.actions.pick_output_dir
+                        on_release: root.pick_output_dir()
+
+                    PassThroughHint:
+                        id: output_dir_hint
+                        text: app.locales.data['ru'].main.dvp.options.output_dir_hint
+
+                    DvpActionButton:
+                        id: reset_output_dir_btn
+                        action_label: app.locales.data['ru'].main.dvp.actions.reset_output_dir
+                        on_release: root.reset_output_dir()
+
+                DvpSection:
+                    id: log_section
+                    text: app.locales.data['ru'].main.dvp.sections.log
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: max(dp(120), log_label.texture_size[1] + dp(8))
+                    padding: dp(10), dp(8)
+                    radius: dp(6)
+                    theme_bg_color: "Custom"
+                    theme_line_color: "Custom"
+                    md_bg_color: app.palette['surface']
+                    line_color: app.palette['accent_dim']
+                    line_width: dp(1)
+
+                    MDLabel:
+                        id: log_label
+                        text: app.locales.data['ru'].main.dvp.log.idle
+                        font_size: sp(9)
+                        theme_font_size: "Custom"
+                        theme_line_height: "Custom"
+                        line_height: 1.35
+                        theme_font_name: "Custom"
+                        font_name: app.get_font("robotomono")
+                        theme_text_color: "Custom"
+                        text_color: app.palette['text']
+                        md_bg_color: 0, 0, 0, 0
+                        halign: "left"
+                        valign: "top"
+                        text_size: self.width, None
+                        adaptive_height: True
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+        MDBoxLayout:
+            id: progress_panel
+            orientation: "vertical"
+            size_hint_y: None
+            height: 0
+            opacity: 0
+            disabled: True
+            padding: dp(14), dp(10)
+            spacing: dp(4)
+            md_bg_color: app.palette['bg']
+
+            canvas.before:
+                Color:
+                    rgba: app.palette['accent_dim']
+                Line:
+                    points: [self.x, self.top, self.right, self.top]
+                    width: dp(1)
+
+            MDLabel:
+                id: progress_label
+                text: ""
+                font_size: sp(9)
+                theme_font_size: "Custom"
+                theme_font_name: "Custom"
+                font_name: app.get_font("robotomono")
+                theme_text_color: "Custom"
+                text_color: app.palette['muted']
+                md_bg_color: 0, 0, 0, 0
+                shorten: True
+                shorten_from: "right"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDBoxLayout:
+                id: progress_track
+                size_hint_y: None
+                height: dp(4)
+                md_bg_color: app.palette['surface']
+
+                MDBoxLayout:
+                    id: progress_fill
+                    size_hint_x: None
+                    width: 0
+                    size_hint_y: 1
+                    md_bg_color: app.palette['accent']

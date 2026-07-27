@@ -1,3 +1,9 @@
+"""
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Этот модуль завязан на интерфейсе которого тут нет его нужно переработать
+"""
+
+
 from __future__ import annotations
 import traceback
 from typing import Any, TYPE_CHECKING

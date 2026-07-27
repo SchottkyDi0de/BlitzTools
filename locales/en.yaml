@@ -1,0 +1,248 @@
+---
+main:
+  titlebar:
+    status: "WORKING"
+  intro:
+    title: "Welcome to BlitzTools"
+    subtitle: "Tools for Tanks Blitz and WoT Blitz"
+    description: "// MODULES"
+  home:
+    title: "// MODULES"
+    hint: "Core app features. Open a module from a card below or pick a section in the navigation panel on the left."
+  placeholder:
+    title: "In development"
+    subtitle: "This section will be available soon"
+  admin_notice:
+    message: "The app is not running as administrator. Some features (cluster blocking) may be unavailable."
+  modules:
+    sessions:
+      title: "SESSIONS"
+      body: "On-screen session statistics in real time"
+    olenemer:
+      title: "OLENEMER"
+      body: "Reworked player lists with additional statistics"
+    cluster:
+      title: "CLUSTERS"
+      body: "Block selected clusters and check ping / packet loss"
+    replay:
+      title: "REPLAYS"
+      body: "Parse and break down replay files"
+    dvp:
+      title: "DVP CONVERTER"
+      body: "Converter for DVPL, DVPM, and DVLD files"
+    ui_manager:
+      title: "GUI MANAGER"
+      body: "Fonts · text editor · layout and UI elements"
+    settings:
+      title: "APP SETTINGS"
+      body: "App and module configuration"
+  settings:
+    title: "SETTINGS"
+    sections:
+      font: "// FONT"
+      language: "// LANGUAGE"
+    fonts:
+      roboto: "Roboto"
+      robotomono: "Roboto Mono"
+      jost: "Jost"
+    languages:
+      ru: "RU"
+      en: "EN"
+  dvp:
+    title: "DVP CONVERTER"
+    description: "Pack and unpack DVPL files. Support for DVPM and DVLD files is coming soon."
+    sections:
+      compression: "// COMPRESSION"
+      options: "// OPTIONS"
+      log: "// LOG"
+    compression:
+      none: "None"
+      none_hint: "Packs fastest but produces the largest files. Use when size is not critical or you need maximum packing speed."
+      lz4: "LZ4"
+      lz4_hint: "Fast algorithm with moderate compression. A good balance of speed and size for most files."
+      lz4_hc: "LZ4 HC"
+      lz4_hc_hint: "Stronger compression at the cost of slower packing. Best when minimum DVPL file size on disk matters."
+    options:
+      keep_original: "Keep original files"
+      keep_original_hint: "When packing or unpacking, keeps the source file on disk. If off, the original is deleted after a successful conversion."
+      fast_mode: "Fast mode"
+      fast_mode_hint: "Speeds up batch processing: the log shows only errors and the final summary, not one line per file."
+      skip_if_exist: "Skip if exist"
+      skip_if_exist_hint: "Skips a file when the output already exists next to the source, without overwriting or converting again."
+      output_dir_hint: "If no folder is selected, results are saved next to the source files."
+      output_dir_active: "Output folder: {path}"
+    actions:
+      pack: "Pack files"
+      unpack: "Unpack files"
+      pack_folder: "Pack folder"
+      unpack_folder: "Unpack folder"
+      clear_log: "Clear log"
+      pick_output_dir: "Choose output folder"
+      reset_output_dir: "Reset output folder"
+      pick_files_pack: "Select files to pack"
+      pick_files_unpack: "Select DVPL files"
+      pick_folder_pack: "Select folder to pack"
+      pick_folder_unpack: "Select folder with DVPL files"
+      pick_output_dir_dialog: "Select folder for converted files"
+    log:
+      idle: "Select files or a folder to convert."
+      working: "Processing…"
+      progress: "{current} / {total} — {name}"
+      summary: "Summary: {ok} succeeded, {skipped} skipped, {failed} failed."
+    results:
+      packed: "Packed: {name} → {out}"
+      unpacked: "Unpacked: {name} → {out}"
+      skipped: "Skipped: {name} ({out} already exists)"
+      failed: "Error ({name}): {error}"
+  replay:
+    title: "REPLAYS"
+    actions:
+      pick_replay: "Pick replay"
+      pick_replay_dialog: "Select a replay file (.wotbreplay / .tbreplay)"
+    status:
+      idle: "Select a replay file to parse."
+      loading: "Loading: {name}…"
+      ready: "Replay: {name}"
+      error: "Error: {error}"
+    teams:
+      team1: "TEAM 1"
+      team2: "TEAM 2"
+      winner: "WIN"
+      defeat: "DEFEAT"
+    author:
+      title: "// RECORDER"
+    summary:
+      winner_team1: "Winner: team 1"
+      winner_team2: "Winner: team 2"
+      draw: "Draw or unknown result"
+      battle_author: "Battle author: {name}"
+      author_id: "Author ID: {id}"
+      author_tank: "Played in tank:"
+      author_damage: "Damage dealt: {value}"
+      earnings_header: "Earned:"
+      earnings_silver: "    Credits: {value}"
+      earnings_xp: "    XP (battle): {value}"
+      earnings_free_xp: "    XP (free): {value}"
+      meta_date: "Battle date: {date}"
+      meta_duration: "Duration: {duration}"
+      meta_mode: "Game mode: {mode}"
+      meta_map_id: "Map ID: {id}"
+    columns:
+      player: "Player"
+      tank: "Tank"
+      damage: "DMG"
+      kills: "Kills"
+      xp: "XP"
+      credits: "Credits"
+  olenemer:
+    title: "OLENEMER"
+    description: "Live team overlay. Watches replay folders and shows player stats during a battle."
+    sections:
+      launch: "// LAUNCH"
+      general: "// GENERAL"
+      regions: "// REGIONS"
+      appearance: "// APPEARANCE"
+      columns: "// COLUMNS"
+      replay_paths: "// REPLAY FOLDERS"
+      keybinds: "// HOTKEYS"
+    status:
+      idle: "Olenemer is not running. Press Start to watch replay folders."
+      running: "Olenemer is running. Windows appear when an active replay is found."
+    options:
+      auto_open: "Auto-open windows"
+      profile_skins: "Profile backgrounds"
+      show_border: "Row separators"
+      show_window_border: "Window border"
+      show_summary: "Team summary"
+      transparency_value: "Opacity: {value}%"
+    regions:
+      ru: "RU"
+      eu: "EU"
+    background:
+      transparent: "Transparent"
+      image: "Image"
+    tank_display:
+      icon: "Class icon"
+      color: "Colored name"
+    columns:
+      avatar: "Avatar"
+      nickname: "Nickname"
+      tank: "Tank"
+      rating: "Rating"
+      platoon: "Platoon"
+      battles: "Battles"
+      winrate: "Win rate"
+      damage: "Damage"
+    replay_paths:
+      ru_active: "RU: {path}"
+      eu_active: "EU: {path}"
+    actions:
+      start: "Start"
+      stop: "Stop"
+      pick_ru_replays: "Pick RU folder"
+      pick_eu_replays: "Pick EU folder"
+      pick_ru_replays_dialog: "Select the RU replays folder"
+      pick_eu_replays_dialog: "Select the EU replays folder"
+      opacity_down: "−"
+      opacity_up: "+"
+    keybinds:
+      hint: "Hotkeys apply after restarting olenemer. Edit values in config.yaml."
+      show_hide: "Show / hide: {value}"
+      increase_opacity: "More opaque: {value}"
+      decrease_opacity: "Less opaque: {value}"
+  cluster:
+    title: "CLUSTERS"
+    description: "Block servers via the hosts file and run a 100-ping benchmark per cluster."
+    sections:
+      regions: "// REGION"
+      clusters: "// CLUSTERS"
+      ping: "// PING TEST"
+      stats: "// STATISTICS"
+      summary: "// SUMMARY"
+    regions:
+      ru: "RU"
+      eu: "EU"
+      asia: "ASIA"
+      na: "NA"
+    labels:
+      cluster_row: "#{id} · {name}{suffix}"
+      blocked_suffix: " · BLOCKED"
+    actions:
+      block: "Block"
+      unblock: "Unblock"
+      unblock_all: "Unblock all"
+      ping: "Run test"
+      stop_ping: "Stop"
+    status:
+      admin_required: "Run BlitzTools as administrator to block clusters."
+      no_selection: "Select one or more clusters."
+      blocked: "Blocked clusters: {count}."
+      unblocked: "Unblocked clusters: {count}."
+      unblocked_all: "All clusters unblocked."
+      block_failed: "Failed to update the hosts file."
+      unblock_failed: "Failed to update the hosts file."
+      ping_idle: "Select one or more clusters and run the test."
+      ping_running: "Ping test: {host}…"
+      ping_progress: "Ping {current}/{total}…"
+      ping_batch_running: "Cluster {cluster}/{clusters_total}: {host}…"
+      ping_batch_progress: "Cluster {cluster}/{clusters_total} · {host} · ping {current}/{total}…"
+      ping_done: "Test finished: {host}"
+      ping_batch_done: "Test finished: {count} cluster(s)."
+      ping_batch_stopped: "Stopped after {done}/{total} cluster(s)."
+      ping_stopped: "Test stopped."
+      ping_stopping: "Stopping test…"
+      ping_summary_line: "{host} — min {min} ms, avg {avg} ms, max {max} ms, loss {loss}"
+      ping_summary_unavailable: "{host} — cluster unavailable"
+      ping_summary_blocked: "{host} — cluster blocked"
+    stats:
+      na: "—"
+      host: "Host: {value}"
+      status: "Status: {value}"
+      status_unavailable: "cluster unavailable"
+      status_blocked: "cluster blocked"
+      min: "Min: {value} ms"
+      avg: "Avg: {value} ms"
+      max: "Max: {value} ms"
+      loss: "Loss: {value}"
+      jitter: "Jitter: {value} ms"
+      duration: "Test duration: {value}"

@@ -1,6 +1,9 @@
 ---
 main:
+  titlebar:
+    status: "WORKING"
   intro:
+<<<<<<< HEAD
     title: "[b]Добро пожаловать в BlitzTools![/b]"
     subtitle: "[b]BlitzTools это набор инструментов для работы с играми Tanks Blitz и World of Tanks.[/b]"
     description: "[u]Программа на данный момент имеет следующий функционал:[/u]"
@@ -8,3 +11,248 @@ main:
     net: "[b]Сеть:[/b] Измерение пинга, тестирование API и принудительное подключение к выбранным кластерам"
     overlay: "[b]Оверлеи:[/b] Наэкранная сессионая статистика и оленеметр в реальном времени и без внешнего API"
 ...
+=======
+    title: "Добро пожаловать в BlitzTools"
+    subtitle: "Инструменты для Tanks Blitz и WoT Blitz"
+    description: "// МОДУЛИ"
+  home:
+    title: "// МОДУЛИ"
+    hint: "Основной функционал приложения. Откройте модуль по карточке или выберите раздел в панели навигации слева."
+  placeholder:
+    title: "В разработке"
+    subtitle: "Этот раздел скоро будет доступен"
+  admin_notice:
+    message: "Приложение запущено без прав администратора. Часть функций (блокировка кластеров) может быть недоступна."
+  modules:
+    sessions:
+      title: "СЕССИИ"
+      body: "Наэкранная сессионная статистика в реальном времени"
+    olenemer:
+      title: "ОЛЕНЕМЕР"
+      body: "Переработанные списки игроков с дополнительной статистикой"
+    cluster:
+      title: "КЛАСТЕРЫ"
+      body: "Блокировка определённых кластеров и проверка пинга / лоссов"
+    replay:
+      title: "РЕПЛЕИ"
+      body: "Парсинг и разбор файлов реплеев"
+    dvp:
+      title: "DVP КОНВЕРТЕР"
+      body: "Конвертер DVPL, DVPM, DVLD файлов"
+    ui_manager:
+      title: "МЕНЕДЖЕР GUI"
+      body: "Шрифты · редактор текста · разметка и элементы UI"
+    settings:
+      title: "НАСТРОЙКИ ПРИЛОЖЕНИЯ"
+      body: "Конфигурация приложения и модулей"
+  settings:
+    title: "НАСТРОЙКИ"
+    sections:
+      font: "// ШРИФТ"
+      language: "// ЯЗЫК"
+    fonts:
+      roboto: "Roboto"
+      robotomono: "Roboto Mono"
+      jost: "Jost"
+    languages:
+      ru: "RU"
+      en: "EN"
+  dvp:
+    title: "DVP КОНВЕРТЕР"
+    description: "Упаковка и распаковка DVPL файлов. Поддержка DVPM и DVLD файлов находится в разработке."
+    sections:
+      compression: "// СЖАТИЕ"
+      options: "// ОПЦИИ"
+      log: "// ЖУРНАЛ"
+    compression:
+      none: "Без сжатия"
+      none_hint: "Файл упаковывается быстрее всего, но занимает больше места. Подходит, если размер не критичен или нужна максимальная скорость упаковки."
+      lz4: "LZ4"
+      lz4_hint: "Быстрый алгоритм с умеренным сжатием. Хороший баланс скорости и размера для большинства файлов."
+      lz4_hc: "LZ4 HC"
+      lz4_hc_hint: "Более сильное сжатие за счёт более долгой упаковки. Имеет смысл, когда важен минимальный размер DVPL на диске."
+    options:
+      keep_original: "Сохранить исходные файлы"
+      keep_original_hint: "При упаковке или распаковке оставляет исходный файл на диске. Если выключено — исходник удаляется после успешной конвертации."
+      fast_mode: "Быстрый режим"
+      fast_mode_hint: "Ускоряет пакетную обработку: в журнал попадают только ошибки и итоговая сводка, без записи по каждому файлу."
+      skip_if_exist: "Пропускать существующие"
+      skip_if_exist_hint: "Пропускает файл, если результат уже лежит рядом с исходником — без перезаписи и без повторной конвертации."
+      output_dir_hint: "Если папка не выбрана, результаты сохраняются рядом с исходными файлами."
+      output_dir_active: "Папка назначения: {path}"
+    actions:
+      pack: "Упаковать файлы"
+      unpack: "Распаковать файлы"
+      pack_folder: "Упаковать папку"
+      unpack_folder: "Распаковать папку"
+      clear_log: "Очистить журнал"
+      pick_output_dir: "Выбрать папку назначения"
+      reset_output_dir: "Сбросить папку назначения"
+      pick_files_pack: "Выберите файлы для упаковки"
+      pick_files_unpack: "Выберите DVPL файлы"
+      pick_folder_pack: "Выберите папку для упаковки"
+      pick_folder_unpack: "Выберите папку с DVPL файлами"
+      pick_output_dir_dialog: "Выберите папку для сохранения результатов"
+    log:
+      idle: "Выберите файлы или папку для конвертации."
+      working: "Обработка…"
+      progress: "{current} / {total} — {name}"
+      summary: "Итог: успешно {ok}, пропущено {skipped}, ошибок {failed}."
+    results:
+      packed: "Упакован: {name} → {out}"
+      unpacked: "Распакован: {name} → {out}"
+      skipped: "Пропущен: {name} ({out} уже существует)"
+      failed: "Ошибка ({name}): {error}"
+  replay:
+    title: "РЕПЛЕИ"
+    actions:
+      pick_replay: "Выбрать реплей"
+      pick_replay_dialog: "Выберите файл реплея (.wotbreplay / .tbreplay)"
+    status:
+      idle: "Выберите файл реплея для разбора."
+      loading: "Загрузка: {name}…"
+      ready: "Реплей: {name}"
+      error: "Ошибка: {error}"
+    teams:
+      team1: "КОМАНДА 1"
+      team2: "КОМАНДА 2"
+      winner: "ПОБЕДА"
+      defeat: "ПОРАЖЕНИЕ"
+    author:
+      title: "// АВТОР ЗАПИСИ"
+    summary:
+      winner_team1: "Победа: команда 1"
+      winner_team2: "Победа: команда 2"
+      draw: "Ничья или результат не определён"
+      battle_author: "Автор боя: {name}"
+      author_id: "Айди автора: {id}"
+      author_tank: "Играл на танке:"
+      author_damage: "Нанесено урона: {value}"
+      earnings_header: "Заработано:"
+      earnings_silver: "    Серебра: {value}"
+      earnings_xp: "    Опыт (боевой): {value}"
+      earnings_free_xp: "    Опыт (свободный): {value}"
+      meta_date: "Дата проведения боя: {date}"
+      meta_duration: "Длительность: {duration}"
+      meta_mode: "Режим игры: {mode}"
+      meta_map_id: "ID карты: {id}"
+    columns:
+      player: "Игрок"
+      tank: "Танк"
+      damage: "Урон"
+      kills: "Фраги"
+      xp: "XP"
+      credits: "Серебро"
+  olenemer:
+    title: "ОЛЕНЕМЕР"
+    description: "Оверлей со списками команд в реальном времени. Отслеживает папки реплеев и показывает статистику игроков во время боя."
+    sections:
+      launch: "// ЗАПУСК"
+      general: "// ОБЩЕЕ"
+      regions: "// РЕГИОНЫ"
+      appearance: "// ВНЕШНИЙ ВИД"
+      columns: "// СТОЛБЦЫ"
+      replay_paths: "// ПАПКИ РЕПЛЕЕВ"
+      keybinds: "// ГОРЯЧИЕ КЛАВИШИ"
+    status:
+      idle: "Оленемер не запущен. Нажмите «Запустить» для отслеживания реплеев."
+      running: "Оленемер работает. Окна появятся при обнаружении активного реплея."
+    options:
+      auto_open: "Автооткрытие окон"
+      profile_skins: "Фоны профилей"
+      show_border: "Разделители строк"
+      show_window_border: "Обводка окна"
+      show_summary: "Сводка по команде"
+      transparency_value: "Прозрачность: {value}%"
+    regions:
+      ru: "RU"
+      eu: "EU"
+    background:
+      transparent: "Прозрачный"
+      image: "Изображение"
+    tank_display:
+      icon: "Иконка класса"
+      color: "Цвет названия"
+    columns:
+      avatar: "Аватар"
+      nickname: "Ник"
+      tank: "Танк"
+      rating: "Рейтинг"
+      platoon: "Взвод"
+      battles: "Бои"
+      winrate: "Винрейт"
+      damage: "Урон"
+    replay_paths:
+      ru_active: "RU: {path}"
+      eu_active: "EU: {path}"
+    actions:
+      start: "Запустить"
+      stop: "Остановить"
+      pick_ru_replays: "Выбрать папку RU"
+      pick_eu_replays: "Выбрать папку EU"
+      pick_ru_replays_dialog: "Выберите папку с реплеями RU"
+      pick_eu_replays_dialog: "Выберите папку с реплеями EU"
+      opacity_down: "−"
+      opacity_up: "+"
+    keybinds:
+      hint: "Горячие клавиши применяются после перезапуска оленемера. Измените значения в config.yaml."
+      show_hide: "Показать / скрыть: {value}"
+      increase_opacity: "Прозрачнее: {value}"
+      decrease_opacity: "Непрозрачнее: {value}"
+  cluster:
+    title: "КЛАСТЕРЫ"
+    description: "Блокировка серверов через hosts и проверка пинга (100 ICMP-запросов на кластер)."
+    sections:
+      regions: "// РЕГИОН"
+      clusters: "// КЛАСТЕРЫ"
+      ping: "// ПРОВЕРКА ПИНГА"
+      stats: "// СТАТИСТИКА"
+      summary: "// СВОДКА"
+    regions:
+      ru: "RU"
+      eu: "EU"
+      asia: "ASIA"
+      na: "NA"
+    labels:
+      cluster_row: "#{id} · {name}{suffix}"
+      blocked_suffix: " · ЗАБЛОКИРОВАН"
+    actions:
+      block: "Заблокировать"
+      unblock: "Разблокировать"
+      unblock_all: "Разблокировать все"
+      ping: "Запустить тест"
+      stop_ping: "Остановить"
+    status:
+      admin_required: "Для блокировки кластеров запустите BlitzTools от имени администратора."
+      no_selection: "Выберите один или несколько кластеров."
+      blocked: "Заблокировано кластеров: {count}."
+      unblocked: "Разблокировано кластеров: {count}."
+      unblocked_all: "Все кластеры разблокированы."
+      block_failed: "Не удалось изменить файл hosts."
+      unblock_failed: "Не удалось изменить файл hosts."
+      ping_idle: "Выберите один или несколько кластеров и запустите тест."
+      ping_running: "Тест пинга: {host}…"
+      ping_progress: "Пинг {current}/{total}…"
+      ping_batch_running: "Кластер {cluster}/{clusters_total}: {host}…"
+      ping_batch_progress: "Кластер {cluster}/{clusters_total} · {host} · пинг {current}/{total}…"
+      ping_done: "Тест завершён: {host}"
+      ping_batch_done: "Тест завершён: {count} кластер(ов)."
+      ping_batch_stopped: "Остановлено после {done}/{total} кластер(ов)."
+      ping_stopped: "Тест остановлен."
+      ping_stopping: "Остановка теста…"
+      ping_summary_line: "{host} — min {min} ms, avg {avg} ms, max {max} ms, loss {loss}"
+      ping_summary_unavailable: "{host} — кластер недоступен"
+      ping_summary_blocked: "{host} — кластер заблокирован"
+    stats:
+      na: "—"
+      host: "Хост: {value}"
+      status: "Статус: {value}"
+      status_unavailable: "кластер недоступен"
+      status_blocked: "кластер заблокирован"
+      min: "Минимум: {value} ms"
+      avg: "Средний: {value} ms"
+      max: "Максимум: {value} ms"
+      loss: "Потери: {value}"
+      jitter: "Джиттер: {value} ms"
+      duration: "Время теста: {value}"
+>>>>>>> 35887a35760c3d003b7693017bf138bc89650345
