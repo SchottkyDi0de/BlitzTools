@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-from kivy import Logger
-from kivy.config import Config
-from kivy.lang import Builder
-from kivy.core.window import Window
-from kivymd.app import MDApp
-=======
 import platform
 
 from utils.dpi_awareness import enable_dpi_awareness
@@ -26,7 +19,6 @@ apply_early_window_config()
 from kivy import Logger
 from threading import Thread
 
->>>>>>> 35887a35760c3d003b7693017bf138bc89650345
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.properties import DictProperty

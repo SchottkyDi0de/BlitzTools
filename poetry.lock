@@ -13,24 +13,6 @@ files = [
 ]
 
 [[package]]
-name = "dynamic-yaml"
-version = "2.0.0"
-description = "Enables self referential yaml entries"
-optional = false
-python-versions = ">=3.0"
-groups = ["main"]
-files = [
-    {file = "dynamic-yaml-2.0.0.tar.gz", hash = "sha256:7dd6cf3ed4dbeb5e068bf156eeb0808ac5cb92df397a436346b4b849f303b60b"},
-    {file = "dynamic_yaml-2.0.0-py3-none-any.whl", hash = "sha256:1df58ccb4e43a25e2dbbc795d830a5bc548a2de58a14f8b902e7a20545574d0d"},
-]
-
-[package.dependencies]
-<<<<<<< HEAD
-pyyaml = ">=5.4"
-=======
-asyncgui = ">=0.6,<0.7"
-
-[[package]]
 name = "certifi"
 version = "2026.6.17"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -213,18 +195,6 @@ files = [
 macos-listener = ["pyobjc-framework-Cocoa ; platform_system == \"Darwin\""]
 
 [[package]]
-name = "docutils"
-version = "0.23"
-description = "Docutils -- Python Documentation Utilities"
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-files = [
-    {file = "docutils-0.23-py3-none-any.whl", hash = "sha256:25d013af9bf23bc1c7b2b093dff4208166c53a94786c9e447808335ef1185fea"},
-    {file = "docutils-0.23.tar.gz", hash = "sha256:746f5060322511280a1e50eb76846ed6bf2342984b2ac04dc42caa1a8d78799e"},
-]
-
-[[package]]
 name = "evdev"
 version = "1.9.3"
 description = "Bindings to the Linux input handling subsystem"
@@ -235,19 +205,6 @@ markers = "\"linux\" in sys_platform"
 files = [
     {file = "evdev-1.9.3.tar.gz", hash = "sha256:2c140e01ac8437758fa23fe5c871397412461f42d421aa20241dc8fe8cfccbc9"},
 ]
-
-[[package]]
-name = "filetype"
-version = "1.2.0"
-description = "Infer file type and MIME type of any file/buffer. No external dependencies."
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "filetype-1.2.0-py2.py3-none-any.whl", hash = "sha256:7ce71b6880181241cf7ac8697a2f1eb6a8bd9b429f7ad6d27b8db9ba5f1c2d25"},
-    {file = "filetype-1.2.0.tar.gz", hash = "sha256:66b56cd6474bf41d8c54660347d37afcc3f7d1970648de365c102ef77548aadb"},
-]
->>>>>>> 35887a35760c3d003b7693017bf138bc89650345
 
 [[package]]
 name = "hpyt"
@@ -262,8 +219,6 @@ files = [
 ]
 
 [[package]]
-<<<<<<< HEAD
-=======
 name = "idna"
 version = "3.18"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -277,170 +232,6 @@ files = [
 
 [package.extras]
 all = ["mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
-
-[[package]]
-name = "kivy"
-version = "2.3.1"
-description = "An open-source Python framework for developing GUI apps that work cross-platform, including desktop, mobile and embedded platforms."
-optional = false
-python-versions = ">=3.8"
-groups = ["main"]
-files = [
-    {file = "Kivy-2.3.1-cp310-cp310-macosx_10_15_universal2.whl", hash = "sha256:ace93c166c9400f9435cfd3bd179b5ef9fdd40d69ee8171a6b8beba08c402d09"},
-    {file = "Kivy-2.3.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3d6215762510b463b0461d173f8a0b22e449beb12ba79cf151e18aa1d3d12a40"},
-    {file = "Kivy-2.3.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ba83dd8266fc2b1247de18c5e8114fa47ea20eb33eb7c3a9e2eb6202b9778088"},
-    {file = "Kivy-2.3.1-cp310-cp310-win_amd64.whl", hash = "sha256:d28ad14162554abd0324ae8f66ce2f374c05456d2656d60cfa80814f715d62c0"},
-    {file = "Kivy-2.3.1-cp311-cp311-macosx_10_15_universal2.whl", hash = "sha256:acb58843763075818de919989a73657307f4d833a7cc5547c1b16c226e260e5d"},
-    {file = "Kivy-2.3.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b7a1799b19f6ab3bcfcef1e729a0229cee646167a1633e067c2add6978f928bb"},
-    {file = "Kivy-2.3.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f180280df46a8c2f9988159938aa1a3e5a0094060d9586ea79df4b4ead9cad98"},
-    {file = "Kivy-2.3.1-cp311-cp311-win_amd64.whl", hash = "sha256:002de19fef53955c48108758beea3092cf281326642d2e71eca1c443f4227cce"},
-    {file = "Kivy-2.3.1-cp312-cp312-macosx_10_15_universal2.whl", hash = "sha256:3f74679ef305f0ed0d8bb3599a2dddc80ffc81157bdc07947498dd689fc9a5d9"},
-    {file = "Kivy-2.3.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:663e9b2fe5002f53371b3ad3712dccdaaa96905bbeaa83d7c7e64f3c44fec94e"},
-    {file = "Kivy-2.3.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2be79fe1494b6e60cb5aa5f124c37961530417cf27a53171b5a72c9e4c7d41cf"},
-    {file = "Kivy-2.3.1-cp312-cp312-win_amd64.whl", hash = "sha256:2046f6608d17b6c1a0530ac9aa127307fa25f6f75764f1d60428a1c0f6c0af88"},
-    {file = "Kivy-2.3.1-cp313-cp313-macosx_10_15_universal2.whl", hash = "sha256:d8d9e57501961c5d45e5a2c5af0caef24e48f43a0cd88f607eb3b517198cfec4"},
-    {file = "Kivy-2.3.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bfe25296e9612cbfa2b68cfb0ccd3c80db1441c11261a9e131d5f8fed7618c2c"},
-    {file = "Kivy-2.3.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:950d17e275f817ca34cc7c9d55f9d229067e2f7fbd0fad985a74c94893f7e739"},
-    {file = "Kivy-2.3.1-cp313-cp313-win_amd64.whl", hash = "sha256:b5127af11c2fc1299f2331402fe4f6edb0985711c2841fbfdf509830c058c78e"},
-    {file = "Kivy-2.3.1-cp38-cp38-macosx_10_15_universal2.whl", hash = "sha256:d9e92c4894f99685d822ab7d059a3912bbff17d812e64a12ed3cf0acd37924cb"},
-    {file = "Kivy-2.3.1-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:445b6054afcd08fd271b75e5552a72a5ffb122b05e8511e46bf69e3b5e344d31"},
-    {file = "Kivy-2.3.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7e473b10e9b9a49a6475760fd1f7d674873852f9561505ff6b4d8e5f1691d4f9"},
-    {file = "Kivy-2.3.1-cp38-cp38-win_amd64.whl", hash = "sha256:ee628e5dbe5e397ceeeda7b49cf4c800b79a695c6345fee1a8f1b71d3fc530bb"},
-    {file = "Kivy-2.3.1-cp39-cp39-macosx_10_15_universal2.whl", hash = "sha256:38a265ff95120694ab7dfc29ed2ccdec40a8a47344387b886f498449b0c3c66c"},
-    {file = "Kivy-2.3.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ae8168549c822a7122044965715d9f953a1862fdef132ea7725df8c1d2f19e5c"},
-    {file = "Kivy-2.3.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:748163206ce95aab5aaad1ada772a79e422a80b6308623510e74a1b7baf80f0a"},
-    {file = "Kivy-2.3.1-cp39-cp39-win_amd64.whl", hash = "sha256:91c836b7c2b4958fb4b3839f63b1724435bd617548baace0602c122d39756746"},
-    {file = "Kivy-2.3.1.tar.gz", hash = "sha256:0833949e3502cdb4abcf9c1da4384674045ad7d85644313aa1ee7573f3b4f9d9"},
-]
-
-[package.dependencies]
-docutils = "*"
-filetype = "*"
-"kivy-deps.angle" = {version = ">=0.4.0,<0.5.0", markers = "sys_platform == \"win32\""}
-"kivy-deps.glew" = {version = ">=0.3.1,<0.4.0", markers = "sys_platform == \"win32\""}
-"kivy-deps.sdl2" = {version = ">=0.8.0,<0.9.0", markers = "sys_platform == \"win32\""}
-Kivy-Garden = ">=0.1.4"
-pygments = "*"
-pypiwin32 = {version = "*", markers = "sys_platform == \"win32\""}
-requests = "*"
-
-[package.extras]
-angle = ["kivy-deps.angle (>=0.4.0,<0.5.0) ; sys_platform == \"win32\""]
-base = ["pillow (>=9.5.0,<11)"]
-dev = ["flake8", "kivy-deps.glew-dev (>=0.3.1,<0.4.0) ; sys_platform == \"win32\"", "kivy-deps.gstreamer-dev (>=0.3.3,<0.4.0) ; sys_platform == \"win32\"", "kivy-deps.sdl2-dev (>=0.8.0,<0.9.0) ; sys_platform == \"win32\"", "pre-commit", "pyinstaller", "pytest (>=3.6)", "pytest-asyncio (!=0.11.0)", "pytest-benchmark", "pytest-cov", "pytest-timeout", "responses", "sphinx (>=6.2.1,<6.3.0)", "sphinxcontrib-jquery (>=4.1,<5.0)"]
-full = ["ffpyplayer ; sys_platform == \"linux\" or sys_platform == \"darwin\"", "kivy-deps.gstreamer (>=0.3.3,<0.4.0) ; sys_platform == \"win32\"", "pillow (>=9.5.0,<11)"]
-glew = ["kivy-deps.glew (>=0.3.1,<0.4.0) ; sys_platform == \"win32\""]
-gstreamer = ["kivy-deps.gstreamer (>=0.3.3,<0.4.0) ; sys_platform == \"win32\""]
-media = ["ffpyplayer ; sys_platform == \"linux\" or sys_platform == \"darwin\"", "kivy-deps.gstreamer (>=0.3.3,<0.4.0) ; sys_platform == \"win32\""]
-sdl2 = ["kivy-deps.sdl2 (>=0.8.0,<0.9.0) ; sys_platform == \"win32\""]
-tuio = ["oscpy"]
-
-[[package]]
-name = "kivy-deps-angle"
-version = "0.4.0"
-description = "Repackaged binary dependency of Kivy."
-optional = false
-python-versions = "*"
-groups = ["main"]
-markers = "sys_platform == \"win32\""
-files = [
-    {file = "kivy_deps.angle-0.4.0-cp310-cp310-win32.whl", hash = "sha256:7873a551e488afa5044c4949a4aa42c4a4c4290469f0a6dd861e6b95283c9638"},
-    {file = "kivy_deps.angle-0.4.0-cp310-cp310-win_amd64.whl", hash = "sha256:71f2f01a3a7bbe1d4790e2a64e64a0ea8ae154418462ea407799ed66898b2c1f"},
-    {file = "kivy_deps.angle-0.4.0-cp311-cp311-win32.whl", hash = "sha256:c3899ff1f3886b80b155955bad07bfa33bbebd97718cdf46dfd788dc467124bc"},
-    {file = "kivy_deps.angle-0.4.0-cp311-cp311-win_amd64.whl", hash = "sha256:574381d4e66f3198bc48aa10f238e7a3816ad56b80ec939f5d56fb33a378d0b1"},
-    {file = "kivy_deps.angle-0.4.0-cp312-cp312-win32.whl", hash = "sha256:4fa7a6366899fba13f7624baf4645787165f45731db08d14557da29c12ee48f0"},
-    {file = "kivy_deps.angle-0.4.0-cp312-cp312-win_amd64.whl", hash = "sha256:668e670d4afd2551af0af2c627ceb0feac884bd799fb6a3dff78fdbfa2ea0451"},
-    {file = "kivy_deps.angle-0.4.0-cp313-cp313-win_amd64.whl", hash = "sha256:9afbf702f8bb9a993c48f39c018ca3b4d2ec381a5d3f82fe65bdaa6af0bba29b"},
-    {file = "kivy_deps.angle-0.4.0-cp37-cp37m-win32.whl", hash = "sha256:24cfc0076d558080a00c443c7117311b4a977c1916fe297232eff1fd6f62651e"},
-    {file = "kivy_deps.angle-0.4.0-cp37-cp37m-win_amd64.whl", hash = "sha256:48592ac6f7c183c5cd10d9ebe43d4148d0b2b9e400a2b0bcb5d21014cc929ce2"},
-    {file = "kivy_deps.angle-0.4.0-cp38-cp38-win32.whl", hash = "sha256:1bbacf20bf6bd6ee965388f95d937c8fba2c54916fb44faa166c2ba58276753c"},
-    {file = "kivy_deps.angle-0.4.0-cp38-cp38-win_amd64.whl", hash = "sha256:e2ba4e390b02ad5bcb57b43a9227fa27ff55e69cd715a87217b324195eb267c3"},
-    {file = "kivy_deps.angle-0.4.0-cp39-cp39-win32.whl", hash = "sha256:6546a62aba2b7e18a800b3df79daa757af3a980c297646c986896522395794e2"},
-    {file = "kivy_deps.angle-0.4.0-cp39-cp39-win_amd64.whl", hash = "sha256:bfaf9b37f2ecc3e4e7736657eed507716477af35cdd3118903e999d9d567ae8c"},
-]
-
-[[package]]
-name = "kivy-deps-glew"
-version = "0.3.1"
-description = "Repackaged binary dependency of Kivy."
-optional = false
-python-versions = "*"
-groups = ["main"]
-markers = "sys_platform == \"win32\""
-files = [
-    {file = "kivy_deps.glew-0.3.1-cp310-cp310-win32.whl", hash = "sha256:8f4b3ed15acb62474909b6d41661ffb4da9eb502bb5684301fb2da668f288a58"},
-    {file = "kivy_deps.glew-0.3.1-cp310-cp310-win_amd64.whl", hash = "sha256:aef2d2a93f129d8425c75234e7f6cc0a34b59a4aee67f6d2cd7a5fdfa9915b53"},
-    {file = "kivy_deps.glew-0.3.1-cp311-cp311-win32.whl", hash = "sha256:ee2f80ef7ac70f4b61c50da8101b024308a8c59a57f7f25a6e09762b6c48f942"},
-    {file = "kivy_deps.glew-0.3.1-cp311-cp311-win_amd64.whl", hash = "sha256:22e155ec59ce717387f5d8804811206d200a023ba3d0bc9bbf1393ee28d0053e"},
-    {file = "kivy_deps.glew-0.3.1-cp312-cp312-win32.whl", hash = "sha256:b64ee4e445a04bc7c848c0261a6045fc2f0944cc05d7f953e3860b49f2703424"},
-    {file = "kivy_deps.glew-0.3.1-cp312-cp312-win_amd64.whl", hash = "sha256:3acbbd30da05fc10c185b5d4bb75fbbc882a6ef2192963050c1c94d60a6e795a"},
-    {file = "kivy_deps.glew-0.3.1-cp313-cp313-win_amd64.whl", hash = "sha256:f4aa8322078359862ccd9e16e5cea61976d75fb43125d87922e20c916fa31a11"},
-    {file = "kivy_deps.glew-0.3.1-cp37-cp37m-win32.whl", hash = "sha256:5bf6a63fe9cc4fe7bbf280ec267ec8c47914020a1175fb22152525ff1837b436"},
-    {file = "kivy_deps.glew-0.3.1-cp37-cp37m-win_amd64.whl", hash = "sha256:d64a8625799fab7a7efeb3661ef8779a7f9c6d80da53eed87a956320f55530fa"},
-    {file = "kivy_deps.glew-0.3.1-cp38-cp38-win32.whl", hash = "sha256:00f4ae0a4682d951266458ddb639451edb24baa54a35215dce889209daf19a06"},
-    {file = "kivy_deps.glew-0.3.1-cp38-cp38-win_amd64.whl", hash = "sha256:3f8b89dcf1846032d7a9c5ef88b0ee9cbd13366e9b4c85ada61e01549a910677"},
-    {file = "kivy_deps.glew-0.3.1-cp39-cp39-win32.whl", hash = "sha256:4e377ed97670dfda619a1b63a82345a8589be90e7c616a458fba2810708810b1"},
-    {file = "kivy_deps.glew-0.3.1-cp39-cp39-win_amd64.whl", hash = "sha256:081a09b92f7e7817f489f8b6b31c9c9623661378de1dce1d6b097af5e7d42b45"},
-    {file = "kivy_deps_glew-0.3.1-cp314-cp314-win_amd64.whl", hash = "sha256:f12bd302dc65ed683bdc03cbbb301f23c2220d8837bca444529858a8b1767acc"},
-]
-
-[[package]]
-name = "kivy-deps-sdl2"
-version = "0.8.0"
-description = "Repackaged binary dependency of Kivy."
-optional = false
-python-versions = "*"
-groups = ["main"]
-markers = "sys_platform == \"win32\""
-files = [
-    {file = "kivy_deps.sdl2-0.8.0-cp310-cp310-win_amd64.whl", hash = "sha256:5af0a3b318a6ec9e0f0c1d476a4af4b2d0cbcce4dbfd89bc4681c33bcd6b3bcd"},
-    {file = "kivy_deps.sdl2-0.8.0-cp311-cp311-win_amd64.whl", hash = "sha256:ae3735480841ec9a57c0fb26e8647adee474a3d746147e3d75a1fc177c0fbc01"},
-    {file = "kivy_deps.sdl2-0.8.0-cp312-cp312-win_amd64.whl", hash = "sha256:bfe0cfca77883dde7e297b3b6039fa9cd7ee8df6b0d12516b38addb0551a574c"},
-    {file = "kivy_deps.sdl2-0.8.0-cp313-cp313-win_amd64.whl", hash = "sha256:56b1c44565b5e8cfc510585db13396edfc605965254f49ed8931189c546d481f"},
-    {file = "kivy_deps.sdl2-0.8.0-cp38-cp38-win_amd64.whl", hash = "sha256:5e9f8c0c1e76eb43f0bad8f36c5b92a46fb5696f733ec441db45e6864b1d4065"},
-    {file = "kivy_deps.sdl2-0.8.0-cp39-cp39-win_amd64.whl", hash = "sha256:dbaa6718e66e8cd4967c2d4021e05114c558342e2468a86c0bce917bea10003f"},
-]
-
-[[package]]
-name = "kivy-garden"
-version = "0.1.5"
-description = ""
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "Kivy Garden-0.1.5.tar.gz", hash = "sha256:2b8377378e87501d5d271f33d94f0e44c089884572c64f89c9d609b1f86a2748"},
-    {file = "Kivy_Garden-0.1.5-py3-none-any.whl", hash = "sha256:ef50f44b96358cf10ac5665f27a4751bb34ef54051c54b93af891f80afe42929"},
-]
-
-[package.dependencies]
-requests = "*"
-
-[[package]]
-name = "kivymd"
-version = "2.0.1.dev0"
-description = "Set of widgets for Kivy inspired by Google's Material Design"
-optional = false
-python-versions = ">=3.7"
-groups = ["main"]
-files = [
-    {file = "master.zip", hash = "sha256:c09db9f44a04e241b56c7cef8c961bb00ee036c5ae92d57df65f89592af5843f"},
-]
-
-[package.dependencies]
-asynckivy = ">=0.6,<0.7"
-kivy = ">=2.3.0"
-materialshapes = ">=0.3"
-materialyoucolor = ">=2.0.7"
-pillow = "*"
-
-[package.extras]
-dev = ["black", "coveralls", "flake8", "isort[pyproject]", "pre-commit", "pyinstaller[hook-testing]", "pytest", "pytest-cov", "pytest-timeout", "pytest_asyncio"]
-docs = ["astroid (<2.12)", "sphinx (==7.3.7)", "sphinx-autoapi (==3.0.0)", "sphinx-book-theme", "sphinx-copybutton", "sphinx-notfound-page", "sphinx-tabs"]
-
-[package.source]
-type = "url"
-url = "https://github.com/kivymd/KivyMD/archive/master.zip"
 
 [[package]]
 name = "lz4"
@@ -513,79 +304,6 @@ files = [
 docs = ["sphinx (>=1.6.0)", "sphinx_bootstrap_theme"]
 flake8 = ["flake8"]
 tests = ["psutil", "pytest (!=3.3.0)", "pytest-cov"]
-
-[[package]]
-name = "materialshapes"
-version = "0.3"
-description = "Material shapes in pure python."
-optional = false
-python-versions = ">3.8"
-groups = ["main"]
-files = [
-    {file = "materialshapes-0.3-py3-none-any.whl", hash = "sha256:2aa1ef131bc67bbd1f6a1e03efd0419cf148fd204bff69a5b41bbce09fe0e2f4"},
-    {file = "materialshapes-0.3.tar.gz", hash = "sha256:141d4ceaaf4122379eb8147805d9a87e8e11bde90b03529cbae1a1689dfe6868"},
-]
-
-[package.dependencies]
-kivy = "*"
-pillow = "*"
-pycairo = "*"
-
-[[package]]
-name = "materialyoucolor"
-version = "3.0.2"
-description = "Material You color generation algorithms in pure python!"
-optional = false
-python-versions = ">=3.7"
-groups = ["main"]
-files = [
-    {file = "materialyoucolor-3.0.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:5f982c8b2c4c058a00ee9ef7d069958606b2f869960768edadff6216cf4b2a73"},
-    {file = "materialyoucolor-3.0.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:e8668667c16d2ff8dee80dab68867d9ced91753d78ccf93ee7339e9d8512e75a"},
-    {file = "materialyoucolor-3.0.2-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:753def6d149d9e074aefc95b4b8b6af4046ff7330ab0302f9f5f840f70468300"},
-    {file = "materialyoucolor-3.0.2-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:5d8bdb722ae476572869a73b18eca6ab2f7a55be215bc0d620feadfae7e68183"},
-    {file = "materialyoucolor-3.0.2-cp310-cp310-win32.whl", hash = "sha256:645088b9e9888bc4a43c00ace89b6f8b01b29dde1db12aa37a920f5b898f7a60"},
-    {file = "materialyoucolor-3.0.2-cp310-cp310-win_amd64.whl", hash = "sha256:2931fd9bd29509a04bb98d58fd8eb3933ea1b40db18583189a993eae5909a9cc"},
-    {file = "materialyoucolor-3.0.2-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:a516a9acfe9b3906e38ac36f7c9da7134a47da05731c4323096d711e1b1df2e2"},
-    {file = "materialyoucolor-3.0.2-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:6d58f1989ba5c7fe4c68b01c23c0b42996403b20ef7b46b1a53be2e05a4bce28"},
-    {file = "materialyoucolor-3.0.2-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:7449488306d4ec275a0ee2de0dc18bf67519a9e5bea1c25726ba1932f353e526"},
-    {file = "materialyoucolor-3.0.2-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:feef0d178c865a5425a1add2fba797e5e5edb6b0fff15a8494346e917934e7c7"},
-    {file = "materialyoucolor-3.0.2-cp311-cp311-win32.whl", hash = "sha256:e5564ec49f011d0460dc3407c3788684d509807a362c44403f10b3b0eccb0496"},
-    {file = "materialyoucolor-3.0.2-cp311-cp311-win_amd64.whl", hash = "sha256:4c80bc9d478a0c4846bb8d955ab580af9e0c2fe849bc5494a050d05fad44fa2a"},
-    {file = "materialyoucolor-3.0.2-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:be9def0be02a9e96fddb8ce601158970da4f27da2761acb4c16ee1f05a7394ce"},
-    {file = "materialyoucolor-3.0.2-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:e4d69e3ecfe7e1fd5dd0886ae33ae2ef46ac819affc50540a33416816f432ac1"},
-    {file = "materialyoucolor-3.0.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:9f675b95c106db547e9eaf59a08eb01689b8df6dc7bdd21ef58837cb0f20242c"},
-    {file = "materialyoucolor-3.0.2-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:d6692115e570c383202f58c6e3fb55c34840cb37aa2cae7f9a76eb4baec47534"},
-    {file = "materialyoucolor-3.0.2-cp312-cp312-win32.whl", hash = "sha256:e9a24f185f83100149de9ca3c799c9d0ace96389dfa4404899ae7d66f7f7c3ea"},
-    {file = "materialyoucolor-3.0.2-cp312-cp312-win_amd64.whl", hash = "sha256:4013952e770c2c8f5bfc5b96a3db31bf0f964cbf9a02ff476eed1f0f4a1c8235"},
-    {file = "materialyoucolor-3.0.2-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:311c1484832c00b8be7ef7781e3fc9e6f17b311f899f6657f4523a1ae067d168"},
-    {file = "materialyoucolor-3.0.2-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:fe03cf51df6e21acf1986810052cf35fed3fbc759c1ab0d7c5a9730ee2890029"},
-    {file = "materialyoucolor-3.0.2-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:c4d302e0b309d9b45548074c8a348903733df8bc4101283dc969f0ff157afde5"},
-    {file = "materialyoucolor-3.0.2-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:92c56bf78cd7008a925b9a928c2784e30266b3c6a56e5a481f627d51c82ed2f8"},
-    {file = "materialyoucolor-3.0.2-cp313-cp313-win32.whl", hash = "sha256:8fa0ae5ea849b0d120e998b157605aa098b1388a035ecd019c8424fd14fc23b9"},
-    {file = "materialyoucolor-3.0.2-cp313-cp313-win_amd64.whl", hash = "sha256:32048938b7735fdb8496fcc6561a5a0c04f74160f8f41674f08304b0942740e7"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314-macosx_10_15_x86_64.whl", hash = "sha256:d913024cf54f7ff76c8651205994421798016ee99dc4a267c6ef85bca5af0bf3"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314-macosx_11_0_arm64.whl", hash = "sha256:b2d52554ca52758a318016a52da4f9f7d8024280eb303ec9df8033261ea6099b"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:91a02dce74057262c6890ca308b33f04c95fbb7831c1e439e2c94662e7bcb88b"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:0ffb0dd15f7c3d9821bd94f04e376135c56854734c0008e238fa78a58f67278c"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314-win32.whl", hash = "sha256:420c537a9829c92b0baa47d15dd375e9fc6a7fecfc203204d1cbcc31654d26f2"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314-win_amd64.whl", hash = "sha256:bdc919d66abccffc01293a29065ad05c0b04ac745a45fe386879e80f92222640"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314t-macosx_10_15_x86_64.whl", hash = "sha256:f14660be800f7d7844400dabc1fa0a777a3b7c9fbe62f353db31bfab85e60945"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:4a922b46d14311688487c493ec8135f6bc3d59c03c38130b0b8e757671aa93a5"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:250a07f4847e6d5ab54554a0bf310c00ae8ae492244127a84d8101719b6994f5"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:f80ed46bd57f6217b66a37f10a57ff2c2d405ca8842ed4a64cfe4d6d5c554947"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314t-win32.whl", hash = "sha256:9995eb30c16388c2069213f7446a6840e365420f20f1dd0ecb9d5e9ce746056d"},
-    {file = "materialyoucolor-3.0.2-cp314-cp314t-win_amd64.whl", hash = "sha256:0a31030706af9b1f3d3916ce26b44e1b6a822cfd78a50083ea2451497d24863d"},
-    {file = "materialyoucolor-3.0.2-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:f5c21b5a8b3da67a45ccbbaf73e22d572c92faff3a2636dd95ac2c9950488233"},
-    {file = "materialyoucolor-3.0.2-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:780847de4960b2abfcfac292dcb548f366f80138237be31456cb9ae38ecc2148"},
-    {file = "materialyoucolor-3.0.2-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:9708f20b003ebe6d9a738534357462973e645b56d297b59b15817195583e2e9f"},
-    {file = "materialyoucolor-3.0.2-cp39-cp39-musllinux_1_2_x86_64.whl", hash = "sha256:8b62926cf8871c06f8de11c198e112a79950d9b106722a8b19a80d354096915f"},
-    {file = "materialyoucolor-3.0.2-cp39-cp39-win32.whl", hash = "sha256:2749cbce638dae11dc1f2809e679f3426d75fbe0e7756b9b7ff554cf02e3fd77"},
-    {file = "materialyoucolor-3.0.2-cp39-cp39-win_amd64.whl", hash = "sha256:b3023be22fd72ebc3f99e9e4146817c50a19b4d09a0d9698bcef0cb481e5e388"},
-    {file = "materialyoucolor-3.0.2.tar.gz", hash = "sha256:e2c892ae23dc0732c32307682002884616a282de5a350088aacc23cdf885e822"},
-]
-
-[package.dependencies]
-pillow = "*"
 
 [[package]]
 name = "packaging"
@@ -744,35 +462,6 @@ files = [
 ]
 
 [[package]]
-name = "pycairo"
-version = "1.29.0"
-description = "Python interface for cairo"
-optional = false
-python-versions = ">=3.10"
-groups = ["main"]
-files = [
-    {file = "pycairo-1.29.0-cp310-cp310-win32.whl", hash = "sha256:96c67e6caba72afd285c2372806a0175b1aa2f4537aa88fb4d9802d726effcd1"},
-    {file = "pycairo-1.29.0-cp310-cp310-win_amd64.whl", hash = "sha256:65bddd944aee9f7d7d72821b1c87e97593856617c2820a78d589d66aa8afbd08"},
-    {file = "pycairo-1.29.0-cp310-cp310-win_arm64.whl", hash = "sha256:15b36aea699e2ff215cb6a21501223246032e572a3a10858366acdd69c81a1c8"},
-    {file = "pycairo-1.29.0-cp311-cp311-win32.whl", hash = "sha256:12757ebfb304b645861283c20585c9204c3430671fad925419cba04844d6dfed"},
-    {file = "pycairo-1.29.0-cp311-cp311-win_amd64.whl", hash = "sha256:3391532db03f9601c1cee9ebfa15b7d1db183c6020f3e75c1348cee16825934f"},
-    {file = "pycairo-1.29.0-cp311-cp311-win_arm64.whl", hash = "sha256:b69be8bb65c46b680771dc6a1a422b1cdd0cffb17be548f223e8cbbb6205567c"},
-    {file = "pycairo-1.29.0-cp312-cp312-win32.whl", hash = "sha256:91bcd7b5835764c616a615d9948a9afea29237b34d2ed013526807c3d79bb1d0"},
-    {file = "pycairo-1.29.0-cp312-cp312-win_amd64.whl", hash = "sha256:3f01c3b5e49ef9411fff6bc7db1e765f542dc1c9cfed4542958a5afa3a8b8e76"},
-    {file = "pycairo-1.29.0-cp312-cp312-win_arm64.whl", hash = "sha256:eafe3d2076f3533535ad4a361fa0754e0ee66b90e548a3a0f558fed00b1248f2"},
-    {file = "pycairo-1.29.0-cp313-cp313-win32.whl", hash = "sha256:3eb382a4141591807073274522f7aecab9e8fa2f14feafd11ac03a13a58141d7"},
-    {file = "pycairo-1.29.0-cp313-cp313-win_amd64.whl", hash = "sha256:91114e4b3fbf4287c2b0788f83e1f566ce031bda49cf1c3c3c19c3e986e95c38"},
-    {file = "pycairo-1.29.0-cp313-cp313-win_arm64.whl", hash = "sha256:09b7f69a5ff6881e151354ea092137b97b0b1f0b2ab4eb81c92a02cc4a08e335"},
-    {file = "pycairo-1.29.0-cp314-cp314-win32.whl", hash = "sha256:69e2a7968a3fbb839736257bae153f547bca787113cc8d21e9e08ca4526e0b6b"},
-    {file = "pycairo-1.29.0-cp314-cp314-win_amd64.whl", hash = "sha256:e91243437a21cc4c67c401eff4433eadc45745275fa3ade1a0d877e50ffb90da"},
-    {file = "pycairo-1.29.0-cp314-cp314-win_arm64.whl", hash = "sha256:b72200ea0e5f73ae4c788cd2028a750062221385eb0e6d8f1ecc714d0b4fdf82"},
-    {file = "pycairo-1.29.0-cp314-cp314t-win_amd64.whl", hash = "sha256:5e45fce6185f553e79e4ef1722b8e98e6cde9900dbc48cb2637a9ccba86f627a"},
-    {file = "pycairo-1.29.0-cp314-cp314t-win_arm64.whl", hash = "sha256:caba0837a4b40d47c8dfb0f24cccc12c7831e3dd450837f2a356c75f21ce5a15"},
-    {file = "pycairo-1.29.0.tar.gz", hash = "sha256:f3f7fde97325cae80224c09f12564ef58d0d0f655da0e3b040f5807bd5bd3142"},
-]
-
-[[package]]
->>>>>>> 35887a35760c3d003b7693017bf138bc89650345
 name = "pydantic"
 version = "2.13.4"
 description = "Data validation using Python type hints"
@@ -928,23 +617,6 @@ files = [
 typing-extensions = ">=4.14.1"
 
 [[package]]
-<<<<<<< HEAD
-=======
-name = "pygments"
-version = "2.20.0"
-description = "Pygments is a syntax highlighting package written in Python."
-optional = false
-python-versions = ">=3.9"
-groups = ["main"]
-files = [
-    {file = "pygments-2.20.0-py3-none-any.whl", hash = "sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176"},
-    {file = "pygments-2.20.0.tar.gz", hash = "sha256:6757cd03768053ff99f3039c1a36d6c0aa0b263438fcab17520b30a303a82b5f"},
-]
-
-[package.extras]
-windows-terminal = ["colorama (>=0.4.6)"]
-
-[[package]]
 name = "pynput"
 version = "1.8.2"
 description = "Monitor and control user input devices"
@@ -1087,22 +759,6 @@ pyobjc-core = ">=12.2.1"
 pyobjc-framework-Cocoa = ">=12.2.1"
 
 [[package]]
-name = "pypiwin32"
-version = "223"
-description = ""
-optional = false
-python-versions = "*"
-groups = ["main"]
-markers = "sys_platform == \"win32\""
-files = [
-    {file = "pypiwin32-223-py3-none-any.whl", hash = "sha256:67adf399debc1d5d14dffc1ab5acacb800da569754fafdc576b2a039485aa775"},
-    {file = "pypiwin32-223.tar.gz", hash = "sha256:71be40c1fbd28594214ecaecb58e7aa8b708eabfa0125c8a109ebd51edbd776a"},
-]
-
-[package.dependencies]
-pywin32 = ">=223"
-
-[[package]]
 name = "python-xlib"
 version = "0.33"
 description = "Python X Library"
@@ -1150,7 +806,6 @@ files = [
 ]
 
 [[package]]
->>>>>>> 35887a35760c3d003b7693017bf138bc89650345
 name = "pywinstyles"
 version = "1.8"
 description = "Customize window styles in windows 11"
@@ -1246,8 +901,6 @@ files = [
 ]
 
 [[package]]
-<<<<<<< HEAD
-=======
 name = "requests"
 version = "2.34.2"
 description = "Python HTTP for Humans."
@@ -1294,7 +947,6 @@ files = [
 ]
 
 [[package]]
->>>>>>> 35887a35760c3d003b7693017bf138bc89650345
 name = "typing-extensions"
 version = "4.15.0"
 description = "Backported and Experimental Type Hints for Python 3.9+"
@@ -1322,8 +974,6 @@ files = [
 typing-extensions = ">=4.12.0"
 
 [[package]]
-<<<<<<< HEAD
-=======
 name = "urllib3"
 version = "2.7.0"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -1342,7 +992,6 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 
 [[package]]
->>>>>>> 35887a35760c3d003b7693017bf138bc89650345
 name = "winaccent"
 version = "2.1.0"
 description = "A simple and lightweight Python module for easily retrieving Windows' accent color, including shades, specific window chrome colors such as active/inactive titlebar and window borders and theme. Supports Windows 8.x, 10 and 11 and doesn't require additional dependencies."
@@ -1357,8 +1006,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-<<<<<<< HEAD
-content-hash = "18a04229e81bd94ef2204a73c5d7c2987f69ae07084a720dc39db4ce1c4e0d21"
-=======
-content-hash = "716bf7e922c7c1ff94a972a0004bc6a309e7881aa13438d8a0dc0f5b1d748619"
->>>>>>> 35887a35760c3d003b7693017bf138bc89650345
+content-hash = "3e127e39c8ce917fa4e2e8c712e9b168b916171da46c79287c58ef525dc7ceb0"
